@@ -1,0 +1,258 @@
+
+<!-- Bootstrap Core CSS -->
+<!-- <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<!-- <link href="lib/css/sb-admin.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> --> 
+
+<style>
+
+	.activated{
+	    background:#d9edf7;
+	    border:1px solid;
+	}
+
+</style>
+
+<body ng-controller="performanceCtrl">
+
+	<div class="row"></div>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-2">
+                <a class="navbar-brand">Menu</a> 
+            </div>
+            <div>
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+            </div>
+            
+            <!-- Top Menu Items -->
+            <div class="nav navbar-right top-nav">
+                <a class="navbar-brand">Welcome {{loggedUser.nome}}!</a> 
+            </div>
+            
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                	<li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Exercises</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Student'">
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Exercises</a>
+                    </li>
+                    <li class="active">
+                        <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
+                    </li>
+                    <li>
+                        <a ui-sref="ranking"><i class="fa fa-fw fa fa-trophy"></i> Ranking</a>
+                    </li>
+                    
+                    <li>
+                        <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+        
+       		<form name="performanceForm" role="form">
+
+	            <div class="container-fluid">
+	
+	                <!-- Page Heading -->
+	                <div class="row">
+	                    <div class="col-lg-12">
+	                        <h1 class="page-header">
+	                            Performance Report
+	                        </h1>
+	                        <ol class="breadcrumb">
+	                            <li>
+	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
+	                            </li>
+	                            <li class="active">
+	                                <i class="fa fa-line-chart"></i> Performance Report
+	                            </li>
+	                        </ol>
+	                    </div>
+	                </div>
+	                <!-- /.row -->
+	                
+   					<div ng-show="loggedUser.tipoConta == 'Teacher'" class="col-md-12" style="border: 2px groove; margin-bottom: 20px;">
+               			<fieldset class="scheduler-border" style="margin-top: 10px;">
+							<div class="row">
+								<div class="col-xs-6 form-group">
+									<label>Student Name</label>
+									<input ng-model="studentName" class="form-control" type="text" maxlength="50"/>
+								</div>
+								<div class="col-xs-4 form-group">
+									<label>Email</label>
+									<input ng-model="studentEmail" class="form-control" type="text" maxlength="50"/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 form-group">
+									<label>Exercise</label>
+									<input ng-model="exerciseName" class="form-control" type="text" maxlength="30"/>
+								</div>
+								<div class="col-xs-3 form-group">
+									<label>Level *</label>
+									<select ng-model="exerciseLevel" class="form-control selectpicker" required>
+										<option value="">Select a value</option>
+										<option>Basic</option>
+										<option>Intermediate</option>
+										<option>Advanced</option>
+									</select>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 form-group" style="text-align: right;">
+									<button type="button" class="btn btn-default" ng-click="searchResolvedExercises()">Search</button>
+								</div>
+							</div>
+						</fieldset>
+						
+               		</div>
+               		
+               		<!-- Basic list -->
+             		<div class="col-md-12">
+	     				<div class="col-md-12">
+							<p style="font-weight: bold;">Basic Level</p>
+						</div>
+						<div class="col-md-12">
+		               		<table id="example" class="table table-bordered" style="text-align: center;" cellspacing="0" width="100%">
+						        <thead>
+						            <tr style="background-color: #2b567a; color: white;">
+						                <th style="text-align: center;">Id</th>
+						                <th style="text-align: center;">Exercise Name</th>
+						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
+						                <th style="text-align: center;">Score</th>
+						                <th style="text-align: center;">Max Score</th>
+						            </tr>
+						        </thead>
+						        <tbody>
+									<tr ng-class="{activated:$index==basicSelectedRow}" data-ng-click="rowHighilited($index, 'Basic')" data-ng-repeat="result in basicList">
+										<td>{{result.idExercicioAluno}}</td>
+										<td>{{result.exercicio.nome}}</td>
+										<td ng-if="loggedUser.tipoConta == 'Teacher'">{{result.aluno.nome}}</td>
+										<td>{{result.nota}}</td>
+										<td>{{result.exercicio.valorNotaMaxima}}</td>
+									</tr>
+									<tr ng-if="basicList.length == 0 && loggedUser.tipoConta != 'Teacher'">
+										<td colspan="4">
+											There aren't resolved exercises for this level.
+										</td>
+									</tr>
+									<tr ng-if="basicList.length == 0 && loggedUser.tipoConta == 'Teacher'">
+										<td colspan="5">
+											There aren't resolved exercises for this level.
+										</td>
+									</tr>
+								</tbody>
+				            </table>
+		            	</div>
+               		</div>
+               		
+               		<!-- Intermediate list -->
+               		<div class="col-md-12">
+	     				<div class="col-md-12">
+							<p style="font-weight: bold;">Intermediate Level</p>
+						</div>
+						<div class="col-md-12">
+		               		<table id="example" class="table table-bordered" style="text-align: center;" cellspacing="0" width="100%">
+						        <thead>
+						            <tr style="background-color: #2b567a; color: white;">
+						                <th style="text-align: center;">Id</th>
+						                <th style="text-align: center;">Exercise Name</th>
+						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
+						                <th style="text-align: center;">Score</th>
+						                <th style="text-align: center;">Max Score</th>
+						            </tr>
+						        </thead>
+						        <tbody>
+									<tr ng-class="{activated:$index==intermediateSelectedRow}" data-ng-click="rowHighilited($index, 'Intermediate')" data-ng-repeat="result in intermediateList">
+										<td>{{result.idExercicioAluno}}</td>
+										<td>{{result.exercicio.nome}}</td>
+										<td ng-if="loggedUser.tipoConta == 'Teacher'">{{result.aluno.nome}}</td>
+										<td>{{result.nota}}</td>
+										<td>{{result.exercicio.valorNotaMaxima}}</td>
+									</tr>
+									<tr ng-if="intermediateList.length == 0 && loggedUser.tipoConta != 'Teacher'">
+										<td colspan="4">
+											There aren't resolved exercises for this level.
+										</td>
+									</tr>
+									<tr ng-if="intermediateList.length == 0 && loggedUser.tipoConta == 'Teacher'">
+										<td colspan="5">
+											There aren't resolved exercises for this level.
+										</td>
+									</tr>
+								</tbody>
+				            </table>
+		            	</div>
+               		</div>
+               		
+               		<!-- Advanced list -->
+               		<div class="col-md-12">
+	     				<div class="col-md-12">
+							<p style="font-weight: bold;">Advanced Level</p>
+						</div>
+						<div class="col-md-12">
+		               		<table id="example" class="table table-bordered" style="text-align: center;" cellspacing="0" width="100%">
+						        <thead>
+						            <tr style="background-color: #2b567a; color: white;">
+						                <th style="text-align: center;">Id</th>
+						                <th style="text-align: center;">Exercise Name</th>
+						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
+						                <th style="text-align: center;">Score</th>
+						                <th style="text-align: center;">Max Score</th>
+						            </tr>
+						        </thead>
+						        <tbody>
+									<tr ng-class="{activated:$index==advancedSelectedRow}" data-ng-click="rowHighilited($index, 'Advanced')" data-ng-repeat="result in advancedList">
+										<td>{{result.idExercicioAluno}}</td>
+										<td>{{result.exercicio.nome}}</td>
+										<td ng-if="loggedUser.tipoConta == 'Teacher'">{{result.aluno.nome}}</td>
+										<td>{{result.nota}}</td>
+										<td>{{result.exercicio.valorNotaMaxima}}</td>
+									</tr>
+									<tr ng-if="advancedList.length == 0 && loggedUser.tipoConta != 'Teacher'">
+										<td colspan="4">
+											There aren't resolved exercises for this level.
+										</td>
+									</tr>
+									<tr ng-if="advancedList.length == 0 && loggedUser.tipoConta == 'Teacher'">
+										<td colspan="5">
+											There aren't resolved exercises for this level.
+										</td>
+									</tr>
+								</tbody>
+				            </table>
+		            	</div>
+               		</div>
+               		
+	            </div>
+	            <!-- /.container-fluid -->
+	            
+            </form>
+            
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+    <div ng-init="init()"></div>
+
+</body>

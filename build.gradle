@@ -1,0 +1,52 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.1.RELEASE'
+	}
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url 'http://repo.spring.io/libs-release' }
+	}
+	
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'war'
+
+repositories{
+	mavenCentral()
+}
+war {
+	baseName = 'WebPlatform'
+}
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	providedRuntime
+}
+
+dependencies {
+	compile('org.hibernate:hibernate-core:5.2.10.Final')
+	
+	// Spring dependencies
+	compile('org.springframework:spring-context:4.3.8.RELEASE')
+	compile('org.springframework:spring-web:4.3.8.RELEASE')
+	compile('org.springframework:spring-core:4.3.8.RELEASE')
+	compile('org.springframework:spring-webmvc:4.3.8.RELEASE')
+	compile('org.springframework:spring-tx:4.3.8.RELEASE')
+	compile('org.springframework:spring-orm:4.3.8.RELEASE')
+	compile('org.springframework:spring-jdbc:4.3.8.RELEASE')
+	
+	compile('javax.servlet:javax.servlet-api:3.0.1')
+	compile('com.fasterxml.jackson.core:jackson-databind:2.8.8.1')
+	compile('commons-dbcp:commons-dbcp:1.4')
+	compile('commons-lang:commons-lang:2.6')
+	
+	compile files('libs/ojdbc6.jar')
+}

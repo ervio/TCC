@@ -1,0 +1,29 @@
+<nav class="navbar navbar-fixed-top navbar-bootsnipp animate" role="navigation"></nav>
+<div class="container">
+	<div class="container">
+		<div class="row" style="margin-top:100px;" ng-controller="loginCtrl">
+			<div class="col-md-4 col-md-offset-4">
+				<fieldset>
+					<form ng-submit="login()">
+						<h3 class="sign-up-title" style="color:dimgray; text-align: center">Welcome back! Please sign in</h3>
+							
+						<hr class="colorgraph">
+						
+						<div ng-show="error" class="alert alert-danger">{{error}}</div>
+				
+						<input class="form-control email-title" ng-model="email" placeholder="E-mail" type="text" maxlength="50">
+						<input class="form-control" ng-model="password" placeholder="Password" type="password" value="" maxlength="50">
+						<a class="pull-right" href="#"><!--Forgot password?-->&nbsp;</a>
+						
+						<input class="btn btn-lg btn-success btn-block" ng-click="dataLoading = true" type="submit" value="Login">
+						
+						<br>
+						<p class="text-center"><a ui-sref="signup" href="#">Need an account? Sign up</a></p>
+				              
+		            	<div ng-show="dataLoading"><web-platform-loading/></div>
+	            	</form>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>

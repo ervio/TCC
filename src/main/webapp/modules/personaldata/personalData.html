@@ -1,0 +1,174 @@
+
+<!-- Bootstrap Core CSS -->
+<!-- <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<!-- <link href="lib/css/sb-admin.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> --> 
+
+<body ng-controller="personalDataCtrl">
+
+	<div class="row"></div>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-2">
+                <a class="navbar-brand">Menu</a> 
+            </div>
+            <div>
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+            </div>
+            
+            <!-- Top Menu Items -->
+            <div class="nav navbar-right top-nav">
+                <a class="navbar-brand">Welcome {{loggedUser.nome}}!</a> 
+            </div>
+            
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                	<li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Exercises</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Student'">
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Exercises</a>
+                    </li>
+                    <li>
+                        <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
+                    </li>
+                    <li>
+                        <a ui-sref="ranking"><i class="fa fa-fw fa fa-trophy"></i> Ranking</a>
+                    </li>
+                    
+                    <li class="active">
+                        <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Personal Data
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-address-book"></i> Personal Data
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+                
+                <div ng-show="error" class="alert alert-danger">{{error}}</div>
+                
+                <div ng-show="registered" class="alert alert-info">Account successfully updated.</div>
+                
+                <div>
+					
+					<form name="personalForm" role="form">
+					
+		               	<div class="row">
+		               	
+			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
+			               	
+		               		<div class="col-md-12" style="text-align: right;">
+								<a ui-sref="main" href="#">
+			   						<input class="btn btn-md btn-primary" type="submit" value="Cancel"/>
+								</a>
+			    				<input type="submit" ng-disabled="personalForm.$invalid" ng-click="update(newrecord, confirmeNovoPassword)" class="btn btn-md btn-primary" value="Update"/>
+			   				</div>
+		   				
+		               		<div class="col-md-6">
+		               			<fieldset class="scheduler-border">
+									<legend class="scheduler-border">Personal Data</legend>
+									<div class="form-group">
+										<label for="fullnameInput">Fullname *</label>
+										<input type="text" class="form-control" ng-model="newrecord.nome" id="fullnameInput" placeholder="Fullname" maxlength="50" required>
+									</div>
+									<div class="form-group">
+										<label for="phoneInput">Phone</label>
+										<input type="text" class="form-control" ng-model="newrecord.telefone" id="phoneInput" placeholder="Phone" maxlength="11">
+									</div>
+									<div class="form-group">
+								        <label for="emailInput">Email *</label>
+								        <input type="text" name="emailInput" id="emailInput" class="form-control" ng-model="newrecord.novoEmail" placeholder="Email" maxlength="50" required />
+								    </div>
+									<div class="form-group">
+										<label for="accountTypeInput">Account Type *</label>
+										<select class="form-control selectpicker"  ng-model="newrecord.tipoConta" id="accountTypeInput" ng-disabled="true" required>
+											<option value="">Select a value</option>
+											<option>Student</option>
+											<option>Teacher</option>
+										</select>
+									</div>
+									<div class="form-group">
+								        <label for="password">Password *</label>
+								        <input type="password" name="password" id="password" class="form-control" ng-model="password" placeholder="Password" maxlength="50" required/>
+								    </div>
+								    <div class="form-group">
+								        <label for="password">New Password</label>
+								        <input type="password" name="password" id="password" class="form-control" ng-model="newrecord.novoPassword" placeholder="New Password" maxlength="50" ng-required="confirmeNovoPassword"/>
+								    </div>
+								    <div class="form-group">
+								        <label for="password">Confirm New Password</label>
+								        <input type="password" name="password" id="password" class="form-control" ng-model="confirmeNovoPassword" placeholder="Confirm New Password" maxlength="50" ng-required="newrecord.novoPassword"/>
+								    </div>
+									
+								</fieldset>
+		               		</div>
+		               		<div class="col-md-6">
+		               			<fieldset class="scheduler-border">
+									<legend class="scheduler-border">Address</legend>
+									<div class="form-group">
+										<label for="streetAddressInput">Street Address</label>
+										<input type="text" class="form-control" ng-model="newrecord.logradouro" id="streetAddressInput" placeholder="Street Address" maxlength="50">
+									</div>
+									<div class="form-group">
+										<label for="neighborhoodInput">Neighborhood</label>
+										<input type="text" class="form-control" ng-model="newrecord.bairro" id="neighborhoodInput" placeholder="Neighborhood" maxlength="50">
+									</div>
+									<div class="form-group">
+										<label for="cityInput">City</label>
+										<input type="text" class="form-control" ng-model="newrecord.cidade" id="cityInput" placeholder="City" maxlength="20">
+									</div>
+									<div class="form-group">
+										<label for="zipCodeInput">Zip Code</label>
+										<input type="text" class="form-control" ng-model="newrecord.cep" id="zipCodeInput" placeholder="Zip Code" maxlength="9">
+									</div>
+								</fieldset>
+		               		</div>
+		               	</div>
+		               	
+	   				</form>
+	   				
+	 			</div>
+                
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+</body>

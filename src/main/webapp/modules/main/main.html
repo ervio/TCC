@@ -1,0 +1,133 @@
+
+<!-- Bootstrap Core CSS -->
+<!-- <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<!-- <link href="lib/css/sb-admin.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> --> 
+
+<style>
+
+	.activated{
+	    background:#d9edf7;
+	    border:1px solid;
+	}
+
+</style>
+
+<body ng-controller="mainCtrl">
+
+	<div class="row"></div>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-2">
+                <a class="navbar-brand">Menu</a> 
+            </div>
+            <div>
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+            </div>
+            
+            <!-- Top Menu Items -->
+            <div class="nav navbar-right top-nav">
+                <a class="navbar-brand">Welcome {{loggedUser.nome}}!</a> 
+            </div>
+            
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                	<li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Exercises</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Student'">
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Exercises</a>
+                    </li>
+                    <li>
+                        <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
+                    </li>
+                    <li>
+                        <a ui-sref="ranking"><i class="fa fa-fw fa fa-trophy"></i> Ranking</a>
+                    </li>
+                    
+                    <li>
+                        <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Home
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
+                
+				<div ng-if="loggedUser.tipoConta == 'Student'">
+				
+					<div ng-show="newInvitations" class="alert alert-warning">You have new invitations!</div>
+	                
+                	<div ng-show="acceptanceSuccess" class="alert alert-info">The invitation was successfully accept.</div>
+					                
+	                <div>
+						<form name="mainForm" role="form">
+						
+			               	<div class="row">
+				               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
+			               	</div>
+			               	
+			               	<div ng-if="invitations.length > 0" class="col-md-12" style="border: 2px groove">
+		               			<fieldset class="scheduler-border">
+									<legend class="scheduler-border">Invites</legend>
+								</fieldset>
+								
+								<table id="example" class="table table-bordered" style="text-align: center;" cellspacing="0" width="100%">
+							        <thead>
+							            <tr style="background-color: #2b567a; color: white;">
+							                <th style="text-align: center;">Teacher</th>
+							                <th class="col-xs-3 form-group"></th>
+							            </tr>
+							        </thead>
+							        <tbody>
+										<tr ng-class="{activated:$index==selectedRow}" data-ng-click="rowHighilited($index)" data-ng-repeat="invitation in invitations">
+											<td>{{invitation.professor.nome}}</td>
+											<td>
+												<input ng-click="acceptInvitation(invitation.professor.id, invitation.aluno.id)" type="submit" class="btn btn-md btn-primary" value="Accept Invitation"/>
+											</td>
+										</tr>
+									</tbody>
+					            </table>
+								
+		               		</div>
+			               	
+		               	</form>
+		 			</div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <div ng-init="init()"></div>
+
+</body>

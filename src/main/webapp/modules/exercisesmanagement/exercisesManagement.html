@@ -1,0 +1,247 @@
+
+<!-- Bootstrap Core CSS -->
+<!-- <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<!-- <link href="lib/css/sb-admin.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> --> 
+
+<style>
+
+	.list-group{
+		margin-top: 20px;
+	}
+	
+	.activated{
+	    background:#d9edf7;
+	    border:1px solid;
+	}
+
+</style>
+
+<body ng-controller="exercisesMgmtCtrl">
+
+	<div class="row"></div>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-2">
+                <a class="navbar-brand">Menu</a> 
+            </div>
+            <div>
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+            </div>
+            
+            <!-- Top Menu Items -->
+            <div class="nav navbar-right top-nav">
+                <a class="navbar-brand">Welcome {{loggedUser.nome}}!</a> 
+            </div>
+            
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                	<li class="active" ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Exercises</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Student'">
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Exercises</a>
+                    </li>
+                    <li>
+                        <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
+                    </li>
+                    <li>
+                        <a ui-sref="ranking"><i class="fa fa-fw fa fa-trophy"></i> Ranking</a>
+                    </li>
+                    
+                    <li>
+                        <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+        
+       		<form name="exercisesForm" role="form">
+
+	            <div class="container-fluid">
+	
+	                <!-- Page Heading -->
+	                <div class="row">
+	                    <div class="col-lg-12">
+	                        <h1 class="page-header">
+	                            Exercises Management
+	                        </h1>
+	                        <ol class="breadcrumb">
+	                            <li>
+	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
+	                            </li>
+	                            <li class="active">
+	                                <i class="fa fa-edit"></i> Exercises Management
+	                            </li>
+	                        </ol>
+	                    </div>
+	                </div>
+	                <!-- /.row -->
+	                
+	                <div ng-show="error" class="alert alert-danger">{{error}}</div>
+	                
+	                <div ng-show="exerciseDeleted" class="alert alert-info">Exercise successfully deleted.</div>
+	                
+	                <div>
+						
+						
+		               	<div class="row">
+		               	
+			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
+			               	
+		               		<div class="col-md-12" style="text-align: right;">
+								<input type="submit" ng-click="goToExerciseCreation()" class="btn btn-md btn-primary" value="New"/>
+			    				<input type="submit" ng-if="exercicio.nome" ng-click="goToExerciseEdition()" class="btn btn-md btn-primary" value="Edit"/>
+			    				<input type="submit" ng-if="exercicio.nome" ng-click="deleteExercise()" class="btn btn-md btn-primary" value="Delete"/>
+			    				<input type="submit" ng-if="exercicio.nome" ng-click="clearAssignModal()" class="btn btn-md btn-primary" data-toggle="modal" data-target="#assignModal" value="Assign"/>
+			   				</div>
+		   				
+		               	</div>
+			               	
+		   				
+						<uib-tabset active="activeForm">
+							<uib-tab index="0" heading="Basic">
+							
+								<div class="list-group">
+								  <a ng-repeat="basic in basicExercisesList" 
+								  	 ng-click="$parent.basicSelected = basic; selectExercise(basicSelected)" 
+								  	 class="list-group-item" 
+								  	 ng-class="{active:basicSelected==basic}">
+								  	 {{basic.nome}}
+							  	  </a>
+								</div>
+								
+							</uib-tab>
+							<uib-tab index="1" heading="Intermediate">
+								
+								<div class="list-group">
+								  <a ng-repeat="intermediate in intermediateExercisesList" 
+								  	 ng-click="$parent.intermediateSelected = intermediate; selectExercise(intermediateSelected)" 
+								  	 class="list-group-item" 
+								  	 ng-class="{active:intermediateSelected==intermediate}">
+								  	 {{intermediate.nome}}
+							  	  </a>
+								</div>
+								
+							</uib-tab>
+							<uib-tab index="2" heading="Advanced">
+							
+								<div class="list-group">
+								  <a ng-repeat="advanced in advancedExercisesList" 
+								  	 ng-click="$parent.advancedSelected = advanced; selectExercise(advancedSelected)" 
+								  	 class="list-group-item" 
+								  	 ng-class="{active:advancedSelected==advanced}">
+								  	 {{advanced.nome}}
+							  	  </a>
+								</div>
+							
+							</uib-tab>
+						</uib-tabset>
+						
+		 			</div>
+	                
+	            </div>
+	            <!-- /.container-fluid -->
+	            
+            </form>
+            
+            <!-- Assign Modal -->
+			<div id="assignModal" class="modal fade" data-backdrop="static" role="dialog">
+				<div class="modal-dialog modal-lg">
+					<form name="formMusic" role="form">
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+							  <button type="button" class="close" data-dismiss="modal">&times;</button>
+							  <h4 class="modal-title" style="font-weight: bold;">Assign Exercise</h4>
+							</div>
+							<div class="modal-body">
+							
+								<div ng-show="assignError" class="alert alert-danger">{{assignError}}</div>
+	                
+	                			<div ng-show="assignSuccess" class="alert alert-info">The exercise was successfully assigned.</div>
+							
+								<div class="row">
+									<div class="col-md-12">
+										<fieldset class="scheduler-border">
+											<legend class="scheduler-border">Student</legend>
+											<div class="row">
+												<div class="col-xs-6 form-group">
+													<label>Name</label>
+													<input ng-model="name" class="form-control" type="text" maxlength="50"/>
+												</div>
+												<div class="col-xs-4 form-group">
+													<label>Email</label>
+													<input ng-model="email" class="form-control" type="text" maxlength="50"/>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12 form-group" style="text-align: right;">
+													<button type="button" class="btn btn-default" ng-click="searchStudents()">Search</button>
+												</div>
+											</div>
+										</fieldset>
+									
+										<table id="example" class="table table-bordered" style="text-align: center;" cellspacing="0" width="100%">
+									        <thead>
+									            <tr style="background-color: #2b567a; color: white;">
+									            	<th style="text-align: center;" class="col-xs-1 form-group">
+									            		<input ng-model="allSelected" ng-change="selectAll()" type="checkbox"/>
+								            		</th>
+									                <th style="text-align: center;">Name</th>
+									                <th style="text-align: center;">Email</th>
+									            </tr>
+									        </thead>
+									        <tbody>
+												<tr ng-class="{activated:$index==selectedRow}" data-ng-click="rowHighilited($index)" data-ng-repeat="student in students">
+													<td><input ng-model="student.selected" ng-change="deselectHeader()" type="checkbox"/></td>
+													<td>{{student.nome}}</td>
+													<td>{{student.email}}</td>
+												</tr>
+												<tr ng-if="students.length == 0">
+													<td colspan="3">
+														No records found
+													</td>
+												</tr>
+											</tbody>
+							            </table>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<div class="row">
+									<div class="col-md-12 form-group" style="text-align: right;">
+									  	<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+									  	<button type="button" ng-click="assignExercise()" ng-disabled="formMusic.$invalid" class="btn btn-default">Assign</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+    <div ng-init="init()"></div>
+
+</body>

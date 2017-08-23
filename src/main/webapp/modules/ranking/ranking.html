@@ -1,0 +1,166 @@
+
+<!-- Bootstrap Core CSS -->
+<!-- <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<!-- <link href="lib/css/sb-admin.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> --> 
+
+<style>
+
+	.activated{
+	    background:#d9edf7;
+	    border:1px solid;
+	}
+
+</style>
+
+<body ng-controller="rankingCtrl">
+
+	<div class="row"></div>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-2">
+                <a class="navbar-brand">Menu</a> 
+            </div>
+            <div>
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+            </div>
+            
+            <!-- Top Menu Items -->
+            <div class="nav navbar-right top-nav">
+                <a class="navbar-brand">Welcome {{loggedUser.nome}}!</a> 
+            </div>
+            
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                	<li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Exercises</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Student'">
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Exercises</a>
+                    </li>
+                    <li>
+                        <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
+                    </li>
+                    <li class="active">
+                        <a ui-sref="ranking"><i class="fa fa-fw fa fa-trophy"></i> Ranking</a>
+                    </li>
+                    
+                    <li>
+                        <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+        
+       		<form name="rankingForm" role="form">
+
+	            <div class="container-fluid">
+	
+	                <!-- Page Heading -->
+	                <div class="row">
+	                    <div class="col-lg-12">
+	                        <h1 class="page-header">
+	                            Ranking
+	                        </h1>
+	                        <ol class="breadcrumb">
+	                            <li>
+	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
+	                            </li>
+	                            <li class="active">
+	                                <i class="fa fa-trophy"></i> Ranking
+	                            </li>
+	                        </ol>
+	                    </div>
+	                </div>
+	                <!-- /.row -->
+	                
+	                <div>
+						
+						<uib-tabset active="activeForm">
+							<uib-tab index="0" heading="Basic">
+							
+								<uib-accordion close-others="oneAtATime">
+								    <div uib-accordion-group ng-repeat="exercise in basicList" class="panel-default" heading="{{exercise.nome}}">
+								      
+										<div>
+											<a ng-repeat="basic in exercise.exercicioAlunos | orderBy:['basic.tempoResolucaoMillis', '-basic.nota', 'basic.chances'] : true" 
+												 ng-click="$parent.basicSelected = basic" 
+												 class="list-group-item" 
+												 ng-class="{active:basicSelected==basic}">
+												 {{$index + 1}} - {{basic.aluno.nome}} | Hits: {{basic.chances}} | Resolution time: {{basic.tempoResolucaoString}}
+											</a>
+										</div>
+								      
+								    </div>
+							  	</uib-accordion>
+								
+							</uib-tab>
+							<uib-tab index="1" heading="Intermediate">
+								
+								<uib-accordion close-others="oneAtATime">
+								    <div uib-accordion-group ng-repeat="exercise in intermediateList" class="panel-default" heading="{{exercise.nome}}">
+								    
+								    	<div>
+											<a ng-repeat="intermediate in exercise.exercicioAlunos | orderBy:['intermediate.tempoResolucaoMillis', '-intermediate.nota', 'intermediate.chances'] : true" 
+												 ng-click="$parent.intermediateSelected = intermediate" 
+												 class="list-group-item" 
+												 ng-class="{active:intermediateSelected==intermediate}">
+												 {{$index + 1}} - {{intermediate.aluno.nome}} | Hits: {{intermediate.chances}} | Resolution time: {{intermediate.tempoResolucaoString}}
+											</a>
+										</div>
+								    
+								    </div>
+							  	</uib-accordion>
+								
+							</uib-tab>
+							<uib-tab index="2" heading="Advanced">
+							
+								<uib-accordion close-others="oneAtATime">
+								    <div uib-accordion-group ng-repeat="exercise in advancedList" class="panel-default" heading="{{exercise.nome}}">
+								    
+								    	<div>
+											<a ng-repeat="advanced in exercise.exercicioAlunos | orderBy:['advanced.tempoResolucaoMillis', '-advanced.nota', 'advanced.chances'] : true" 
+												 ng-click="$parent.advancedSelected = advanced" 
+												 class="list-group-item" 
+												 ng-class="{active:advancedSelected==advanced}">
+												 {{$index + 1}} - {{advanced.aluno.nome}} | Hits: {{advanced.chances}} | Resolution time: {{advanced.tempoResolucaoString}}
+											</a>
+										</div>
+								    
+								    </div>
+							  	</uib-accordion>
+							
+							</uib-tab>
+						</uib-tabset>
+						
+		 			</div>
+	                
+	            </div>
+	            <!-- /.container-fluid -->
+	            
+            </form>
+            
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+    <div ng-init="init()"></div>
+
+</body>
