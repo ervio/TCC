@@ -40,9 +40,8 @@ public class SignupController {
 		// profile
 		if (userModel.getTipoConta().equals("Student")) {
 
-			Aluno aluno = new Aluno(null, null, userModel.getNome(), userModel.getTelefone(), userModel.getEmail(),
-					userModel.getLogradouro(), userModel.getBairro(), userModel.getCidade(), userModel.getCep(),
-					userModel.getPassword(), null, null);
+			Aluno aluno = new Aluno(null, null, userModel.getNome(), userModel.getEmail(), userModel.getPassword(),
+					null, null, userModel.getSobrenome(), userModel.getGenero());
 			try {
 				alunoDao.saveOrUpdate(aluno);
 			} catch (ConstraintViolationException e) {
@@ -51,9 +50,9 @@ public class SignupController {
 
 		} else {
 
-			Professor professor = new Professor(null, userModel.getNome(), userModel.getTelefone(),
-					userModel.getEmail(), userModel.getLogradouro(), userModel.getBairro(), userModel.getCidade(),
-					userModel.getCep(), userModel.getPassword(), null, null, null);
+			Professor professor = new Professor(null, userModel.getNome(), userModel.getEmail(),
+					userModel.getPassword(), null, null, null, userModel.getSobrenome(), userModel.getGenero(),
+					userModel.getEspecialidade(), userModel.getNomeInstituicao());
 			try {
 				professorDao.saveOrUpdate(professor);
 			} catch (ConstraintViolationException e) {

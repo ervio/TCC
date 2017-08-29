@@ -4,33 +4,29 @@ public class UserModel {
 
 	private long id;
 	private String nome;
-	private String telefone;
 	private String email;
-	private String novoEmail;
 	private String tipoConta;
 	private String password;
+
+	private String sobrenome;
+	private String genero;
+	private String especialidade;
+	private String nomeInstituicao;
+	private String confirmPassword;
+
+	private String novoEmail;
 	private String novoPassword;
-	private String logradouro;
-	private String bairro;
-	private String cidade;
-	private String cep;
 	private String status;
 
 	public UserModel() {
 	}
 
-	public UserModel(long id, String nome, String telefone, String email, String tipoConta, String password,
-			String logradouro, String bairro, String cidade, String cep) {
+	public UserModel(long id, String nome, String email, String tipoConta, String password) {
 		this.id = id;
 		this.nome = nome;
-		this.telefone = telefone;
 		this.email = email;
 		this.tipoConta = tipoConta;
 		this.password = password;
-		this.logradouro = logradouro;
-		this.bairro = bairro;
-		this.cidade = cidade;
-		this.cep = cep;
 	}
 
 	public long getId() {
@@ -47,14 +43,6 @@ public class UserModel {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
 	}
 
 	public String getEmail() {
@@ -81,38 +69,6 @@ public class UserModel {
 		this.password = password;
 	}
 
-	public String getLogradouro() {
-		return logradouro;
-	}
-
-	public void setLogradouro(String logradouro) {
-		this.logradouro = logradouro;
-	}
-
-	public String getBairro() {
-		return bairro;
-	}
-
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
-
-	public String getCidade() {
-		return cidade;
-	}
-
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
-
-	public String getCep() {
-		return cep;
-	}
-
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
-
 	public String getNovoPassword() {
 		return novoPassword;
 	}
@@ -135,6 +91,46 @@ public class UserModel {
 
 	public void setNovoEmail(String novoEmail) {
 		this.novoEmail = novoEmail;
+	}
+
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+	}
+
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
+
+	public String getEspecialidade() {
+		return especialidade;
+	}
+
+	public void setEspecialidade(String especialidade) {
+		this.especialidade = especialidade;
+	}
+
+	public String getNomeInstituicao() {
+		return nomeInstituicao;
+	}
+
+	public void setNomeInstituicao(String nomeInstituicao) {
+		this.nomeInstituicao = nomeInstituicao;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 }

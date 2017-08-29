@@ -61,17 +61,12 @@ public class PersonalDataController {
 
 			Professor professor = professorList.get(0);
 			professor.setNome(userModel.getNome());
-			professor.setTelefone(userModel.getTelefone());
 			if (!userModel.getEmail().equals(userModel.getNovoEmail())) {
 				professor.setEmail(userModel.getNovoEmail());
 			}
 			if (StringUtils.stripToNull(userModel.getNovoPassword()) != null) {
 				professor.setPassword(userModel.getNovoPassword());
 			}
-			professor.setLogradouro(userModel.getLogradouro());
-			professor.setBairro(userModel.getBairro());
-			professor.setCidade(userModel.getCidade());
-			professor.setCep(userModel.getCep());
 
 			try {
 				professorDao.saveOrUpdate(professor);
@@ -107,17 +102,12 @@ public class PersonalDataController {
 
 			Aluno aluno = alunoList.get(0);
 			aluno.setNome(userModel.getNome());
-			aluno.setTelefone(userModel.getTelefone());
 			if (!userModel.getEmail().equals(userModel.getNovoEmail())) {
 				aluno.setEmail(userModel.getNovoEmail());
 			}
 			if (StringUtils.stripToNull(userModel.getNovoPassword()) != null) {
 				aluno.setPassword(userModel.getNovoPassword());
 			}
-			aluno.setLogradouro(userModel.getLogradouro());
-			aluno.setBairro(userModel.getBairro());
-			aluno.setCidade(userModel.getCidade());
-			aluno.setCep(userModel.getCep());
 
 			try {
 				alunoDao.saveOrUpdate(aluno);

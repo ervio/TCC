@@ -14,59 +14,85 @@
 					
 						<form name="form" role="form">
 						
-			               	<div class="row">
-			               		<div class="col-md-6">
-			               			<fieldset class="scheduler-border">
-										<legend class="scheduler-border">Personal Data</legend>
+	               			<fieldset class="scheduler-border">
+								<legend class="scheduler-border">Personal Data</legend>
+								<div class="row">
+									<div class="col-md-6 form-group">
 										<div class="form-group">
-											<label for="fullnameInput">Fullname *</label>
-											<input type="text" class="form-control" ng-model="newrecord.nome" id="fullnameInput" placeholder="Fullname" maxlength="50" required>
+											<label for="fullnameInput">First Name *</label>
+											<input type="text" class="form-control" ng-model="newrecord.nome" id="firstNameInput" placeholder="First Name" maxlength="50" required>
 										</div>
 										<div class="form-group">
-											<label for="phoneInput">Phone</label>
-											<input type="text" class="form-control" ng-model="newrecord.telefone" id="phoneInput" placeholder="Phone" maxlength="11">
+											<label for="lastNameInput">Last Name *</label>
+											<input type="text" class="form-control" ng-model="newrecord.sobrenome" id="lastNameInput" placeholder="Last name" maxlength="50" required>
 										</div>
 										<div class="form-group">
-									        <label for="emailInput">Email *</label>
-									        <input type="text" name="emailInput" id="emailInput" class="form-control" ng-model="newrecord.email" placeholder="Email" maxlength="50" required />
-									    </div>
+											<label for="emailInput">Email *</label>
+								        	<input type="text" name="emailInput" id="emailInput" class="form-control" ng-model="newrecord.email" placeholder="Email" maxlength="50" required />
+										</div>
+										<div class="form-group">
+											<label for="gender">Gender *</label>
+											<select class="form-control selectpicker"  ng-model="newrecord.genero" id="gender" required>
+												<option value="">Select a value</option>
+												<option>Male</option>
+												<option>Female</option> 
+											</select>
+										</div>
 										<div class="form-group">
 											<label for="accountTypeInput">Account Type *</label>
-											<select class="form-control selectpicker"  ng-model="newrecord.tipoConta" id="accountTypeInput" required>
+											<select class="form-control selectpicker" ng-model="newrecord.tipoConta" id="accountTypeInput" required>
 												<option value="">Select a value</option>
 												<option>Student</option>
 												<option>Teacher</option>
 											</select>
 										</div>
-										<div class="form-group">
-									        <label for="password">Password *</label>
-									        <input type="password" name="password" id="password" class="form-control" ng-model="newrecord.password" placeholder="Password" maxlength="50" required />
-									    </div>
-										
-									</fieldset>
-			               		</div>
-			               		<div class="col-md-6">
-			               			<fieldset class="scheduler-border">
-										<legend class="scheduler-border">Address</legend>
-										<div class="form-group">
-											<label for="streetAddressInput">Street Address</label>
-											<input type="text" class="form-control" ng-model="newrecord.logradouro" id="streetAddressInput" placeholder="Street Address" maxlength="50">
+									</div>
+									<div class="col-md-6 form-group">
+										<div class="form-group" ng-if="newrecord.tipoConta == 'Teacher'">
+											<label for="specialty">Specialty *</label>
+											<select class="form-control selectpicker"  ng-model="newrecord.especialidade" id="specialty" required>
+												<option value="">Select a value</option>
+												<option>Private teacher</option>
+												<option>Free-course teacher</option>
+												<option>School teacher</option>
+											</select>
+										</div>
+										<div class="form-group" ng-if="newrecord.especialidade == 'Free-course teacher' || newrecord.especialidade == 'School teacher'">
+											<label for="institutionNameInput">Name of institution *</label>
+											<input type="text" class="form-control" ng-model="newrecord.nomeInstituicao" id="institutionNameInput" placeholder="Name of institution" maxlength="50" required>
 										</div>
 										<div class="form-group">
-											<label for="neighborhoodInput">Neighborhood</label>
-											<input type="text" class="form-control" ng-model="newrecord.bairro" id="neighborhoodInput" placeholder="Neighborhood" maxlength="50">
+											<label for="password">Password *</label>
+								        	<input type="password" name="password" id="password" class="form-control" ng-model="newrecord.password" placeholder="Password" maxlength="50" required />
 										</div>
 										<div class="form-group">
-											<label for="cityInput">City</label>
-											<input type="text" class="form-control" ng-model="newrecord.cidade" id="cityInput" placeholder="City" maxlength="20">
+											 <label for="confirmPassword">Confirm password *</label>
+								        	<input type="password" name="confirmPassword" id="password" class="form-control" ng-model="newrecord.confirmPassword" placeholder="Confirm password" maxlength="50" required />
 										</div>
-										<div class="form-group">
-											<label for="zipCodeInput">Zip Code</label>
-											<input type="text" class="form-control" ng-model="newrecord.cep" id="zipCodeInput" placeholder="Zip Code" maxlength="9">
-										</div>
-									</fieldset>
-			               		</div>
-			               	</div>
+									</div>
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								</div>
+							</fieldset>
 			               	
 							<div style="text-align: center;">
 								<a ui-sref="index" href="#">

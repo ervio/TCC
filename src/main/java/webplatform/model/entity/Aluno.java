@@ -31,12 +31,9 @@ public class Aluno implements java.io.Serializable {
 	private Long id;
 	private Professor professor;
 	private String nome;
-	private String telefone;
+	private String sobrenome;
 	private String email;
-	private String logradouro;
-	private String bairro;
-	private String cidade;
-	private String cep;
+	private String genero;
 	private String password;
 	private Set<Convite> convites = new HashSet<Convite>();
 	private Set<ExercicioAluno> exercicioAlunos = new HashSet<ExercicioAluno>();
@@ -48,21 +45,17 @@ public class Aluno implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Aluno(Long id, Professor professor, String nome, String telefone, String email, String logradouro,
-			String bairro, String cidade, String cep, String password, Set<Convite> convites,
-			Set<ExercicioAluno> exercicioAlunos) {
+	public Aluno(Long id, Professor professor, String nome, String email, String password, Set<Convite> convites,
+			Set<ExercicioAluno> exercicioAlunos, String sobrenome, String genero) {
 		this.id = id;
 		this.professor = professor;
 		this.nome = nome;
-		this.telefone = telefone;
 		this.email = email;
-		this.logradouro = logradouro;
-		this.bairro = bairro;
-		this.cidade = cidade;
-		this.cep = cep;
 		this.password = password;
 		this.convites = convites;
 		this.exercicioAlunos = exercicioAlunos;
+		this.sobrenome = sobrenome;
+		this.genero = genero;
 	}
 
 	@Id
@@ -96,15 +89,6 @@ public class Aluno implements java.io.Serializable {
 		this.nome = nome;
 	}
 
-	@Column(name = "TELEFONE", length = 11)
-	public String getTelefone() {
-		return this.telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
 	@Column(name = "EMAIL", length = 50)
 	public String getEmail() {
 		return this.email;
@@ -112,42 +96,6 @@ public class Aluno implements java.io.Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	@Column(name = "LOGRADOURO", length = 50)
-	public String getLogradouro() {
-		return this.logradouro;
-	}
-
-	public void setLogradouro(String logradouro) {
-		this.logradouro = logradouro;
-	}
-
-	@Column(name = "BAIRRO", length = 50)
-	public String getBairro() {
-		return this.bairro;
-	}
-
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
-
-	@Column(name = "CIDADE", length = 20)
-	public String getCidade() {
-		return this.cidade;
-	}
-
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
-
-	@Column(name = "CEP", length = 9)
-	public String getCep() {
-		return this.cep;
-	}
-
-	public void setCep(String cep) {
-		this.cep = cep;
 	}
 
 	@Column(name = "PASSWORD", length = 50)
@@ -177,6 +125,24 @@ public class Aluno implements java.io.Serializable {
 
 	public void setExercicioAlunos(Set<ExercicioAluno> exercicioAlunos) {
 		this.exercicioAlunos = exercicioAlunos;
+	}
+
+	@Column(name = "SOBRENOME", length = 50)
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+	}
+
+	@Column(name = "GENERO", length = 6)
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String genero) {
+		this.genero = genero;
 	}
 
 }
