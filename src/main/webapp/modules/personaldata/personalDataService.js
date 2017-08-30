@@ -4,4 +4,9 @@ angular.module("app").service("personalDataService", function($http, constants){
 	this.update = function(newrecord) {	
 		return $http.post(constants.baseUrl + "/updateUserData", newrecord);
 	};
+	
+	// Call the getAllCountries service from SignupController class
+	this.getAllCountries = function() {	
+		return $http.get(constants.baseUrl + "/personalData/getAllCountries");
+	};
 });

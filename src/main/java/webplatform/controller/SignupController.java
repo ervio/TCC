@@ -1,9 +1,12 @@
 package webplatform.controller;
 
+import java.util.List;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import webplatform.dao.AlunoDao;
+import webplatform.dao.PaisDao;
 import webplatform.dao.ProfessorDao;
 import webplatform.model.UserModel;
 import webplatform.model.entity.Aluno;
+import webplatform.model.entity.Pais;
 import webplatform.model.entity.Professor;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -25,6 +30,9 @@ public class SignupController {
 
 	@Autowired
 	private ProfessorDao professorDao;
+
+	@Autowired
+	private PaisDao paisDao;
 
 	/**
 	 * Populate the registered user according to the chosen profile in ALUNO or
@@ -41,7 +49,8 @@ public class SignupController {
 		if (userModel.getTipoConta().equals("Student")) {
 
 			Aluno aluno = new Aluno(null, null, userModel.getNome(), userModel.getEmail(), userModel.getPassword(),
-					null, null, userModel.getSobrenome(), userModel.getGenero());
+					null, null, userModel.getSobrenome(), userModel.getGenero(),
+					new Pais(Long.parseLong(userModel.getPais())));
 			try {
 				alunoDao.saveOrUpdate(aluno);
 			} catch (ConstraintViolationException e) {
@@ -52,7 +61,8 @@ public class SignupController {
 
 			Professor professor = new Professor(null, userModel.getNome(), userModel.getEmail(),
 					userModel.getPassword(), null, null, null, userModel.getSobrenome(), userModel.getGenero(),
-					userModel.getEspecialidade(), userModel.getNomeInstituicao());
+					userModel.getEspecialidade(), userModel.getNomeInstituicao(),
+					new Pais(Long.parseLong(userModel.getPais())));
 			try {
 				professorDao.saveOrUpdate(professor);
 			} catch (ConstraintViolationException e) {
@@ -62,5 +72,18 @@ public class SignupController {
 
 		return new ResponseEntity(userModel, HttpStatus.OK);
 
+	}
+
+	/**
+	 * Search all the options related to the question selected
+	 * 
+	 * @param questionId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/signup/getAllCountries", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity getAllCountries() {
+		List<Pais> paises = paisDao.listAll();
+		return new ResponseEntity(paises, HttpStatus.OK);
 	}
 }

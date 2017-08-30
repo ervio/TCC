@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -24,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Professor implements java.io.Serializable {
 
 	private Long id;
+	private Pais pais;
 	private String nome;
 	private String sobrenome;
 	private String email;
@@ -43,7 +46,8 @@ public class Professor implements java.io.Serializable {
 	}
 
 	public Professor(Long id, String nome, String email, String password, Set<Convite> convites, Set<Aluno> alunos,
-			Set<Exercicio> exercicios, String sobrenome, String genero, String especialidade, String nomeInstituicao) {
+			Set<Exercicio> exercicios, String sobrenome, String genero, String especialidade, String nomeInstituicao,
+			Pais pais) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
@@ -55,6 +59,7 @@ public class Professor implements java.io.Serializable {
 		this.genero = genero;
 		this.especialidade = especialidade;
 		this.nomeInstituicao = nomeInstituicao;
+		this.pais = pais;
 	}
 
 	@Id
@@ -162,4 +167,13 @@ public class Professor implements java.io.Serializable {
 		this.nomeInstituicao = nomeInstituicao;
 	}
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "PAIS")
+	public Pais getPais() {
+		return this.pais;
+	}
+
+	public void setPais(Pais pais) {
+		this.pais = pais;
+	}
 }

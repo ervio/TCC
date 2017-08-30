@@ -12,7 +12,7 @@ public class UserModel {
 	private String genero;
 	private String especialidade;
 	private String nomeInstituicao;
-	private String confirmPassword;
+	private String pais;
 
 	private String novoEmail;
 	private String novoPassword;
@@ -21,12 +21,32 @@ public class UserModel {
 	public UserModel() {
 	}
 
-	public UserModel(long id, String nome, String email, String tipoConta, String password) {
+	/* Constructor for teachers */
+	public UserModel(long id, String nome, String email, String tipoConta, String password, String sobrenome,
+			String genero, String especialidade, String nomeInstituicao, String pais) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.tipoConta = tipoConta;
 		this.password = password;
+		this.sobrenome = sobrenome;
+		this.genero = genero;
+		this.especialidade = especialidade;
+		this.nomeInstituicao = nomeInstituicao;
+		this.pais = pais;
+	}
+
+	/* Constructor for students */
+	public UserModel(long id, String nome, String email, String tipoConta, String password, String sobrenome,
+			String genero, String pais) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.tipoConta = tipoConta;
+		this.password = password;
+		this.sobrenome = sobrenome;
+		this.genero = genero;
+		this.pais = pais;
 	}
 
 	public long getId() {
@@ -125,12 +145,12 @@ public class UserModel {
 		this.nomeInstituicao = nomeInstituicao;
 	}
 
-	public String getConfirmPassword() {
-		return confirmPassword;
+	public String getPais() {
+		return pais;
 	}
 
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
+	public void setPais(String pais) {
+		this.pais = pais;
 	}
 
 }

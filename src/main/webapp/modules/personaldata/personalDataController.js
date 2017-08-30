@@ -37,4 +37,14 @@ angular.module('app').controller("personalDataCtrl", function($scope, $rootScope
 		$scope.password = "";
 	};
 	
+	// Method called when the screen opens
+	$scope.init = function(){
+		
+		personalDataService.getAllCountries().then( 
+			function successCallback(response) {
+				$scope.paises = angular.copy(response.data);
+			}
+		);
+		
+	};
 });

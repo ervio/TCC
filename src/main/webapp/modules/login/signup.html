@@ -48,6 +48,15 @@
 										</div>
 									</div>
 									<div class="col-md-6 form-group">
+										
+										<div class="form-group">
+											<label for="country">Country *</label>
+											<select class="form-control selectpicker" ng-model="newrecord.pais" id="country" required>
+												<option value="">Select a value</option>
+												<option ng-repeat="country in paises" value="{{country.id}}">{{country.nome}}</option>
+											</select> 
+										</div>
+									
 										<div class="form-group" ng-if="newrecord.tipoConta == 'Teacher'">
 											<label for="specialty">Specialty *</label>
 											<select class="form-control selectpicker"  ng-model="newrecord.especialidade" id="specialty" required>
@@ -70,27 +79,6 @@
 								        	<input type="password" name="confirmPassword" id="password" class="form-control" ng-model="newrecord.confirmPassword" placeholder="Confirm password" maxlength="50" required />
 										</div>
 									</div>
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
 								</div>
 							</fieldset>
 			               	
@@ -121,4 +109,6 @@
 			</div>
 		</div>
 	</div>
+	
+	<div ng-init="init()"></div>
 </div>

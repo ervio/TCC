@@ -8,6 +8,7 @@ angular.module('app').controller("signupCtrl", function($scope, $location, LazyR
 			 especialidade : "",
 			 nomeInstituicao : "",
 			 password : "",
+			 pais : "",
 			 confirmPassword : ""
 			 };
 	
@@ -33,6 +34,17 @@ angular.module('app').controller("signupCtrl", function($scope, $location, LazyR
 		}
 		
 		$scope.dataLoading = false;
+		
+	};
+	
+	// Method called when the screen opens
+	$scope.init = function(){
+		
+		signupService.getAllCountries().then( 
+			function successCallback(response) {
+				$scope.paises = angular.copy(response.data);
+			}
+		);
 		
 	};
 });

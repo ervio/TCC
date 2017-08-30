@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import webplatform.dao.AlunoDao;
+import webplatform.dao.PaisDao;
 import webplatform.dao.ProfessorDao;
 import webplatform.enums.DataBaseErrorsEnum;
 import webplatform.model.UserModel;
 import webplatform.model.entity.Aluno;
+import webplatform.model.entity.Pais;
 import webplatform.model.entity.Professor;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -29,6 +32,9 @@ public class PersonalDataController {
 
 	@Autowired
 	private ProfessorDao professorDao;
+
+	@Autowired
+	private PaisDao paisDao;
 
 	/**
 	 * Update the personal data of the logged user
@@ -61,12 +67,19 @@ public class PersonalDataController {
 
 			Professor professor = professorList.get(0);
 			professor.setNome(userModel.getNome());
+			professor.setSobrenome(userModel.getSobrenome());
+
 			if (!userModel.getEmail().equals(userModel.getNovoEmail())) {
 				professor.setEmail(userModel.getNovoEmail());
 			}
 			if (StringUtils.stripToNull(userModel.getNovoPassword()) != null) {
 				professor.setPassword(userModel.getNovoPassword());
 			}
+
+			professor.setGenero(userModel.getGenero());
+			professor.setPais(new Pais(Long.parseLong(userModel.getPais())));
+			professor.setEspecialidade(userModel.getEspecialidade());
+			professor.setNomeInstituicao(userModel.getNomeInstituicao());
 
 			try {
 				professorDao.saveOrUpdate(professor);
@@ -102,12 +115,17 @@ public class PersonalDataController {
 
 			Aluno aluno = alunoList.get(0);
 			aluno.setNome(userModel.getNome());
+			aluno.setSobrenome(userModel.getSobrenome());
+
 			if (!userModel.getEmail().equals(userModel.getNovoEmail())) {
 				aluno.setEmail(userModel.getNovoEmail());
 			}
 			if (StringUtils.stripToNull(userModel.getNovoPassword()) != null) {
 				aluno.setPassword(userModel.getNovoPassword());
 			}
+
+			aluno.setGenero(userModel.getGenero());
+			aluno.setPais(new Pais(Long.parseLong(userModel.getPais())));
 
 			try {
 				alunoDao.saveOrUpdate(aluno);
@@ -129,5 +147,18 @@ public class PersonalDataController {
 			userModel.setStatus("The password is wrong.");
 			return new ResponseEntity(userModel, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	/**
+	 * Search all the options related to the question selected
+	 * 
+	 * @param questionId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/personalData/getAllCountries", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity getAllCountries() {
+		List<Pais> paises = paisDao.listAll();
+		return new ResponseEntity(paises, HttpStatus.OK);
 	}
 }

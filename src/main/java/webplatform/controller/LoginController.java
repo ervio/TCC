@@ -44,18 +44,25 @@ public class LoginController {
 		// Search user in PROFESSOR table
 		if (!teacherList.isEmpty()) {
 			Professor teacher = teacherList.get(0);
+			String country = teacher.getPais() != null ? teacher.getPais().getid().toString() : null;
+
 			UserModel userModel = new UserModel(teacher.getId(), teacher.getNome(), teacher.getEmail(),
-					AccountTypeEnum.TEACHER.getValue(), teacher.getPassword());
+					AccountTypeEnum.TEACHER.getValue(), teacher.getPassword(), teacher.getSobrenome(),
+					teacher.getGenero(), teacher.getEspecialidade(), teacher.getNomeInstituicao(), country);
 			return new ResponseEntity(userModel, HttpStatus.OK);
 
 		} else {
 
 			// Search user in ALUNO table
 			List<Aluno> studentList = alunoDao.findByEmailAndPassword(email, password);
+
 			if (!studentList.isEmpty()) {
 				Aluno student = studentList.get(0);
+				String country = student.getPais() != null ? student.getPais().getid().toString() : null;
+
 				UserModel userModel = new UserModel(student.getId(), student.getNome(), student.getEmail(),
-						AccountTypeEnum.STUDENT.getValue(), student.getPassword());
+						AccountTypeEnum.STUDENT.getValue(), student.getPassword(), student.getSobrenome(),
+						student.getGenero(), country);
 				return new ResponseEntity(userModel, HttpStatus.OK);
 			} else {
 				return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
