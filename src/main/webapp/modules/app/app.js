@@ -81,6 +81,11 @@ app.factory("LazyRoute", function ($log) {
 				templateUrl: 'modules/ranking/ranking.html',
 				controller: "rankingCtrl"
 			})
+			.state('logout', {
+				url: '/WebPlatform/',
+				templateUrl: 'modules/login/login.html',
+				controller: "rankingCtrl"
+			})
 	    	;
         
         $log.log("Sub View1 state configured.");

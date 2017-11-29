@@ -42,13 +42,13 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                 	<li ng-if="loggedUser.tipoConta == 'Teacher'">
-                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Exercises</a>
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Lessons</a>
                     </li>
                     <li ng-if="loggedUser.tipoConta == 'Teacher'">
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
                     </li>
                     <li ng-if="loggedUser.tipoConta == 'Student'">
-                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Exercises</a>
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
                     </li>
                     <li class="active">
                         <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
@@ -59,6 +59,9 @@
                     
                     <li>
                         <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                    <li>
+                        <a ui-sref="logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
                     </li>
                 </ul>
             </div>
@@ -103,7 +106,7 @@
 							</div>
 							<div class="row">
 								<div class="col-xs-6 form-group">
-									<label>Exercise</label>
+									<label>Lesson</label>
 									<input ng-model="exerciseName" class="form-control" type="text" maxlength="30"/>
 								</div>
 								<div class="col-xs-3 form-group">
@@ -135,7 +138,7 @@
 						        <thead>
 						            <tr style="background-color: #2b567a; color: white;">
 						                <th style="text-align: center;">Id</th>
-						                <th style="text-align: center;">Exercise Name</th>
+						                <th style="text-align: center;">Lesson Name</th>
 						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
 						                <th style="text-align: center;">Score</th>
 						                <th style="text-align: center;">Max Score</th>
@@ -151,12 +154,12 @@
 									</tr>
 									<tr ng-if="basicList.length == 0 && loggedUser.tipoConta != 'Teacher'">
 										<td colspan="4">
-											There aren't resolved exercises for this level.
+											There aren't resolved lessons for this level.
 										</td>
 									</tr>
 									<tr ng-if="basicList.length == 0 && loggedUser.tipoConta == 'Teacher'">
 										<td colspan="5">
-											There aren't resolved exercises for this level.
+											There aren't resolved lessons for this level.
 										</td>
 									</tr>
 								</tbody>
@@ -174,7 +177,7 @@
 						        <thead>
 						            <tr style="background-color: #2b567a; color: white;">
 						                <th style="text-align: center;">Id</th>
-						                <th style="text-align: center;">Exercise Name</th>
+						                <th style="text-align: center;">Lesson Name</th>
 						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
 						                <th style="text-align: center;">Score</th>
 						                <th style="text-align: center;">Max Score</th>
@@ -190,12 +193,12 @@
 									</tr>
 									<tr ng-if="intermediateList.length == 0 && loggedUser.tipoConta != 'Teacher'">
 										<td colspan="4">
-											There aren't resolved exercises for this level.
+											There aren't resolved lessons for this level.
 										</td>
 									</tr>
 									<tr ng-if="intermediateList.length == 0 && loggedUser.tipoConta == 'Teacher'">
 										<td colspan="5">
-											There aren't resolved exercises for this level.
+											There aren't resolved lessons for this level.
 										</td>
 									</tr>
 								</tbody>
@@ -213,7 +216,7 @@
 						        <thead>
 						            <tr style="background-color: #2b567a; color: white;">
 						                <th style="text-align: center;">Id</th>
-						                <th style="text-align: center;">Exercise Name</th>
+						                <th style="text-align: center;">Lesson Name</th>
 						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
 						                <th style="text-align: center;">Score</th>
 						                <th style="text-align: center;">Max Score</th>
@@ -229,12 +232,12 @@
 									</tr>
 									<tr ng-if="advancedList.length == 0 && loggedUser.tipoConta != 'Teacher'">
 										<td colspan="4">
-											There aren't resolved exercises for this level.
+											There aren't resolved lessons for this level.
 										</td>
 									</tr>
 									<tr ng-if="advancedList.length == 0 && loggedUser.tipoConta == 'Teacher'">
 										<td colspan="5">
-											There aren't resolved exercises for this level.
+											There aren't resolved lessons for this level.
 										</td>
 									</tr>
 								</tbody>

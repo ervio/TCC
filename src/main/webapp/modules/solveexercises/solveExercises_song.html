@@ -35,13 +35,13 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                 	<li ng-if="loggedUser.tipoConta == 'Teacher'">
-                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Exercises</a>
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Lessons</a>
                     </li>
                     <li ng-if="loggedUser.tipoConta == 'Teacher'">
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
                     </li>
                     <li class="active" ng-if="loggedUser.tipoConta == 'Student'">
-                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Exercises</a>
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
                     </li>
                     <li>
                         <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
@@ -52,6 +52,9 @@
                     
                     <li>
                         <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                    <li>
+                        <a ui-sref="logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
                     </li>
                 </ul>
             </div>
@@ -68,14 +71,14 @@
 	                <div class="row">
 	                    <div class="col-lg-12">
 	                        <h1 class="page-header">
-	                            Exercise - {{exerciseToEdit.exercicio.nome}}
+	                            Lesson - {{exerciseToEdit.exercicio.nome}}
 	                        </h1>
 	                        <ol class="breadcrumb">
 	                            <li>
 	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
 	                            </li>
 	                            <li>
-	                                <i class="fa fa-edit"></i>  <a ui-sref="solveExercises">Solve Exercises</a>
+	                                <i class="fa fa-edit"></i>  <a ui-sref="solveExercises">Solve Lessons</a>
 	                            </li>
 	                            <li class="active">
 	                                <i class="fa fa-edit"></i> {{exerciseToEdit.exercicio.nome}}
