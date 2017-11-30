@@ -94,7 +94,7 @@ app.factory("LazyRoute", function ($log) {
     return {};
 });
 
-app.directive('webPlatformLoading', function() {
+app.directive('webPlatformLoading', function() { 
 	return {
 		template: 
 			'<div class="text-center">' +
