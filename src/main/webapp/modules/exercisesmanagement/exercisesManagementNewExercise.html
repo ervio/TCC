@@ -200,7 +200,7 @@
 	   				
 	   				<!-- Activities Modal -->
 					<div id="activitiesModal" class="modal fade" data-backdrop="static" role="dialog">
-						<div class="modal-dialog modal-lg">
+						<div class="modal-dialog modal-lg" style="width: 1000px !important;">
 							<form name="ActivitiesForm" role="form">
 								<!-- Modal content-->
 								<div class="modal-content">
@@ -211,7 +211,7 @@
 									<div class="modal-body">
 											
 										<uib-tabset active="activeForm">
-											<uib-tab index="0" heading="Session 1">
+											<uib-tab index="0" heading="Vocabulary Practice">
 											
 												<div class="row">
 													<div class="col-md-12 form-group">
@@ -269,7 +269,7 @@
 												</div>
 												
 											</uib-tab>
-											<uib-tab index="1" heading="Session 2">
+											<uib-tab index="1" heading="Listening Practice">
 											
 												<div class="row">
 													<div class="col-md-12 form-group">
@@ -285,7 +285,7 @@
 												</div>
 												
 											</uib-tab>
-											<uib-tab index="2" heading="Session 3">
+											<uib-tab index="2" heading="Language Practice">
 											
 												<div class="row">
 													<div class="col-md-12 form-group">
@@ -299,16 +299,12 @@
 															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Definitions</legend>
 															
 															<div class="col-md-12 form-group">
-																<div class="scrolly">
-																	<div class="list-group" style="margin-top: 20px;">
-																	  <a class="list-group-item" class="optionSelected">
-																	  	 A) TELL sth/sb FROM sth/sb: to distinguish one from another.
-																  	  </a>
-																  	  <a class="list-group-item active" class="optionSelected">
-																	  	 B) TELL: to say sth to sb such as a story, a lie, the truth, a secret, a joke, etc.
-																  	  </a>
-																	</div>
-																</div>
+																<a class="list-group-item" class="optionSelected">
+															  		A) TELL sth/sb FROM sth/sb: to distinguish one from another.
+														  		</a>
+														  		<a class="list-group-item active" class="optionSelected">
+																	B) TELL: to say sth to sb such as a story, a lie, the truth, a secret, a joke, etc.
+														  		</a>
 															</div>
 															
 															<div class="col-md-12 form-group" style="text-align: center;">
@@ -319,7 +315,7 @@
 															
 															<div class="col-md-12 form-group">
 																<label>Definition</label>
-																<input ng-model="musicName" class="form-control" type="text" maxlength="30" required/>
+																<input class="form-control" type="text" maxlength="30" value="TELL: to say sth to sb such as a story, a lie, the truth, a secret, a joke, etc."/>
 															</div>
 														</fieldset>
 													</div>
@@ -327,26 +323,38 @@
 												
 												<div class="row">
 													<div class="col-md-12">
+														<br>
 														<fieldset class="scheduler-border">
 															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Alternatives</legend>
 															
-															<div class="col-md-9 form-group">
-																<label>Alternative</label>
-																<input class="form-control" type="text" maxlength="30" value="Can you tell heaven from hell?"/>
-																<input class="form-control" type="text" maxlength="30" value="Have you told her your grade in English?"/>
+															<div class="col-md-12 form-group">
+																<a class="list-group-item" class="optionSelected">
+															  		1) Can you tell heaven from hell?
+														  		</a>
+														  		<a class="list-group-item active" class="optionSelected">
+																	2) Have you told her your grade in English?
+														  		</a>
 															</div>
-															<div class="col-md-3 form-group">
-																<label>Answer</label>
-																<select class="form-control selectpicker">
-																	<option value="">Select a value</option>
-																	<option>A</option>
-																	<option>B</option>
-																</select>
-																<select class="form-control selectpicker">
-																	<option value="">Select a value</option>
-																	<option>A</option>
-																	<option>B</option>
-																</select>
+															
+															<div class="col-md-12 form-group" style="text-align: center;">
+																<button type="button" class="btn btn-default">Save Option</button>
+																<button type="button" class="btn btn-default">Edit</button>
+																<button type="button" class="btn btn-default">Delete</button>
+															</div>
+															
+															<div>
+																<div class="col-md-10 form-group">
+																	<label>Alternative</label>
+																	<input class="form-control" type="text" maxlength="30" value="Have you told her your grade in English?"/>
+																</div>
+																<div class="col-md-2 form-group">
+																	<label>Answer</label>
+																	<select class="form-control selectpicker">
+																		<option value="">Select</option>
+																		<option>A</option>
+																		<option>B</option>
+																	</select>
+																</div>
 															</div>
 															
 														</fieldset>
@@ -354,19 +362,156 @@
 												</div>
 											
 											</uib-tab>
-											<uib-tab index="2" heading="Session 4">
+											<uib-tab index="3" heading="Reading Practice">
 											
+												<div class="row">
+													<div class="col-md-12 form-group">
+														<div ng-show="modalError" class="alert alert-danger">{{modalError}}</div>
+													</div>
+												</div>
+											
+												<div class="row">
+													<div class="col-md-12">
+														<fieldset class="scheduler-border">
+															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Questions</legend>
+															
+															<div class="col-md-12 form-group">
+																<a class="list-group-item" class="optionSelected">
+															  		1) The first verse of the song talks about:
+														  		</a>
+														  		<a class="list-group-item active" class="optionSelected">
+																	2) The second verse talks about:
+														  		</a>
+															</div>
+															
+															<div class="col-md-12 form-group" style="text-align: center;">
+																<button type="button" class="btn btn-default">Save Option</button>
+																<button type="button" class="btn btn-default">Edit</button>
+																<button type="button" class="btn btn-default">Delete</button>
+															</div>
+															
+															<div class="col-md-12 form-group">
+																<label>Question</label>
+																<input class="form-control" type="text" maxlength="30" value="The second verse talks about:"/>
+															</div>
+														</fieldset>
+													</div>
+												</div>	
 												
+												<div class="row">
+													<div class="col-md-12">
+														<br>
+														<fieldset class="scheduler-border">
+															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Alternatives</legend>
+															
+															<div class="col-md-12 form-group">
+																<a class="list-group-item" class="optionSelected">
+															  		a)	missing someone</b>
+														  		</a>
+														  		<a class="list-group-item active" class="optionSelected">
+																	b)	similar things
+														  		</a>
+														  		<a class="list-group-item" class="optionSelected">
+																	c)	business
+														  		</a>
+														  		<a class="list-group-item" class="optionSelected">
+																	d)	choices in life
+														  		</a>
+															</div>
+															
+															<div class="col-md-12 form-group" style="text-align: center;">
+																<button type="button" class="btn btn-default">Save Option</button>
+																<button type="button" class="btn btn-default">Edit</button>
+																<button type="button" class="btn btn-default">Delete</button>
+															</div>
+															
+															<div>
+																<div class="col-md-10 form-group">
+																	<label>Alternative</label>
+																	<input class="form-control" type="text" maxlength="30" value="similar things"/>
+																</div>
+																<div class="col-md-2 form-group">
+																	<label>Correct?</label>
+																	<select class="form-control selectpicker">
+																		<option value="">Select</option>
+																		<option>Yes</option>
+																		<option>No</option>
+																	</select>
+																</div>
+															</div>
+															
+														</fieldset>
+													</div>
+												</div>
 											
 											</uib-tab>
-											<uib-tab index="2" heading="Session 5">
+											<uib-tab index="4" heading="Pronunciation Practice">
 											
-												
+												<div class="row">
+													<div class="col-md-12 form-group">
+														<div ng-show="modalError" class="alert alert-danger">{{modalError}}</div>
+													</div>
+												</div>
+											
+												<div class="row">
+													<div class="col-md-12">
+														<fieldset class="scheduler-border">
+															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Questions</legend>
+															
+															<div class="col-md-12 form-group">
+																<a class="list-group-item" class="optionSelected">
+															  		1)	So you think you can tell <b style="color: darkblue;">heaven</b> from <b style="color: darkblue;">hell</b>.
+														  		</a>
+														  		<a class="list-group-item active" class="optionSelected">
+																	2)	Can you tell a green field from a cold <b style="color: darkblue;">steel rail?</b>
+														  		</a>
+															</div>
+															
+															<div class="col-md-12 form-group" style="text-align: center;">
+																<button type="button" class="btn btn-default">Save Option</button>
+																<button type="button" class="btn btn-default">Edit</button>
+																<button type="button" class="btn btn-default">Add line</button>
+																<button type="button" class="btn btn-default">Delete</button>
+															</div>
+															
+															<div class="col-md-10 form-group">
+																<label>Question</label>
+																<input class="form-control" type="text" maxlength="30" value="Can you tell a green field from a cold"/>
+																<input class="form-control" type="text" maxlength="30" value="steel rail?"/>
+															</div>
+															<div class="col-md-2 form-group">
+																<label>Type</label>
+																<select class="form-control selectpicker">
+																	<option value="">Select</option>
+																	<option>Sentence</option>
+																	<option>Gap</option>
+																</select>
+																<select class="form-control selectpicker">
+																	<option value="">Select</option>
+																	<option>Sentence</option>
+																	<option>Gap</option>
+																</select>
+															</div>
+															
+														</fieldset>
+													</div>
+												</div>	
 											
 											</uib-tab>
-											<uib-tab index="2" heading="Session 6">
+											<uib-tab index="5" heading="Writing Practice">
 											
-												
+												<div class="row">
+													<div class="col-md-12 form-group">
+														<div ng-show="modalError" class="alert alert-danger">{{modalError}}</div>
+													</div>
+												</div>
+											
+												<div class="row">
+													<div class="col-md-10 form-group">
+														<label>Question</label>
+														<input class="form-control" type="text" maxlength="30" value="What do you think WISH YOU WERE HERE is about? What does it mean?"/>
+													</div>
+												</div>	
 											
 											</uib-tab>
 										</uib-tabset>
