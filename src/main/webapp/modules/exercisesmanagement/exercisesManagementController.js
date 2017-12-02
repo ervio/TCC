@@ -114,6 +114,10 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		$("#questionModal").modal("show");
 	 };
 	 
+	 $scope.activitiesModal = function(){
+		$("#activitiesModal").modal("show");
+	 };
+	 
 	 // Function called by "Add question" button (when question list is not empty)
 	 $scope.addNewQuestion = function(){
 		 $scope.error = "";
