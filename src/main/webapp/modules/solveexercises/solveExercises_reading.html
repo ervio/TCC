@@ -71,7 +71,7 @@
 	                <div class="row">
 	                    <div class="col-lg-12">
 	                        <h1 class="page-header">
-	                            Listening Practice
+	                            Reading Practice
 	                        </h1>
 	                        <ol class="breadcrumb">
 	                            <li>
@@ -81,7 +81,7 @@
 	                                <i class="fa fa-edit"></i>  <a ui-sref="solveExercises">Solve Lessons</a>
 	                            </li>
 	                            <li class="active">
-	                                <i class="fa fa-edit"></i> Listening Practice
+	                                <i class="fa fa-edit"></i> Reading Practice
 	                            </li>
 	                        </ol>
 	                    </div>
@@ -97,53 +97,112 @@
 			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
 			               	
 			               	<div class="col-md-12">
-								<b>Complete the last verse of the song with the missing lines. Click and drag each line into the correct order.</b>
+								<b>Read the lyrics of the song and choose the best alternative to the sentences.</b>
 			   				</div>
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
 								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
-								<input type="submit" ng-click="goToVocabulary()" class="btn btn-md btn-primary" value="Vocabulary"/>
+								<input type="submit" ng-click="goToOralPrdocution()" class="btn btn-md btn-primary" value="Oral Production"/>
 			   				</div>
-		   				
-		               	</div>
-		               	
-		               	<div style="text-align: center; margin-bottom: 10px; margin-top: 10px;">
-		               		<youtube-video video-url="exerciseToEdit.exercicio.musica.link" player-width="'40%'" player-height="'300px'"></youtube-video>
-	               		</div>
-		               	
-		               	<div class="simpleDemo row">
-
-						    <div class="col-md-12">
-						        <div class="row">
-						            <div ng-repeat="(listName, list) in models.lists" class="col-md-6">
-						                <div class="panel panel-info">
-						                    <div class="panel-heading">
-						                        <h3 class="panel-title">{{exerciseToEdit.exercicio.musica.nome}}</h3>
-						                    </div>
-						                    <div class="panel-body">
-						                    	<ul dnd-list="list">
-												    <!-- The dnd-draggable directive makes an element draggable and will
-												         transfer the object that was assigned to it. If an element was
-												         dragged away, you have to remove it from the original list
-												         yourself using the dnd-moved attribute -->
-												    <li ng-repeat="item in list"
-												        dnd-draggable="item"
-												        dnd-moved="list.splice($index, 1)"
-												        dnd-effect-allowed="move"
-												        dnd-selected="models.selected = item"
-												        ng-class="{'selected': models.selected === item}"
-												        >
-												        {{item.label}}
-												    </li>
-												</ul>
-						                    </div>
-						                </div>
-						            </div>
-						        </div>
-						
-						    </div>
-						
-						</div>
+			   				
+			   				<div class="row">
+			   					<div class="col-md-12" align="center">
+			   						<b style="color: red;">Wish You Were Here</b> <b>- Pink Floyd</b>
+			   					</div>
+			   				</div><br>
+			   				
+			   				<div class="col-md-6" align="center">
+								
+								So, so you think you can tell<br>
+								Heaven from hell<br>
+								Blue skies from pain<br>
+								Can you tell a green field<br>
+								From a cold steel rail<br>
+								A smile from a veil<br>
+								Do you think you can tell<br><br>
+								
+								Did they get you to trade<br>
+								Your heroes for ghosts<br>
+								Hot ashes for trees<br>
+								Hot air for a cool breeze<br>
+								Cold comfort for change<br>
+								Did you exchange<br>
+								A walk on part in the war<br>
+								For a lead role in a cage<br><br>
+								
+								How I wish<br>
+								How I wish you were here<br>
+								We're just two lost souls<br>
+								Swimming in a fish bowl<br>
+								Year after year<br>
+								Running over the same old ground<br>
+								What have we found<br>
+								The same old fears<br>
+								Wish you were here<br>
+								
+			   				</div>
+			   				
+			   				<div class="col-md-6">
+			   				
+			   					<label>1) The first verse of the song talks about:</label>
+							    <div class="radio">
+							        <label>
+							            <input type="radio">a) distinct things  
+							        </label><br>
+							        <label>
+							            <input type="radio">b) similar things 
+							        </label><br>
+							        <label>
+							            <input type="radio">c) business 
+							        </label><br>
+							        <label>
+							            <input type="radio">d) missing someone 
+							        </label>
+							    </div>
+			   				
+			   				</div>
+			   				
+			   				<div class="col-md-6">
+			   				
+			   					<label>2) The second verse talks about:</label>
+							    <div class="radio">
+							        <label>
+							            <input type="radio">a) missing someone  
+							        </label><br>
+							        <label>
+							            <input type="radio">b) similar things 
+							        </label><br>
+							        <label>
+							            <input type="radio">c) business 
+							        </label><br>
+							        <label>
+							            <input type="radio">d) choices in life 
+							        </label>
+							    </div>
+			   				
+			   				</div>
+			   				
+			   				<div class="col-md-6">
+			   				
+			   					<label>3) The third verse talks about:</label>
+							    <div class="radio">
+							        <label>
+							            <input type="radio">a) missing someone  
+							        </label><br>
+							        <label>
+							            <input type="radio">b) distinct things 
+							        </label><br>
+							        <label>
+							            <input type="radio">c) business 
+							        </label><br>
+							        <label>
+							            <input type="radio">d) choices in life 
+							        </label>
+							    </div>
+			   				
+			   				</div>
+			   				
+		               	</div><br>
 		               	
 		 			</div>
 	                

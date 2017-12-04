@@ -164,6 +164,26 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		
 	};
 	
+	$scope.goToVocabulary = function(){
+		$state.go("resolveExerciseVocabulary");
+	};
+	
+	$scope.goToLanguage = function(){
+		$state.go("resolveExerciseLanguage");
+	};
+	
+	$scope.goToReading = function(){
+		$state.go("resolveExerciseReading");
+	};
+	
+	$scope.goToOralPrdocution = function(){
+		$state.go("resolveExerciseOralProduction");
+	};
+	
+	$scope.goToWriting = function(){
+		$state.go("resolveExerciseWriting");
+	};
+	
 	// Method to submit the questions resolved by the student. It calls the method submitQuestions from solveExercisesService
 	$scope.submitQuestions = function(){
 		

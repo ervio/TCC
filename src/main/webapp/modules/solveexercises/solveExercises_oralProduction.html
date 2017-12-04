@@ -71,7 +71,7 @@
 	                <div class="row">
 	                    <div class="col-lg-12">
 	                        <h1 class="page-header">
-	                            Listening Practice
+	                            Oral Production
 	                        </h1>
 	                        <ol class="breadcrumb">
 	                            <li>
@@ -81,7 +81,7 @@
 	                                <i class="fa fa-edit"></i>  <a ui-sref="solveExercises">Solve Lessons</a>
 	                            </li>
 	                            <li class="active">
-	                                <i class="fa fa-edit"></i> Listening Practice
+	                                <i class="fa fa-edit"></i> Oral Production
 	                            </li>
 	                        </ol>
 	                    </div>
@@ -97,53 +97,55 @@
 			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
 			               	
 			               	<div class="col-md-12">
-								<b>Complete the last verse of the song with the missing lines. Click and drag each line into the correct order.</b>
+								<b>Say aloud the correct word to complete the lines of the lyrics.</b>
 			   				</div>
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
 								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
-								<input type="submit" ng-click="goToVocabulary()" class="btn btn-md btn-primary" value="Vocabulary"/>
+								<input type="submit" ng-click="goToWriting()" class="btn btn-md btn-primary" value="Writing"/>
 			   				</div>
-		   				
+			   				
+		               	</div><br>
+		               	
+		               	<div class="row">
+		               	
+		               		<div class="col-md-12">
+		               			1) So you think you can tell <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> from <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>.
+		               		</div>
+		               	
 		               	</div>
 		               	
-		               	<div style="text-align: center; margin-bottom: 10px; margin-top: 10px;">
-		               		<youtube-video video-url="exerciseToEdit.exercicio.musica.link" player-width="'40%'" player-height="'300px'"></youtube-video>
-	               		</div>
+		               	<div class="row">
 		               	
-		               	<div class="simpleDemo row">
-
-						    <div class="col-md-12">
-						        <div class="row">
-						            <div ng-repeat="(listName, list) in models.lists" class="col-md-6">
-						                <div class="panel panel-info">
-						                    <div class="panel-heading">
-						                        <h3 class="panel-title">{{exerciseToEdit.exercicio.musica.nome}}</h3>
-						                    </div>
-						                    <div class="panel-body">
-						                    	<ul dnd-list="list">
-												    <!-- The dnd-draggable directive makes an element draggable and will
-												         transfer the object that was assigned to it. If an element was
-												         dragged away, you have to remove it from the original list
-												         yourself using the dnd-moved attribute -->
-												    <li ng-repeat="item in list"
-												        dnd-draggable="item"
-												        dnd-moved="list.splice($index, 1)"
-												        dnd-effect-allowed="move"
-												        dnd-selected="models.selected = item"
-												        ng-class="{'selected': models.selected === item}"
-												        >
-												        {{item.label}}
-												    </li>
-												</ul>
-						                    </div>
-						                </div>
-						            </div>
-						        </div>
-						
-						    </div>
-						
-						</div>
+		               		<div class="col-md-12">
+		               			2) Can you tell a green field from a cold <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>?
+		               		</div>
+		               	
+		               	</div>
+		               	
+		               	<div class="row">
+		               	
+		               		<div class="col-md-12">
+		               			3) Did they get you to trade your heroes for <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>, hot <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> for trees?
+		               		</div>
+		               	
+		               	</div>
+		               	
+		               	<div class="row">
+		               	
+		               		<div class="col-md-12">
+		               			4) Did you exchange a walk on part in the <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> for a lead role in a <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>.
+		               		</div>
+		               	
+		               	</div>
+		               	
+		               	<div class="row">
+		               	
+		               		<div class="col-md-12">
+		               			5) We're just two lost souls swimming in a <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> year after year. 
+		               		</div>
+		               	
+		               	</div>
 		               	
 		 			</div>
 	                

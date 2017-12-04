@@ -1,0 +1,241 @@
+
+<!-- Bootstrap Core CSS -->
+<!-- <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<!-- <link href="lib/css/sb-admin.css" rel="stylesheet">
+
+<link href="lib/drag-and-drop/simple.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+
+<body ng-controller="solveExercisesCtrl">
+
+	<div class="row"></div>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-2">
+                <a class="navbar-brand">Menu</a> 
+            </div>
+            <div>
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+            </div>
+            
+            <!-- Top Menu Items -->
+            <div class="nav navbar-right top-nav">
+                <a class="navbar-brand">Welcome {{loggedUser.nome}}!</a> 
+            </div>
+            
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                	<li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Lessons</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Teacher'"> 
+                        <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
+                    </li>
+                    <li class="active" ng-if="loggedUser.tipoConta == 'Student'">
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
+                    </li>
+                    <li>
+                        <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
+                    </li>
+                    <li>
+                        <a ui-sref="ranking"><i class="fa fa-fw fa fa-trophy"></i> Ranking</a>
+                    </li>
+                    
+                    <li>
+                        <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                    <li>
+                        <a ui-sref="logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+        
+       		<form name="exercisesForm" role="form">
+
+	            <div class="container-fluid">
+	
+	                <!-- Page Heading --> 
+	                <div class="row">
+	                    <div class="col-lg-12">
+	                        <h1 class="page-header">
+	                            Language Practice
+	                        </h1>
+	                        <ol class="breadcrumb">
+	                            <li>
+	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
+	                            </li>
+	                            <li>
+	                                <i class="fa fa-edit"></i>  <a ui-sref="solveExercises">Solve Lessons</a>
+	                            </li>
+	                            <li class="active">
+	                                <i class="fa fa-edit"></i> Language Practice
+	                            </li>
+	                        </ol>
+	                    </div>
+	                </div>
+	                <!-- /.row -->
+	                
+	                <div ng-show="error" class="alert alert-danger">{{error}}</div>
+	                
+	                <div>
+						
+		               	<div class="row">
+		               	
+			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
+			               	
+			               	<div class="col-md-12">
+								<b>Read the two definitions (TELL and TELL FROM) and match the sentences with the correct meaning of TELL:</b>
+			   				</div>
+			               	
+		               		<div class="col-md-12" style="text-align: right;">
+								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
+								<input type="submit" ng-click="goToReading()" class="btn btn-md btn-primary" value="Reading"/>
+			   				</div>
+			   				
+		               	</div><br>
+		               	
+		               	<div class="row">
+		               		<div class="col-md-12">
+		               			A)	TELL  sth/sb FROM sth/sb: to distinguish one from another.
+		               		</div>
+		               	</div>
+		               	
+		               	<div class="row">
+		               		<div class="col-md-12">
+		               			B)	TELL: to say sth to sb such as a story, a lie, the truth, a secret, a joke, etc. 
+		               		</div>
+		               	</div><br>
+		               	
+		               	<div class="row">
+		               		<div class="col-md-2">
+		               			<select class="form-control selectpicker">
+									<option value="">Select</option>
+									<option>A</option>
+									<option>B</option>
+								</select>
+		               		</div>
+		               		<div class="col-md-9">
+		               			Can you tell heaven from hell?
+		               		</div>
+		               	</div>
+		               	
+		               	<div class="row" style="margin-top: 10px;">
+		               		<div class="col-md-2">
+		               			<select class="form-control selectpicker">
+									<option value="">Select</option>
+									<option>A</option>
+									<option>B</option>
+								</select>
+		               		</div>
+		               		<div class="col-md-9">
+		               			Have you told her your grade in English?
+		               		</div>
+		               	</div>
+		               	
+		               	<div class="row" style="margin-top: 10px;">
+		               		<div class="col-md-2">
+		               			<select class="form-control selectpicker">
+									<option value="">Select</option>
+									<option>A</option>
+									<option>B</option>
+								</select>
+		               		</div>
+		               		<div class="col-md-9">
+		               			The mother told the child a story from a fairy tale book.
+		               		</div>
+		               	</div>
+		               	
+		               	<div class="row" style="margin-top: 10px;">
+		               		<div class="col-md-2">
+		               			<select class="form-control selectpicker">
+									<option value="">Select</option>
+									<option>A</option>
+									<option>B</option>
+								</select>
+		               		</div>
+		               		<div class="col-md-9">
+		               			I can't tell one twin from the other.
+		               		</div>
+		               	</div>
+		               	
+		               	<div class="row" style="margin-top: 10px;">
+		               		<div class="col-md-2">
+		               			<select class="form-control selectpicker">
+									<option value="">Select</option>
+									<option>A</option>
+									<option>B</option>
+								</select>
+		               		</div>
+		               		<div class="col-md-9">
+		               			She couldn't tell the homemade bread from the one we bought at the bakery.
+		               		</div>
+		               	</div>
+		               	
+		               	<div class="row" style="margin-top: 10px;">
+		               		<div class="col-md-2">
+		               			<select class="form-control selectpicker">
+									<option value="">Select</option>
+									<option>A</option>
+									<option>B</option>
+								</select>
+		               		</div>
+		               		<div class="col-md-9">
+		               			He never told anyone he was from Syria.
+		               		</div>
+		               	</div>
+		               	
+		               	<div class="row" style="margin-top: 10px;">
+		               		<div class="col-md-2">
+		               			<select class="form-control selectpicker">
+									<option value="">Select</option>
+									<option>A</option>
+									<option>B</option>
+								</select>
+		               		</div>
+		               		<div class="col-md-9">
+		               			Are you good at telling jokes from your country?
+		               		</div>
+		               	</div>
+		               	
+		               	<div class="row" style="margin-top: 10px;">
+		               		<div class="col-md-2">
+		               			<select class="form-control selectpicker">
+									<option value="">Select</option>
+									<option>A</option>
+									<option>B</option>
+								</select>
+		               		</div>
+		               		<div class="col-md-9">
+		               			Do you think you can tell an influenza from a common cold?
+		               		</div>
+		               	</div>
+		               	
+		 			</div>
+	                
+	            </div>
+	            <!-- /.container-fluid -->
+	            
+            </form>
+            
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+    <div ng-init="initSong()"></div>
+
+</body>

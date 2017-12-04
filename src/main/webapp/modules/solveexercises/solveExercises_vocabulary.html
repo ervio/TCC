@@ -1,0 +1,319 @@
+
+<!-- Bootstrap Core CSS -->
+<!-- <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<!-- <link href="lib/css/sb-admin.css" rel="stylesheet">
+
+<link href="lib/drag-and-drop/simple.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+
+<body ng-controller="solveExercisesCtrl">
+
+	<div class="row"></div>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-md-2">
+                <a class="navbar-brand">Menu</a> 
+            </div>
+            <div>
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+            </div>
+            
+            <!-- Top Menu Items -->
+            <div class="nav navbar-right top-nav">
+                <a class="navbar-brand">Welcome {{loggedUser.nome}}!</a> 
+            </div>
+            
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                	<li ng-if="loggedUser.tipoConta == 'Teacher'">
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Lessons</a>
+                    </li>
+                    <li ng-if="loggedUser.tipoConta == 'Teacher'"> 
+                        <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
+                    </li>
+                    <li class="active" ng-if="loggedUser.tipoConta == 'Student'">
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
+                    </li>
+                    <li>
+                        <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
+                    </li>
+                    <li>
+                        <a ui-sref="ranking"><i class="fa fa-fw fa fa-trophy"></i> Ranking</a>
+                    </li>
+                    
+                    <li>
+                        <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
+                    </li>
+                    <li>
+                        <a ui-sref="logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+        
+       		<form name="exercisesForm" role="form">
+
+	            <div class="container-fluid">
+	
+	                <!-- Page Heading --> 
+	                <div class="row">
+	                    <div class="col-lg-12">
+	                        <h1 class="page-header">
+	                            Vocabulary Practice
+	                        </h1>
+	                        <ol class="breadcrumb">
+	                            <li>
+	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
+	                            </li>
+	                            <li>
+	                                <i class="fa fa-edit"></i>  <a ui-sref="solveExercises">Solve Lessons</a>
+	                            </li>
+	                            <li class="active">
+	                                <i class="fa fa-edit"></i> Vocabulary Practice
+	                            </li>
+	                        </ol>
+	                    </div>
+	                </div>
+	                <!-- /.row -->
+	                
+	                <div ng-show="error" class="alert alert-danger">{{error}}</div>
+	                
+	                <div>
+						
+		               	<div class="row">
+		               	
+			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
+			               	
+			               	<div class="col-md-12">
+								<b>Match the words with the images. You may use a dictionary to help you.</b>
+			   				</div>
+			               	
+		               		<div class="col-md-12" style="text-align: right;">
+								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
+								<input type="submit" ng-click="goToLanguage()" class="btn btn-md btn-primary" value="Language"/>
+			   				</div>
+			   				
+		               	</div><br>
+		               	
+		               	<div class="row">
+		               		
+		               		<div class="col-md-2">
+		               			1)	heaven <i class="fa fa-volume-up" style="color:red"></i>
+		               		</div>
+		               		<div class="col-md-2">
+		               			2)	hell <i class="fa fa-volume-up" style="color:red"></i>
+		               		</div>
+		               		<div class="col-md-2">
+		               			3)	steel rail <i class="fa fa-volume-up" style="color:red"></i>
+		               		</div>
+		               		<div class="col-md-2">
+		               			4)	ghost <i class="fa fa-volume-up" style="color:red"></i>
+		               		</div>
+		               		<div class="col-md-2">
+		               			5)	ashes <i class="fa fa-volume-up" style="color:red"></i>
+		               		</div>
+		               		<div class="col-md-2">
+		               			6)	war <i class="fa fa-volume-up" style="color:red"></i>
+		               		</div>
+		               		
+		               		<div class="col-md-2">
+		               			7)	cage <i class="fa fa-volume-up" style="color:red"></i>
+		               		</div>
+		               		<div class="col-md-2">
+		               			8)	fish bowl <i class="fa fa-volume-up" style="color:red"></i>
+		               		</div>
+		               		
+		               	</div><br>
+		               	
+		               	<div class="row">
+							<div class="col-md-3 form-group">
+								<div align="center">
+									<img src="img/heaven.jpg" height="150" width="180"/><br>
+								</div>
+									
+								<div class="col-md-12 form-group" align="center">
+									<select class="form-control selectpicker" style="width: 50%;">
+										<option value="">Select</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-md-3 form-group">
+								<div align="center">
+									<img src="img/fishbowl.jpg" height="150" width="180"/><br>
+								</div>
+									
+								<div class="col-md-12 form-group" align="center">
+									<select class="form-control selectpicker" style="width: 50%;">
+										<option value="">Select</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-md-3 form-group">
+								<div align="center">
+									<img src="img/cage.jpg" height="150" width="180"/><br>
+								</div>
+									
+								<div class="col-md-12 form-group" align="center">
+									<select class="form-control selectpicker" style="width: 50%;">
+										<option value="">Select</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-md-3 form-group">
+								<div align="center">
+									<img src="img/ghost.jpg" height="150" width="180"/><br>
+								</div>
+									
+								<div class="col-md-12 form-group" align="center">
+									<select class="form-control selectpicker" style="width: 50%;">
+										<option value="">Select</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+									</select>
+								</div>
+							</div>
+						</div>
+		               	
+		               	<div class="row">
+							<div class="col-md-3 form-group">
+								<div align="center">
+									<img src="img/war.jpg" height="150" width="180"/><br>
+								</div>
+									
+								<div class="col-md-12 form-group" align="center">
+									<select class="form-control selectpicker" style="width: 50%;">
+										<option value="">Select</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-md-3 form-group">
+								<div align="center">
+									<img src="img/hell.jpg" height="150" width="180"/><br>
+								</div>
+									
+								<div class="col-md-12 form-group" align="center">
+									<select class="form-control selectpicker" style="width: 50%;">
+										<option value="">Select</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-md-3 form-group">
+								<div align="center">
+									<img src="img/steel_rail.jpg" height="150" width="180"/><br>
+								</div>
+									
+								<div class="col-md-12 form-group" align="center">
+									<select class="form-control selectpicker" style="width: 50%;">
+										<option value="">Select</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="col-md-3 form-group">
+								<div align="center">
+									<img src="img/ashes.png" height="150" width="180"/><br>
+								</div>
+									
+								<div class="col-md-12 form-group" align="center">
+									<select class="form-control selectpicker" style="width: 50%;">
+										<option value="">Select</option>
+										<option>1</option>
+										<option>2</option>
+										<option>3</option>
+										<option>4</option>
+										<option>5</option>
+										<option>6</option>
+										<option>7</option>
+										<option>8</option>
+									</select>
+								</div>
+							</div>
+						</div>
+		               	
+		 			</div>
+	                
+	            </div>
+	            <!-- /.container-fluid -->
+	            
+            </form>
+            
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    
+    <div ng-init="initSong()"></div>
+
+</body>

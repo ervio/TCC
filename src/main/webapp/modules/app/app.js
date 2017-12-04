@@ -86,6 +86,31 @@ app.factory("LazyRoute", function ($log) {
 				templateUrl: 'modules/login/login.html',
 				controller: "rankingCtrl"
 			})
+			.state('resolveExerciseVocabulary', {
+				url: '/WebPlatform/',
+				templateUrl: 'modules/solveexercises/solveExercises_vocabulary.html',
+				controller: "solveExercisesCtrl"
+			})
+			.state('resolveExerciseLanguage', {
+				url: '/WebPlatform/',
+				templateUrl: 'modules/solveexercises/solveExercises_language.html',
+				controller: "solveExercisesCtrl"
+			})
+			.state('resolveExerciseReading', {
+				url: '/WebPlatform/',
+				templateUrl: 'modules/solveexercises/solveExercises_reading.html',
+				controller: "solveExercisesCtrl"
+			})
+			.state('resolveExerciseOralProduction', {
+				url: '/WebPlatform/',
+				templateUrl: 'modules/solveexercises/solveExercises_oralProduction.html',
+				controller: "solveExercisesCtrl"
+			})
+			.state('resolveExerciseWriting', {
+				url: '/WebPlatform/',
+				templateUrl: 'modules/solveexercises/solveExercises_writing.html',
+				controller: "solveExercisesCtrl"
+			})
 	    	;
         
         $log.log("Sub View1 state configured.");
