@@ -52,7 +52,7 @@
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
                     </li>
                     <li ng-if="loggedUser.tipoConta == 'Student'"> 
-                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i>Lesson Resolution</a>
                     </li>
                     <li>
                         <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
@@ -80,17 +80,17 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 ng-if="!exercicio.idExercicio" class="page-header">
-                            Lessons Management - New Lesson
+                            Lesson Management - New Lesson
                         </h1>
                         <h1 ng-if="exercicio.idExercicio" class="page-header">
-                            Lessons Management - Edit Lesson
+                            Lesson Management - Edit Lesson
                         </h1>
                         <ol class="breadcrumb">
                             <li>
                                 <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
                             </li>
                             <li>
-                                <i class="fa fa-edit"></i>  <a ui-sref="exercisesManagement">Lessons Management</a>
+                                <i class="fa fa-edit"></i>  <a ui-sref="exercisesManagement">Lesson Management</a>
                             </li>
                             <li ng-if="!exercicio.idExercicio" class="active">
                                 <i class="fa fa-sticky-note-o"></i> New
@@ -279,13 +279,13 @@
 												
 												<div class="row">
 													<div class="col-md-12 form-group">
-														<label>Lyrics part *</label>
+														<label>Part of the song to be ordered (max 10 lines) *</label>
 														<textarea ng-model="musicLyrics" class="form-control" rows="8" required></textarea>
 													</div>
 												</div>
 												
 											</uib-tab>
-											<uib-tab index="2" heading="Language Practice">
+											<uib-tab index="2" heading="Grammar Practice">
 											
 												<div class="row">
 													<div class="col-md-12 form-group">
