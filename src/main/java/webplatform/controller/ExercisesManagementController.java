@@ -1,23 +1,28 @@
 package webplatform.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import webplatform.bo.ExercisesManagementBo;
 import webplatform.dao.AlternativaDao;
 import webplatform.dao.AlunoDao;
 import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioDao;
+import webplatform.dao.ImagemDao;
 import webplatform.dao.MusicaDao;
 import webplatform.dao.QuestaoDao;
 import webplatform.model.ExercicioModel;
@@ -25,6 +30,7 @@ import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.Aluno;
 import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.ExercicioAluno;
+import webplatform.model.entity.Imagem;
 import webplatform.model.entity.Questao;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -52,9 +58,12 @@ public class ExercisesManagementController {
 	@Autowired
 	private MusicaDao musicaDao;
 
+	@Autowired
+	private ImagemDao imagemDao;
+
 	/**
-	 * The method saves the exercises including the music of it, the questions
-	 * and their alternatives
+	 * The method saves the exercises including the music of it, the questions and
+	 * their alternatives
 	 * 
 	 * @param exercicioModel
 	 * @return
@@ -195,5 +204,22 @@ public class ExercisesManagementController {
 			exercicioAlunoDao.saveOrUpdate(exercicioAluno);
 		}
 		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/test", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public @ResponseBody String saveUserDataAndFile(@RequestParam(value = "file") MultipartFile file,
+			@RequestParam("idExercicio") String idExercicio, @RequestParam("nomeImagem") String nomeImagem) {
+		System.out.println("Cacete: ");
+		Imagem imagem = new Imagem();
+		try {
+			imagem.setBytes(file.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		imagem.setIdExercicio(Long.parseLong(idExercicio));
+		imagem.setNome(nomeImagem);
+		imagemDao.saveOrUpdate(imagem);
+		return "";
 	}
 }

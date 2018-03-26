@@ -28,6 +28,7 @@ public class Exercicio implements java.io.Serializable {
 	private Long idExercicio;
 	private Professor professor;
 	private Musica musica;
+	// TODO: remover atributo nome
 	private String nome;
 	private String nivel;
 	private int valorNotaMaxima;

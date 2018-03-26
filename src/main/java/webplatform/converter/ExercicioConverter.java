@@ -14,7 +14,6 @@ public class ExercicioConverter {
 		if (exercicioModel.getIdExercicio() != 0) {
 			exercicio.setIdExercicio(exercicioModel.getIdExercicio());
 		}
-		exercicio.setNome(exercicioModel.getNome());
 		exercicio.setNivel(exercicioModel.getNivel());
 		exercicio.setValorNotaMaxima(Integer.parseInt(exercicioModel.getValorNotaMaxima()));
 

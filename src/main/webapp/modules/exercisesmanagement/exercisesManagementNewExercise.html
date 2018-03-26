@@ -46,7 +46,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                 	<li class="active" ng-if="loggedUser.tipoConta == 'Teacher'">
-                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Lessons</a>
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Lesson Management</a>
                     </li>
                     <li ng-if="loggedUser.tipoConta == 'Teacher'">
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
@@ -127,10 +127,6 @@
 		               			<fieldset class="scheduler-border">
 									<legend class="scheduler-border">Lesson</legend>
 									<div class="row">
-										<div class="col-xs-6 form-group">
-											<label>Name *</label>
-											<input ng-model="exercicio.nome" class="form-control" type="text" maxlength="30" required/>
-										</div>
 										<div class="col-xs-3 form-group">
 											<label>Level *</label>
 											<select ng-model="exercicio.nivel" class="form-control selectpicker" required>
@@ -140,8 +136,6 @@
 												<option>Advanced</option>
 											</select>
 										</div>
-									</div>
-									<div class="row">
 										<div class="col-xs-3 form-group">
 											<label>Max Score *</label>
 											<input ng-model="exercicio.valorNotaMaxima" class="form-control" type="text" maxlength="2" required/>
@@ -201,7 +195,7 @@
 	   				<!-- Activities Modal -->
 					<div id="activitiesModal" class="modal fade" data-backdrop="static" role="dialog">
 						<div class="modal-dialog modal-lg" style="width: 1000px !important;">
-							<form name="ActivitiesForm" role="form">
+							<form name="activitiesForm" role="form">
 								<!-- Modal content-->
 								<div class="modal-content">
 									<div class="modal-header">
@@ -220,52 +214,40 @@
 												</div>
 											
 												<div class="row">
-													<div class="col-md-4 form-group">
-														<div align="center">
-															<img src="img/fishbowl.jpg" height="150" width="180"/><br>
-														</div>
-															
-														<div class="col-md-10 form-group">
-															<input class="form-control" type="text" maxlength="50" required/>
-														</div>
-														<div>
-															<i class="fa fa-trash fa-2x" style="color:red"></i>
-														</div>
-													</div>
-													
-													<div class="col-md-4 form-group">
-														<div align="center">
-															<img src="img/ghost.jpg" height="150" width="180"/><br>
-														</div>
-															
-														<div class="col-md-10 form-group">
-															<input class="form-control" type="text" maxlength="50" required/>
-														</div>
-														<div>
-															<i class="fa fa-trash fa-2x" style="color:red"></i>
-														</div>
-													</div>
-													
-													<div class="col-md-4 form-group">
-														<div align="center">
-															<img src="img/war.jpg" height="150" width="180"/><br>
-														</div>
-															
-														<div class="col-md-10 form-group">
-															<input class="form-control" type="text" maxlength="50" required/>
-														</div>
-														<div>
-															<i class="fa fa-trash fa-2x" style="color:red"></i>
-														</div>
-													</div>
-												</div>
-											
-												<div class="row">
-													<div class="col-md-12 form-group">
+						                        	<div class="col-md-12 form-group">
 						                                <label>Select the picture *</label>
-						                                <input type="file"><br>
-						                                <button class="btn btn-primary">Import File</button>
+						                                <input type="file" 
+													         ngf-select 
+													         ng-model="picFile" name="file"    
+													         accept="image/*" 
+													         ngf-max-size="2MB">
+													         <i ng-show="activitiesForm.file.$error.maxSize">File too large {{picFile.size / 1000000|number:1}}MB: max 2M</i><br>
+						                                <button type="button" class="btn btn-primary" ng-disabled="activitiesForm.file.$error.maxSize" ng-click="addFileToList(picFile); picFile = null;">Import File</button>
 						                            </div>
+												</div>
+												
+												<br>
+												
+												<div class="row">
+												
+													<div class="col-md-4 form-group" class="uploadedfile" ng-repeat="f in pictures">
+														<div ng-show="f">
+														    <!-- FILE -->
+														    <div align="center">
+																<img class="thumb" ngf-thumbnail="f"><br>
+															</div>
+														    
+														    <div class="col-md-10 form-group">
+																<input class="form-control" ng-model="f.nome" type="text" maxlength="50" required/>
+															</div>
+															<div>
+																<button ng-click="removePicture(f)">
+														         	<i class="fa fa-trash fa-2x" style="color:red"></i>
+														       </button>
+															</div>
+														</div>
+													</div>
+												
 												</div>
 												
 											</uib-tab>
@@ -280,7 +262,7 @@
 												<div class="row">
 													<div class="col-md-12 form-group">
 														<label>Part of the song to be ordered (max 10 lines) *</label>
-														<textarea ng-model="musicLyrics" class="form-control" rows="8" required></textarea>
+														<textarea ng-model="musicLyrics" class="form-control" rows="8"></textarea>
 													</div>
 												</div>
 												
@@ -521,7 +503,8 @@
 										<div class="row">
 											<div class="col-md-12 form-group" style="text-align: right;">
 												<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-												<button type="button" class="btn btn-default" ng-click="saveQuestionModal()" ng-disabled="questionForm.$invalid || questao.alternativas.length == 0">Save</button>
+												<button type="button" class="btn btn-default" ng-click="test()">Test</button>
+												<button type="button" class="btn btn-default" ng-click="saveActivitiesModal()" ng-disabled="activitiesForm.$invalid">Save</button>
 											</div>
 										</div>
 									</div>

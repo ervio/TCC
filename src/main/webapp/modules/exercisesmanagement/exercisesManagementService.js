@@ -50,4 +50,19 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 	this.assignExercise = function(studentsIds, idExercicio){
 		return $http.get(constants.baseUrl + "/assignExercise/" + studentsIds + "/" + idExercicio);
 	}
+	
+	
+	this.test = function(pictures, exercicio){
+		
+		var URL = constants.baseUrl + "/test";
+	    var fd = new FormData();
+	    fd.append('file', pictures[0]);
+	    fd.append('exercicio', angular.toJson(exercicio, true));
+	    return $http.post(URL, fd, {
+	        transformRequest : angular.identity,
+	        headers : {
+	            'Content-Type' : undefined
+	        }
+	    });
+	}
 });

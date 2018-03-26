@@ -46,7 +46,7 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                 	<li class="active" ng-if="loggedUser.tipoConta == 'Teacher'"> 
-                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Manage Lessons</a>
+                        <a ui-sref="exercisesManagement"><i class="fa fa-fw fa-edit"></i> Lesson Management</a>
                     </li>
                     <li ng-if="loggedUser.tipoConta == 'Teacher'">
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
@@ -109,9 +109,9 @@
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
 								<input type="submit" ng-click="goToExerciseCreation()" class="btn btn-md btn-primary" value="New"/>
-			    				<input type="submit" ng-if="exercicio.nome" ng-click="goToExerciseEdition()" class="btn btn-md btn-primary" value="Edit"/>
-			    				<input type="submit" ng-if="exercicio.nome" ng-click="deleteExercise()" class="btn btn-md btn-primary" value="Delete"/>
-			    				<input type="submit" ng-if="exercicio.nome" ng-click="clearAssignModal()" class="btn btn-md btn-primary" data-toggle="modal" data-target="#assignModal" value="Assign"/>
+			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="goToExerciseEdition()" class="btn btn-md btn-primary" value="Edit"/>
+			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="deleteExercise()" class="btn btn-md btn-primary" value="Delete"/>
+			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="clearAssignModal()" class="btn btn-md btn-primary" data-toggle="modal" data-target="#assignModal" value="Assign"/>
 			   				</div>
 		   				
 		               	</div>
@@ -125,7 +125,7 @@
 								  	 ng-click="$parent.basicSelected = basic; selectExercise(basicSelected)" 
 								  	 class="list-group-item" 
 								  	 ng-class="{active:basicSelected==basic}">
-								  	 {{basic.nome}}
+								  	 {{basic.musica.nome}}
 							  	  </a>
 								</div>
 								
@@ -137,7 +137,7 @@
 								  	 ng-click="$parent.intermediateSelected = intermediate; selectExercise(intermediateSelected)" 
 								  	 class="list-group-item" 
 								  	 ng-class="{active:intermediateSelected==intermediate}">
-								  	 {{intermediate.nome}}
+								  	 {{intermediate.musica.nome}}
 							  	  </a>
 								</div>
 								
@@ -149,7 +149,7 @@
 								  	 ng-click="$parent.advancedSelected = advanced; selectExercise(advancedSelected)" 
 								  	 class="list-group-item" 
 								  	 ng-class="{active:advancedSelected==advanced}">
-								  	 {{advanced.nome}}
+								  	 {{advanced.musica.nome}}
 							  	  </a>
 								</div>
 							

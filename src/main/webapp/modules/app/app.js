@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'youtube-embed', 'dndLists', 'ngAnimate', 'ngSanitize'])
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'youtube-embed', 'dndLists', 'ngAnimate', 'ngSanitize', 'ngFileUpload'])
 
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $injector) {
 	

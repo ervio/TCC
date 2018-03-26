@@ -53,12 +53,23 @@
 		    background-color: #A6D9A6;
 		}
 
+		.thumb {
+		    width: 180px;
+		    height: 150px;
+		    float: none;
+		    position: relative;
+		}
+
     </style>
     
-    <script src="lib/angular-1.6.4/angular.js"></script>
+    <!-- Angular base libs -->
+    <script src="webjars/angularjs/1.6.9/angular.js"></script>
+    <script src="webjars/angularjs/1.6.9/angular-resource.js"></script>
+    <script src="webjars/angularjs/1.6.9/angular-animate.js"></script>
+    <script src="webjars/angularjs/1.6.9/angular-sanitize.js"></script>
+    
+    <!-- UI router lib --> 
     <script src="lib/angular-1.6.4/angular-ui-router2.js"></script>
-    <script src="lib/angular-1.6.4/angular-animate.js"></script>
-    <script src="lib/angular-1.6.4/angular-sanitize.js"></script>
      
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -70,6 +81,9 @@
 	
 	<!-- Drag & Drop libs -->
 	<script src="lib/drag-and-drop/angular-drag-and-drop-lists.js"></script>
+	
+	<!-- ng-file-upload lib -->
+	<script src="webjars/ng-file-upload/12.0.4/ng-file-upload.js"></script>
     
     <script src="modules/app/app.js"></script>
     <script src="modules/utils/constants.js"></script>

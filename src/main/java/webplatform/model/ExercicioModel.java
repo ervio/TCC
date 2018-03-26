@@ -6,6 +6,7 @@ public class ExercicioModel {
 
 	private long idExercicio;
 	private long professorId;
+	// TODO: remover atributo nome
 	private String nome;
 	private String nivel;
 	private String valorNotaMaxima;

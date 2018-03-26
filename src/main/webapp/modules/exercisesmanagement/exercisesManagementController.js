@@ -1,4 +1,4 @@
-angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScope, $state, LazyRoute, exercisesManagementService){
+angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScope, $state, Upload, LazyRoute, exercisesManagementService, constants){
 	
 	$scope.assignSuccess = false;
 	$scope.assignError = false;
@@ -6,6 +6,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.basicExercisesList = [];
 	$scope.alternativesToDelete = [];
 	$scope.students = [];
+	$scope.pictures = [];
 	
 	/* Temporary variables */
 	$scope.alternativesToDeleteTemp = [];
@@ -61,7 +62,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	if(!$rootScope.exercicioToEdit){
 		$scope.exercicio = {
 			professorId : $rootScope.loggedUser.id,
-			nome : "",
 			nivel : "",
 			valorNotaMaxima : "",
 			musica : {
@@ -70,7 +70,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 				letra : "",
 				link : ""
 	        },
-	        questoes : []
+	        questoes : [],
+	        pictures : []
 		};
 	}else{
 		$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
@@ -112,10 +113,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 				correta : ""
 			};
 		$("#questionModal").modal("show");
-	 };
-	 
-	 $scope.activitiesModal = function(){
-		$("#activitiesModal").modal("show");
 	 };
 	 
 	 // Function called by "Add question" button (when question list is not empty)
@@ -437,6 +434,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 			 
 			 exercisesManagementService.saveExercise($scope.exercicio).then( 
 				function successCallback(response) {
+					$scope.savePictures(response.data.idExercicio);
 					$scope.exercicio = angular.copy(response.data);
 					$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
 					$scope.exerciseSaved = true;
@@ -564,4 +562,89 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		$scope.assignSuccess = "";
 		$scope.students = [];
 	};
+	
+	$scope.addFileToList = function(file){
+		$scope.pictures.push(file);
+	};
+	
+	 $scope.activitiesModal = function(){
+		angular.forEach($scope.exercicio.pictures, function(file) {
+			$scope.pictures.push(file);
+		});
+		$("#activitiesModal").modal("show");
+	 };
+	
+	$scope.uploadFiles = function(files, errFiles) {
+	    $scope.errFiles = errFiles;
+	    angular.forEach(files, function(file) {
+	    	$scope.filesTest.push(file);
+//	      file.upload = Upload.upload({
+//	      	url: 'api/upload/file',
+//	        data: {file: file}
+//	      });
+
+//	      file.upload.then(function (response) {
+//	        $timeout(function () {
+//	          file.result = response.data;
+//	        });
+//	      }, function (response) {
+//	        if (response.status > 0)
+//	          $scope.errorMsg = response.status + ': ' + response.data;
+//	      }, function (evt) {
+//	        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+//	      });
+	    });
+	    console.log("Caraloh");
+	  };
+	  
+	  $scope.removePicture = function(pictureToRemove){
+		  
+		  for (var i = 0; i < $scope.pictures.length; i++) {
+		    if ($scope.pictures[i] == pictureToRemove) {
+		    	$scope.pictures.splice(i, 1);
+		        break;
+		    }
+		 }
+		  
+	  };
+	  
+	  $scope.saveActivitiesModal = function(){
+		  $scope.exercicio.pictures = [];
+		  angular.forEach($scope.pictures, function(file) {
+			  $scope.exercicio.pictures.push(file);
+		  });
+		  $scope.pictures = [];
+		  $("#activitiesModal").modal("hide");
+	  };
+	  
+	  $scope.savePictures = function(idExercicio) {
+	    
+//		  exercisesManagementService.test($scope.pictures, $scope.exercicio).then( 
+//				function successCallback(response) {
+//					$scope.assignSuccess = true;
+//				}, 
+//				function errorCallback(response) {
+//					
+//				}
+//			);
+		  
+		  angular.forEach($scope.exercicio.pictures, function(file) {
+		      file.upload = Upload.upload({
+		      	url: constants.baseUrl + '/test',
+		        data: {file: file, 'idExercicio': idExercicio, 'nomeImagem' : file.nome}
+		      });
+
+		      file.upload.then(function (response) {
+		        $timeout(function () {
+		          file.result = response.data;
+		        });
+		      }, function (response) {
+		        if (response.status > 0)
+		          $scope.errorMsg = response.status + ': ' + response.data;
+		      }, function (evt) {
+		        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+		      });
+		    });
+		  
+	  };
 });
