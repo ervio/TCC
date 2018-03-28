@@ -14,6 +14,7 @@ public class MusicaConverter {
 		musica.setCantor(musicaModel.getCantor());
 		musica.setLink(musicaModel.getLink());
 		musica.setLetra(musicaModel.getLetra());
+		musica.setLetraOrdenar(musicaModel.getLetraOrdenar());
 		return musica;
 	}
 }

@@ -1,9 +1,15 @@
 package webplatform.dao.impl;
 
+import java.util.List;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import webplatform.dao.ImagemDao;
+import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.Imagem;
 
 @Transactional
@@ -24,4 +30,23 @@ public class ImagemDaoImpl extends BaseDao<Imagem> implements ImagemDao {
 		return entity;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Imagem> findByExercise(Long exerciseId) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.eq("exercicio", new Exercicio(exerciseId)));
+		return (List<Imagem>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@Override
+	public void delete(Imagem picture) {
+		hibernateTemplate.delete(picture);
+	}
+
+	@Override
+	public void deleteAll(List<Imagem> pictures) {
+		if (!CollectionUtils.isEmpty(pictures)) {
+			hibernateTemplate.deleteAll(pictures);
+		}
+	}
 }

@@ -167,6 +167,7 @@ public class ExercisesManagementController {
 			questaoDao.delete(questao);
 		}
 
+		imagemDao.deleteAll(imagemDao.findByExercise(Long.parseLong(exerciseId)));
 		exercicioDao.delete(new Exercicio(Long.parseLong(exerciseId)));
 		musicaDao.delete(questoes.get(0).getExercicio().getMusica());
 		return new ResponseEntity(HttpStatus.OK);
@@ -217,7 +218,7 @@ public class ExercisesManagementController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		imagem.setIdExercicio(Long.parseLong(idExercicio));
+		imagem.setExercicio(new Exercicio(Long.parseLong(idExercicio)));
 		imagem.setNome(nomeImagem);
 		imagemDao.saveOrUpdate(imagem);
 		return "";

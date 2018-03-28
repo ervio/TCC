@@ -5,10 +5,13 @@ package webplatform.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -20,8 +23,8 @@ import javax.persistence.Table;
 public class Imagem implements java.io.Serializable {
 
 	private Long idImagem;
+	private Exercicio exercicio;
 	private byte[] bytes;
-	private Long idExercicio;
 	private String nome;
 
 	public Imagem() {
@@ -31,11 +34,11 @@ public class Imagem implements java.io.Serializable {
 		this.idImagem = idImagem;
 	}
 
-	public Imagem(Long idImagem, byte[] bytes, Long idExercicio, String nome) {
+	public Imagem(Long idImagem, byte[] bytes, String nome, Exercicio exercicio) {
 		this.idImagem = idImagem;
 		this.bytes = bytes;
-		this.idExercicio = idExercicio;
 		this.nome = nome;
+		this.exercicio = exercicio;
 	}
 
 	@Id
@@ -60,15 +63,6 @@ public class Imagem implements java.io.Serializable {
 		this.bytes = bytes;
 	}
 
-	@Column(name = "ID_EXERCICIO", precision = 22, scale = 0)
-	public Long getIdExercicio() {
-		return this.idExercicio;
-	}
-
-	public void setIdExercicio(Long idExercicio) {
-		this.idExercicio = idExercicio;
-	}
-
 	@Column(name = "NOME", length = 50)
 	public String getNome() {
 		return this.nome;
@@ -76,5 +70,15 @@ public class Imagem implements java.io.Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "EXERCICIO")
+	public Exercicio getExercicio() {
+		return this.exercicio;
+	}
+
+	public void setExercicio(Exercicio exercicio) {
+		this.exercicio = exercicio;
 	}
 }

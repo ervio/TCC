@@ -21,6 +21,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.musicLyrics = "";
 	$scope.name = "";
 	$scope.email = "";
+	$scope.listeningPractice = {letraOrdenar:""}
 	
 	$scope.questao = {
 		pergunta : "",
@@ -68,6 +69,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 				nome : "",
 				cantor : "",
 				letra : "",
+				letraOrdenar : "",
 				link : ""
 	        },
 	        questoes : [],
@@ -568,6 +570,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	};
 	
 	 $scope.activitiesModal = function(){
+		$scope.listeningPractice.letraOrdenar =  angular.copy($scope.exercicio.musica.letraOrdenar);
 		angular.forEach($scope.exercicio.pictures, function(file) {
 			$scope.pictures.push(file);
 		});
@@ -613,6 +616,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		  angular.forEach($scope.pictures, function(file) {
 			  $scope.exercicio.pictures.push(file);
 		  });
+		  $scope.exercicio.musica.letraOrdenar = angular.copy($scope.listeningPractice.letraOrdenar);
 		  $scope.pictures = [];
 		  $("#activitiesModal").modal("hide");
 	  };
@@ -647,4 +651,18 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		    });
 		  
 	  };
+	  
+	  $(document).ready(function () {
+		  $('textarea[data-limit-rows=true]')
+		    .on('keypress', function (event) {
+		        var textarea = $(this),
+		            text = textarea.val(),
+		            numberOfLines = (text.match(/\n/g) || []).length + 1,
+		            maxRows = parseInt(textarea.attr('rows'));
+	
+		        if (event.which === 13 && numberOfLines === maxRows ) {
+		          return false;
+		        }
+		    })
+		});
 });

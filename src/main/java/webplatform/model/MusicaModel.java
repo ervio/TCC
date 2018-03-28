@@ -6,6 +6,7 @@ public class MusicaModel {
 	private String nome;
 	private String cantor;
 	private String letra;
+	private String letraOrdenar;
 	private String link;
 
 	public long getIdMusica() {
@@ -46,6 +47,14 @@ public class MusicaModel {
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public String getLetraOrdenar() {
+		return letraOrdenar;
+	}
+
+	public void setLetraOrdenar(String letraOrdenar) {
+		this.letraOrdenar = letraOrdenar;
 	}
 
 }

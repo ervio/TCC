@@ -35,6 +35,7 @@ public class Exercicio implements java.io.Serializable {
 	private Byte media;
 	private Set<ExercicioAluno> exercicioAlunos = new HashSet<ExercicioAluno>();
 	private Set<Questao> questoes = new HashSet<Questao>();
+	private Set<Imagem> imagens = new HashSet<Imagem>();
 
 	public Exercicio() {
 	}
@@ -44,7 +45,8 @@ public class Exercicio implements java.io.Serializable {
 	}
 
 	public Exercicio(Long idExercicio, Professor professor, Musica musica, String nome, String nivel,
-			int valorNotaMaxima, Byte media, Set<ExercicioAluno> exercicioAlunos, Set<Questao> questoes) {
+			int valorNotaMaxima, Byte media, Set<ExercicioAluno> exercicioAlunos, Set<Questao> questoes,
+			Set<Imagem> imagens) {
 		this.idExercicio = idExercicio;
 		this.professor = professor;
 		this.musica = musica;
@@ -54,6 +56,7 @@ public class Exercicio implements java.io.Serializable {
 		this.media = media;
 		this.exercicioAlunos = exercicioAlunos;
 		this.questoes = questoes;
+		this.imagens = imagens;
 	}
 
 	@Id
@@ -142,6 +145,16 @@ public class Exercicio implements java.io.Serializable {
 
 	public void setQuestoes(Set<Questao> questaos) {
 		this.questoes = questaos;
+	}
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicio")
+	public Set<Imagem> getImagens() {
+		return imagens;
+	}
+
+	public void setImagens(Set<Imagem> imagens) {
+		this.imagens = imagens;
 	}
 
 }

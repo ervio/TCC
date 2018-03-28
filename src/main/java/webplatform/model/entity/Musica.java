@@ -20,6 +20,7 @@ public class Musica implements java.io.Serializable {
 	private String nome;
 	private String cantor;
 	private String letra;
+	private String letraOrdenar;
 	private String link;
 
 	public Musica() {
@@ -29,11 +30,12 @@ public class Musica implements java.io.Serializable {
 		this.idMusica = idMusica;
 	}
 
-	public Musica(Long idMusica, String nome, String cantor, String letra, String link) {
+	public Musica(Long idMusica, String nome, String cantor, String letra, String letraOrdenar, String link) {
 		this.idMusica = idMusica;
 		this.nome = nome;
 		this.cantor = cantor;
 		this.letra = letra;
+		this.letraOrdenar = letraOrdenar;
 		this.link = link;
 	}
 
@@ -75,6 +77,16 @@ public class Musica implements java.io.Serializable {
 
 	public void setLetra(String letra) {
 		this.letra = letra;
+	}
+
+	@Lob
+	@Column(name = "LETRA_ORDENAR")
+	public String getLetraOrdenar() {
+		return letraOrdenar;
+	}
+
+	public void setLetraOrdenar(String letraOrdenar) {
+		this.letraOrdenar = letraOrdenar;
 	}
 
 	@Column(name = "LINK", length = 50)
