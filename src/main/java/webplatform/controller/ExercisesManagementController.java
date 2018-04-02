@@ -22,6 +22,8 @@ import webplatform.dao.AlternativaDao;
 import webplatform.dao.AlunoDao;
 import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioDao;
+import webplatform.dao.GrammarDefinicaoDao;
+import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.ImagemDao;
 import webplatform.dao.MusicaDao;
 import webplatform.dao.QuestaoDao;
@@ -30,6 +32,8 @@ import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.Aluno;
 import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.ExercicioAluno;
+import webplatform.model.entity.GrammarDefinicao;
+import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Imagem;
 import webplatform.model.entity.Questao;
 
@@ -61,6 +65,12 @@ public class ExercisesManagementController {
 	@Autowired
 	private ImagemDao imagemDao;
 
+	@Autowired
+	private GrammarDefinicaoDao grammarDefinicaoDao;
+
+	@Autowired
+	private GrammarQuestaoDao grammarQuestaoDao;
+
 	/**
 	 * The method saves the exercises including the music of it, the questions and
 	 * their alternatives
@@ -89,6 +99,32 @@ public class ExercisesManagementController {
 
 	/**
 	 * Search all the questions related to the exercise selected
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@RequestMapping(value = "/searchGrammarDefinitionsByExercise/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchGrammarDefinitionsByExercise(
+			@PathVariable("exerciseId") String exerciseId) {
+		List<GrammarDefinicao> definicoes = grammarDefinicaoDao.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(definicoes, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all the questions related to the exercise selected
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@RequestMapping(value = "/searchGrammarAlternativesByExercise/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchGrammarAlternativesByExercise(
+			@PathVariable("exerciseId") String exerciseId) {
+		List<GrammarQuestao> questoes = grammarQuestaoDao.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(questoes, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all the definitions related to the exercise selected
 	 * 
 	 * @param exerciseId
 	 * @return

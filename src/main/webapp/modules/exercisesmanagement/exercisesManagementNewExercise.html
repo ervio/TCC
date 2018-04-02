@@ -164,7 +164,7 @@
 								</p>
 		               		</div>
 		               		
-		               		<div ng-if="exercicio.questoes.length == 0" class="col-md-12">
+		               		<div class="col-md-12">
 								<p>
 									<button type="button" ng-click="activitiesModal()" class="btn btn-default">Activities</button>
 								</p>
@@ -281,23 +281,27 @@
 															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Definitions</legend>
 															
 															<div class="col-md-12 form-group">
-																<a class="list-group-item" class="optionSelected">
-															  		A) TELL sth/sb FROM sth/sb: to distinguish one from another.
-														  		</a>
-														  		<a class="list-group-item active" class="optionSelected">
-																	B) TELL: to say sth to sb such as a story, a lie, the truth, a secret, a joke, etc.
-														  		</a>
+																<div class="scrolly">
+																	<div class="list-group" style="margin-top: 20px;">
+																	  <a ng-repeat="definition in definitions" 
+																	  	 ng-click="selectDefinition(definition, $index); grammarPractice.definitionInput = definition.definicao;" 
+																	  	 class="list-group-item" 
+																	  	 ng-class="{active:definitionSelected == definition}">
+																	  	 {{$index + 1}}) {{definition.definicao}}
+																  	  </a>
+																	</div>
+																</div>
 															</div>
 															
 															<div class="col-md-12 form-group" style="text-align: center;">
-																<button type="button" class="btn btn-default">Save Option</button>
-																<button type="button" class="btn btn-default">Edit</button>
-																<button type="button" class="btn btn-default">Delete</button>
+																<button ng-click="addDefinition()" ng-disabled="!grammarPractice.definitionInput" type="button" class="btn btn-default">Save Option</button>
+																<button ng-if="definitions.length > 0" ng-click="editDefinition()" ng-disabled="!definitionSelected" type="button" class="btn btn-default">Edit</button>
+																<button ng-if="definitions.length > 0" ng-click="deleteDefinition()" ng-disabled="!definitionSelected" type="button" class="btn btn-default">Delete</button>
 															</div>
 															
 															<div class="col-md-12 form-group">
 																<label>Definition</label>
-																<input class="form-control" type="text" maxlength="30" value="TELL: to say sth to sb such as a story, a lie, the truth, a secret, a joke, etc."/>
+																<input ng-model="grammarPractice.definitionInput" class="form-control" type="text" maxlength="500"/>
 															</div>
 														</fieldset>
 													</div>
@@ -310,31 +314,34 @@
 															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Alternatives</legend>
 															
 															<div class="col-md-12 form-group">
-																<a class="list-group-item" class="optionSelected">
-															  		1) Can you tell heaven from hell?
-														  		</a>
-														  		<a class="list-group-item active" class="optionSelected">
-																	2) Have you told her your grade in English?
-														  		</a>
+																<div class="scrolly">
+																	<div class="list-group" style="margin-top: 20px;">
+																	  <a ng-repeat="alternative in alternatives" 
+																	  	 ng-click="selectAlternative(alternative, $index); grammarPractice.alternativeInput = alternative.questao; grammarPractice.alternativeAnswer = alternative.definition;" 
+																	  	 class="list-group-item" 
+																	  	 ng-class="{active:alternativeSelected == alternative}">
+																	  	 {{alternative.questao}}
+																  	  </a>
+																	</div>
+																</div>
 															</div>
 															
 															<div class="col-md-12 form-group" style="text-align: center;">
-																<button type="button" class="btn btn-default">Save Option</button>
-																<button type="button" class="btn btn-default">Edit</button>
-																<button type="button" class="btn btn-default">Delete</button>
+																<button ng-click="addAlternative()" ng-disabled="!grammarPractice.alternativeInput" type="button" class="btn btn-default">Save Option</button>
+																<button ng-if="alternatives.length > 0" ng-click="editAlternative()" ng-disabled="!alternativeSelected" type="button" class="btn btn-default">Edit</button>
+																<button ng-if="alternatives.length > 0" ng-click="deleteAlternative()" ng-disabled="!alternativeSelected" type="button" class="btn btn-default">Delete</button>
 															</div>
 															
 															<div>
 																<div class="col-md-10 form-group">
 																	<label>Alternative</label>
-																	<input class="form-control" type="text" maxlength="30" value="Have you told her your grade in English?"/>
+																	<input class="form-control" type="text" maxlength="500" ng-model="grammarPractice.alternativeInput"/>
 																</div>
 																<div class="col-md-2 form-group">
 																	<label>Answer</label>
-																	<select class="form-control selectpicker">
-																		<option value="">Select</option>
-																		<option>A</option>
-																		<option>B</option>
+																	<select class="form-control selectpicker" ng-model="grammarPractice.alternativeAnswer">
+																		<option value="">Select a value</option>
+																		<option ng-repeat="definition in definitions" value="{{$index}}">{{$index + 1}}</option>
 																	</select>
 																</div>
 															</div>
@@ -502,8 +509,8 @@
 									<div class="modal-footer">
 										<div class="row">
 											<div class="col-md-12 form-group" style="text-align: right;">
-												<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-												<button type="button" class="btn btn-default" ng-click="saveActivitiesModal()" ng-disabled="activitiesForm.$invalid">Save</button>
+												<button type="button" class="btn btn-default" ng-click="clearActivitiesModal(); activeForm = 0;" data-dismiss="modal">Cancel</button>
+												<button type="button" class="btn btn-default" ng-click="saveActivitiesModal(); activeForm = 0;" ng-disabled="activitiesForm.$invalid">Save</button>
 											</div>
 										</div>
 									</div>

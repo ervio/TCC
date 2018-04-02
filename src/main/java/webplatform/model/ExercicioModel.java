@@ -13,6 +13,7 @@ public class ExercicioModel {
 	private MusicaModel musica;
 	private List<QuestaoModel> questoes;
 	private List<ExercicioAlunoModel> exercicioAlunos;
+	private List<GrammarDefinicaoModel> grammarDefinicoes;
 
 	public long getIdExercicio() {
 		return idExercicio;
@@ -76,6 +77,14 @@ public class ExercicioModel {
 
 	public void setExercicioAlunos(List<ExercicioAlunoModel> exercicioAlunos) {
 		this.exercicioAlunos = exercicioAlunos;
+	}
+
+	public List<GrammarDefinicaoModel> getGrammarDefinicoes() {
+		return grammarDefinicoes;
+	}
+
+	public void setGrammarDefinicoes(List<GrammarDefinicaoModel> grammarDefinicoes) {
+		this.grammarDefinicoes = grammarDefinicoes;
 	}
 
 }

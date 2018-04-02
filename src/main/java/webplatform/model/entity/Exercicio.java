@@ -36,6 +36,7 @@ public class Exercicio implements java.io.Serializable {
 	private Set<ExercicioAluno> exercicioAlunos = new HashSet<ExercicioAluno>();
 	private Set<Questao> questoes = new HashSet<Questao>();
 	private Set<Imagem> imagens = new HashSet<Imagem>();
+	private Set<GrammarDefinicao> grammarDefinicoes = new HashSet<GrammarDefinicao>();
 
 	public Exercicio() {
 	}
@@ -155,6 +156,16 @@ public class Exercicio implements java.io.Serializable {
 
 	public void setImagens(Set<Imagem> imagens) {
 		this.imagens = imagens;
+	}
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicio")
+	public Set<GrammarDefinicao> getGrammarDefinicoes() {
+		return grammarDefinicoes;
+	}
+
+	public void setGrammarDefinicoes(Set<GrammarDefinicao> grammarDefinicoes) {
+		this.grammarDefinicoes = grammarDefinicoes;
 	}
 
 }

@@ -15,6 +15,16 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		return $http.get(constants.baseUrl + "/searchQuestionsByExercise/" + exercicioId);
 	}
 	
+	// Calls the searchGrammarDefinitionsByExercise service from ExercisesManagementController class
+	this.searchGrammarDefinitionsByExercise = function(exercicioId){
+		return $http.get(constants.baseUrl + "/searchGrammarDefinitionsByExercise/" + exercicioId);
+	}
+	
+	// Calls the searchGrammarAlternativesByExercise service from ExercisesManagementController class
+	this.searchGrammarAlternativesByExercise = function(exercicioId){
+		return $http.get(constants.baseUrl + "/searchGrammarAlternativesByExercise/" + exercicioId);
+	}
+	
 	// Calls the searchOptionsByQuestion service from ExercisesManagementController class
 	this.searchOptionsByQuestion = function(questionId){
 		return $http.get(constants.baseUrl + "/searchOptionsByQuestion/" + questionId);

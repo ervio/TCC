@@ -8,11 +8,15 @@ import webplatform.converter.ExercicioConverter;
 import webplatform.converter.MusicaConverter;
 import webplatform.dao.AlternativaDao;
 import webplatform.dao.ExercicioDao;
+import webplatform.dao.GrammarDefinicaoDao;
+import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.MusicaDao;
 import webplatform.dao.QuestaoDao;
 import webplatform.model.ExercicioModel;
 import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.Exercicio;
+import webplatform.model.entity.GrammarDefinicao;
+import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Musica;
 import webplatform.model.entity.Professor;
 import webplatform.model.entity.Questao;
@@ -32,6 +36,12 @@ public class ExercisesManagementBo {
 	@Autowired
 	private AlternativaDao alternativaDao;
 
+	@Autowired
+	private GrammarDefinicaoDao grammarDefinicaoDao;
+
+	@Autowired
+	private GrammarQuestaoDao grammarQuestaoDao;
+
 	@Transactional
 	public Exercicio saveExercise(ExercicioModel exercicioModel) {
 		Musica musica = MusicaConverter.convert(exercicioModel.getMusica());
@@ -47,6 +57,16 @@ public class ExercisesManagementBo {
 			for (Alternativa alternativa : questao.getAlternativas()) {
 				alternativa.setQuestao(questao);
 				alternativaDao.saveOrUpdate(alternativa);
+			}
+		}
+
+		for (GrammarDefinicao definicao : exercicio.getGrammarDefinicoes()) {
+			definicao.setExercicio(exercicio);
+			grammarDefinicaoDao.saveOrUpdate(definicao);
+
+			for (GrammarQuestao grammarQuestao : definicao.getQuestoes()) {
+				grammarQuestao.setDefinicaoResposta(definicao);
+				grammarQuestaoDao.saveOrUpdate(grammarQuestao);
 			}
 		}
 

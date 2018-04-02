@@ -2,9 +2,13 @@ package webplatform.converter;
 
 import java.util.HashSet;
 
+import org.springframework.util.CollectionUtils;
+
 import webplatform.model.ExercicioModel;
+import webplatform.model.GrammarDefinicaoModel;
 import webplatform.model.QuestaoModel;
 import webplatform.model.entity.Exercicio;
+import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.Questao;
 
 public class ExercicioConverter {
@@ -17,7 +21,7 @@ public class ExercicioConverter {
 		exercicio.setNivel(exercicioModel.getNivel());
 		exercicio.setValorNotaMaxima(Integer.parseInt(exercicioModel.getValorNotaMaxima()));
 
-		if (exercicioModel.getQuestoes() != null && !exercicioModel.getQuestoes().isEmpty()) {
+		if (!CollectionUtils.isEmpty(exercicioModel.getQuestoes())) {
 
 			exercicio.setQuestoes(new HashSet<Questao>());
 
@@ -26,6 +30,16 @@ public class ExercicioConverter {
 				exercicio.getQuestoes().add(questao);
 			}
 
+		}
+
+		if (!CollectionUtils.isEmpty(exercicioModel.getGrammarDefinicoes())) {
+
+			exercicio.setGrammarDefinicoes(new HashSet<GrammarDefinicao>());
+
+			for (GrammarDefinicaoModel definicao : exercicioModel.getGrammarDefinicoes()) {
+				GrammarDefinicao definicaoTemp = GrammarDefinicaoConverter.convert(definicao);
+				exercicio.getGrammarDefinicoes().add(definicaoTemp);
+			}
 		}
 
 		return exercicio;

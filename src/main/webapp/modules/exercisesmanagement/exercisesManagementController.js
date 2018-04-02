@@ -7,6 +7,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.alternativesToDelete = [];
 	$scope.students = [];
 	$scope.pictures = [];
+	$scope.definitions = [];
+	$scope.alternatives = [];
 	
 	/* Temporary variables */
 	$scope.alternativesToDeleteTemp = [];
@@ -21,7 +23,16 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.musicLyrics = "";
 	$scope.name = "";
 	$scope.email = "";
-	$scope.listeningPractice = {letraOrdenar:""}
+	$scope.listeningPractice = {letraOrdenar:""};
+	$scope.grammarPractice = {
+		definitionInput : "",
+		alternativeInput : "",
+		alternativeAnswer : ""
+	};
+	$scope.definitionSelected = "";
+	$scope.definitionSelectedIndex = "";
+	$scope.alternativeSelected = "";
+	$scope.alternativeSelectedIndex = "";
 	
 	$scope.questao = {
 		pergunta : "",
@@ -36,7 +47,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	
 	// Calls searchQuestionsByExercise from exercisesManagementService considering the selected exercise
 	$scope.searchQuestionsByExercise = function(idExercicio){
-		exercisesManagementService.searchQuestionsByExercise($scope.exercicio.idExercicio).then( 
+		exercisesManagementService.searchQuestionsByExercise(idExercicio).then( 
 			function successCallback(response) {
 				$scope.exercicio.questoes = [];
 				
@@ -59,6 +70,53 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		);
 	};
 	
+	// Calls searchGrammarAlternativesByExercise from exercisesManagementService considering the selected exercise
+	$scope.searchGrammarAlternativesByExercise = function(idExercicio){
+		
+		exercisesManagementService.searchGrammarAlternativesByExercise(idExercicio).then( 
+			function successCallback(response) {
+				
+				$(response.data).each(function(index, alternative) {
+					
+					for(var i = 0; i < $scope.exercicio.grammarDefinicoes.length; i++){
+						var definicao = $scope.exercicio.grammarDefinicoes[i];
+						
+						if(alternative.definicaoResposta.id == definicao.id){
+							alternative.definition = i + "";
+							definicao.questoes.push(angular.copy(alternative));
+							break;
+						}
+					}
+					
+				});
+				
+			}, 
+			function errorCallback(response) {
+				console.log('Deu errado');
+			}
+		);
+		
+	};
+	
+	// Calls searchGrammarDefinitionsByExercise from exercisesManagementService considering the selected exercise
+	$scope.searchGrammarDefinitionsByExercise = function(idExercicio){
+		exercisesManagementService.searchGrammarDefinitionsByExercise(idExercicio).then( 
+			function successCallback(response) {
+				$scope.exercicio.grammarDefinicoes = [];
+				
+				$(response.data).each(function(index, definicao) {
+					$scope.exercicio.grammarDefinicoes.push(angular.copy(definicao));
+					$scope.exercicio.grammarDefinicoes[index].questoes = [];
+				 });
+				
+				$scope.searchGrammarAlternativesByExercise($scope.exercicio.idExercicio);
+			}, 
+			function errorCallback(response) {
+				console.log('Deu errado');
+			}
+		);
+	};
+	
 	// Populates the temporary json with the values from the selected exercise, if it's being edited, or empty values, if it's a new one
 	if(!$rootScope.exercicioToEdit){
 		$scope.exercicio = {
@@ -73,11 +131,13 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 				link : ""
 	        },
 	        questoes : [],
-	        pictures : []
+	        pictures : [],
+	        grammarDefinicoes : []
 		};
 	}else{
 		$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
 		$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
+		$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
 	}
 	
 	// Function called by "New" button
@@ -439,6 +499,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 					$scope.savePictures(response.data.idExercicio);
 					$scope.exercicio = angular.copy(response.data);
 					$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
+					$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
 					$scope.exerciseSaved = true;
 					$scope.alternativesToDelete = [];
 					$scope.questionsToDelete = [];
@@ -571,12 +632,56 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	
 	 $scope.activitiesModal = function(){
 		$scope.listeningPractice.letraOrdenar =  angular.copy($scope.exercicio.musica.letraOrdenar);
+		if($scope.exercicio.grammarDefinicoes != null && $scope.exercicio.grammarDefinicoes.length > 0){
+			$scope.definitions = angular.copy($scope.exercicio.grammarDefinicoes);
+		}
 		angular.forEach($scope.exercicio.pictures, function(file) {
 			$scope.pictures.push(file);
 		});
+		
+		angular.forEach($scope.exercicio.grammarDefinicoes, function(definicao){
+			if(definicao.questoes != null && definicao.questoes.length > 0){
+				angular.forEach(definicao.questoes, function(questao){
+					$scope.alternatives.push(angular.copy(questao));
+				});
+			}
+		});
+		
 		$("#activitiesModal").modal("show");
 	 };
 	
+	$scope.clearActivitiesModal = function(){
+		$scope.pictures = [];
+		$scope.listeningPractice.letraOrdenar = "";
+		$scope.definitions = [];
+		$scope.alternatives = [];
+		
+		$scope.grammarPractice.definitionInput = "";
+		$scope.grammarPractice.alternativeInput = "";
+		$scope.grammarPractice.alternativeAnswer = "";
+		$scope.definitionSelected = "";
+		$scope.definitionSelectedIndex = "";
+		$scope.alternativeSelected = "";
+		$scope.alternativeSelectedIndex = "";
+	};
+	 
+	$scope.saveActivitiesModal = function(){
+		$scope.exercicio.pictures = [];
+		angular.forEach($scope.pictures, function(file) {
+			$scope.exercicio.pictures.push(file);
+		});
+		$scope.exercicio.musica.letraOrdenar = angular.copy($scope.listeningPractice.letraOrdenar);
+		$scope.exercicio.grammarDefinicoes = angular.copy($scope.definitions);
+		angular.forEach($scope.exercicio.grammarDefinicoes, function(definicao){
+			definicao.questoes = [];
+		});
+		angular.forEach($scope.alternatives, function(questao){
+			$scope.exercicio.grammarDefinicoes[questao.definition].questoes.push(angular.copy(questao));
+		});
+		$scope.clearActivitiesModal();
+		$("#activitiesModal").modal("hide");
+	};
+	  
 	$scope.uploadFiles = function(files, errFiles) {
 	    $scope.errFiles = errFiles;
 	    angular.forEach(files, function(file) {
@@ -611,16 +716,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		  
 	  };
 	  
-	  $scope.saveActivitiesModal = function(){
-		  $scope.exercicio.pictures = [];
-		  angular.forEach($scope.pictures, function(file) {
-			  $scope.exercicio.pictures.push(file);
-		  });
-		  $scope.exercicio.musica.letraOrdenar = angular.copy($scope.listeningPractice.letraOrdenar);
-		  $scope.pictures = [];
-		  $("#activitiesModal").modal("hide");
-	  };
-	  
 	  $scope.savePictures = function(idExercicio) {
 	    
 //		  exercisesManagementService.test($scope.pictures, $scope.exercicio).then( 
@@ -652,6 +747,61 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		  
 	  };
 	  
+	  $scope.selectDefinition = function(definition, index){
+		  $scope.definitionSelected = definition;
+		  $scope.definitionSelectedIndex = index;
+	  };
+	  
+	  $scope.addDefinition = function(){
+		  var definition = {
+				  definicao : angular.copy($scope.grammarPractice.definitionInput)
+		  };
+		  $scope.definitions.push(angular.copy(definition));
+		  $scope.grammarPractice.definitionInput = "";
+	  };
+	  
+	  $scope.editDefinition = function(){
+		  $scope.definitions[$scope.definitionSelectedIndex].definicao = angular.copy($scope.grammarPractice.definitionInput);
+		  $scope.grammarPractice.definitionInput = "";
+		  $scope.definitionSelected = "";
+	  };
+	  
+	  $scope.deleteDefinition = function(){
+		  $scope.definitions.splice($scope.definitionSelectedIndex, 1);
+		  $scope.grammarPractice.definitionInput = "";
+		  $scope.definitionSelected = "";
+	  };
+	  
+	  $scope.selectAlternative = function(alternative, index){
+		  $scope.alternativeSelected = alternative;
+		  $scope.alternativeSelectedIndex = index;
+	  };
+	  
+	  $scope.addAlternative = function(){
+		  var alternative = {
+				  questao : $scope.grammarPractice.alternativeInput,
+				  definition : $scope.grammarPractice.alternativeAnswer
+	  	  };
+		  $scope.alternatives.push(alternative);
+		  $scope.grammarPractice.alternativeInput = "";
+		  $scope.grammarPractice.alternativeAnswer = "";
+	  };
+	  
+	  $scope.editAlternative = function(){
+		  $scope.alternatives[$scope.alternativeSelectedIndex].alternative = angular.copy($scope.grammarPractice.alternativeInput);
+		  $scope.alternatives[$scope.alternativeSelectedIndex].definition = angular.copy($scope.grammarPractice.alternativeAnswer);
+		  $scope.grammarPractice.alternativeInput = "";
+		  $scope.grammarPractice.alternativeAnswer = "";
+		  $scope.alternativeSelected = "";
+	  };
+	  
+	  $scope.deleteAlternative = function(){
+		  $scope.alternatives.splice($scope.alternativeSelectedIndex, 1);
+		  $scope.grammarPractice.alternativeInput = "";
+		  $scope.grammarPractice.alternativeAnswer = "";
+		  $scope.alternativeSelected = "";
+	  };
+	  
 	  $(document).ready(function () {
 		  $('textarea[data-limit-rows=true]')
 		    .on('keypress', function (event) {
@@ -665,4 +815,5 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		        }
 		    })
 		});
+	  
 });
