@@ -27,6 +27,7 @@ import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.ImagemDao;
 import webplatform.dao.MusicaDao;
 import webplatform.dao.QuestaoDao;
+import webplatform.dao.ReadingQuestaoDao;
 import webplatform.model.ExercicioModel;
 import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.Aluno;
@@ -36,6 +37,7 @@ import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Imagem;
 import webplatform.model.entity.Questao;
+import webplatform.model.entity.ReadingQuestao;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @RestController
@@ -47,9 +49,11 @@ public class ExercisesManagementController {
 	@Autowired
 	private ExercicioDao exercicioDao;
 
+	// TODO: Remover
 	@Autowired
 	private QuestaoDao questaoDao;
 
+	// TODO: Remover
 	@Autowired
 	private AlternativaDao alternativaDao;
 
@@ -70,6 +74,9 @@ public class ExercisesManagementController {
 
 	@Autowired
 	private GrammarQuestaoDao grammarQuestaoDao;
+
+	@Autowired
+	private ReadingQuestaoDao readingQuestaoDao;
 
 	/**
 	 * The method saves the exercises including the music of it, the questions and
@@ -124,6 +131,20 @@ public class ExercisesManagementController {
 	}
 
 	/**
+	 * Search all the reading questions related to the exercise selected
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@RequestMapping(value = "/searchReadingQuestionsByExercise/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchReadingQuestionsByExercise(
+			@PathVariable("exerciseId") String exerciseId) {
+		List<ReadingQuestao> questoes = readingQuestaoDao.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(questoes, HttpStatus.OK);
+	}
+
+	// TODO: Remover
+	/**
 	 * Search all the definitions related to the exercise selected
 	 * 
 	 * @param exerciseId
@@ -135,6 +156,7 @@ public class ExercisesManagementController {
 		return new ResponseEntity(exercicios, HttpStatus.OK);
 	}
 
+	// TODO: Remover
 	/**
 	 * Search all the options related to the question selected
 	 * 
@@ -147,6 +169,7 @@ public class ExercisesManagementController {
 		return new ResponseEntity(alternativas, HttpStatus.OK);
 	}
 
+	// TODO: Remover
 	/**
 	 * Delete all the selected alternatives from the question
 	 * 
@@ -161,6 +184,7 @@ public class ExercisesManagementController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	// TODO: Remover
 	/**
 	 * Delete the questions and all the alternatives related to them
 	 * 

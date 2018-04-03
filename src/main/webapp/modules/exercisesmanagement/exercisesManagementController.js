@@ -9,6 +9,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.pictures = [];
 	$scope.definitions = [];
 	$scope.alternatives = [];
+	$scope.readingQuestions = [];
 	
 	/* Temporary variables */
 	$scope.alternativesToDeleteTemp = [];
@@ -27,12 +28,15 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.grammarPractice = {
 		definitionInput : "",
 		alternativeInput : "",
-		alternativeAnswer : ""
+		alternativeAnswer : "",
+		readingQuestionInput : ""
 	};
 	$scope.definitionSelected = "";
 	$scope.definitionSelectedIndex = "";
 	$scope.alternativeSelected = "";
 	$scope.alternativeSelectedIndex = "";
+	$scope.questionSelected = "";
+	$scope.questionSelectedIndex = "";
 	
 	$scope.questao = {
 		pergunta : "",
@@ -45,6 +49,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		correta : ""
 	};
 	
+	// TODO: Remove
 	// Calls searchQuestionsByExercise from exercisesManagementService considering the selected exercise
 	$scope.searchQuestionsByExercise = function(idExercicio){
 		exercisesManagementService.searchQuestionsByExercise(idExercicio).then( 
@@ -117,6 +122,24 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		);
 	};
 	
+	// Calls searchGrammarDefinitionsByExercise from exercisesManagementService considering the selected exercise
+	$scope.searchReadingQuestionsByExercise = function(idExercicio){
+		exercisesManagementService.searchReadingQuestionsByExercise(idExercicio).then( 
+			function successCallback(response) {
+				$scope.exercicio.readingQuestoes = [];
+				
+				$(response.data).each(function(index, question) {
+					$scope.exercicio.readingQuestoes.push(angular.copy(question));
+					$scope.exercicio.readingQuestoes[index].readingAlternativas = [];
+				 });
+				
+			}, 
+			function errorCallback(response) {
+				console.log('Deu errado');
+			}
+		);
+	};
+	
 	// Populates the temporary json with the values from the selected exercise, if it's being edited, or empty values, if it's a new one
 	if(!$rootScope.exercicioToEdit){
 		$scope.exercicio = {
@@ -132,12 +155,14 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	        },
 	        questoes : [],
 	        pictures : [],
-	        grammarDefinicoes : []
+	        grammarDefinicoes : [],
+	        readingQuestoes : []
 		};
 	}else{
 		$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
 		$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
 		$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
+		$scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio);
 	}
 	
 	// Function called by "New" button
@@ -500,6 +525,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 					$scope.exercicio = angular.copy(response.data);
 					$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
 					$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
+					$scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio);
 					$scope.exerciseSaved = true;
 					$scope.alternativesToDelete = [];
 					$scope.questionsToDelete = [];
@@ -626,14 +652,13 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		$scope.students = [];
 	};
 	
-	$scope.addFileToList = function(file){
-		$scope.pictures.push(file);
-	};
-	
 	 $scope.activitiesModal = function(){
 		$scope.listeningPractice.letraOrdenar =  angular.copy($scope.exercicio.musica.letraOrdenar);
 		if($scope.exercicio.grammarDefinicoes != null && $scope.exercicio.grammarDefinicoes.length > 0){
 			$scope.definitions = angular.copy($scope.exercicio.grammarDefinicoes);
+		}
+		if($scope.exercicio.readingQuestoes != null && $scope.exercicio.readingQuestoes.length > 0){
+			$scope.readingQuestions = angular.copy($scope.exercicio.readingQuestoes);
 		}
 		angular.forEach($scope.exercicio.pictures, function(file) {
 			$scope.pictures.push(file);
@@ -655,6 +680,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		$scope.listeningPractice.letraOrdenar = "";
 		$scope.definitions = [];
 		$scope.alternatives = [];
+		$scope.readingQuestions = [];
 		
 		$scope.grammarPractice.definitionInput = "";
 		$scope.grammarPractice.alternativeInput = "";
@@ -663,6 +689,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		$scope.definitionSelectedIndex = "";
 		$scope.alternativeSelected = "";
 		$scope.alternativeSelectedIndex = "";
+		$scope.questionSelected = "";
+		$scope.questionSelectedIndex = "";
 	};
 	 
 	$scope.saveActivitiesModal = function(){
@@ -672,6 +700,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		});
 		$scope.exercicio.musica.letraOrdenar = angular.copy($scope.listeningPractice.letraOrdenar);
 		$scope.exercicio.grammarDefinicoes = angular.copy($scope.definitions);
+		$scope.exercicio.readingQuestoes = angular.copy($scope.readingQuestions);
 		angular.forEach($scope.exercicio.grammarDefinicoes, function(definicao){
 			definicao.questoes = [];
 		});
@@ -681,58 +710,28 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		$scope.clearActivitiesModal();
 		$("#activitiesModal").modal("hide");
 	};
+	
+	$scope.addFileToList = function(file){
+		$scope.pictures.push(file);
+	};
 	  
-	$scope.uploadFiles = function(files, errFiles) {
-	    $scope.errFiles = errFiles;
-	    angular.forEach(files, function(file) {
-	    	$scope.filesTest.push(file);
-//	      file.upload = Upload.upload({
-//	      	url: 'api/upload/file',
-//	        data: {file: file}
-//	      });
-
-//	      file.upload.then(function (response) {
-//	        $timeout(function () {
-//	          file.result = response.data;
-//	        });
-//	      }, function (response) {
-//	        if (response.status > 0)
-//	          $scope.errorMsg = response.status + ': ' + response.data;
-//	      }, function (evt) {
-//	        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-//	      });
-	    });
-	    console.log("Caraloh");
-	  };
-	  
-	  $scope.removePicture = function(pictureToRemove){
-		  
-		  for (var i = 0; i < $scope.pictures.length; i++) {
+	$scope.removePicture = function(pictureToRemove){
+		for (var i = 0; i < $scope.pictures.length; i++) {
 		    if ($scope.pictures[i] == pictureToRemove) {
 		    	$scope.pictures.splice(i, 1);
 		        break;
 		    }
-		 }
-		  
-	  };
+		}
+	};
 	  
 	  $scope.savePictures = function(idExercicio) {
 	    
-//		  exercisesManagementService.test($scope.pictures, $scope.exercicio).then( 
-//				function successCallback(response) {
-//					$scope.assignSuccess = true;
-//				}, 
-//				function errorCallback(response) {
-//					
-//				}
-//			);
-		  
 		  angular.forEach($scope.exercicio.pictures, function(file) {
 		      file.upload = Upload.upload({
 		      	url: constants.baseUrl + '/test',
 		        data: {file: file, 'idExercicio': idExercicio, 'nomeImagem' : file.nome}
 		      });
-
+	
 		      file.upload.then(function (response) {
 		        $timeout(function () {
 		          file.result = response.data;
@@ -800,6 +799,31 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		  $scope.grammarPractice.alternativeInput = "";
 		  $scope.grammarPractice.alternativeAnswer = "";
 		  $scope.alternativeSelected = "";
+	  };
+	  
+	  $scope.selectQuestion = function(question, index){
+		  $scope.questionSelected = question;
+		  $scope.questionSelectedIndex = index;
+	  };
+	  
+	  $scope.addQuestion = function(){
+		  var question = {
+				  pergunta : angular.copy($scope.grammarPractice.readingQuestionInput)
+		  };
+		  $scope.readingQuestions.push(angular.copy(question));
+		  $scope.grammarPractice.readingQuestionInput = "";
+	  };
+	  
+	  $scope.editQuestion = function(){
+		  $scope.readingQuestions[$scope.questionSelectedIndex].pergunta = angular.copy($scope.grammarPractice.readingQuestionInput);
+		  $scope.grammarPractice.readingQuestionInput = "";
+		  $scope.questionSelected = "";
+	  };
+	  
+	  $scope.deleteQuestion = function(){
+		  $scope.readingQuestions.splice($scope.questionSelectedIndex, 1);
+		  $scope.grammarPractice.readingQuestionInput = "";
+		  $scope.questionSelected = "";
 	  };
 	  
 	  $(document).ready(function () {

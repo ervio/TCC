@@ -6,10 +6,10 @@ import org.springframework.util.CollectionUtils;
 
 import webplatform.model.ExercicioModel;
 import webplatform.model.GrammarDefinicaoModel;
-import webplatform.model.QuestaoModel;
+import webplatform.model.ReadingQuestaoModel;
 import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.GrammarDefinicao;
-import webplatform.model.entity.Questao;
+import webplatform.model.entity.ReadingQuestao;
 
 public class ExercicioConverter {
 
@@ -21,16 +21,17 @@ public class ExercicioConverter {
 		exercicio.setNivel(exercicioModel.getNivel());
 		exercicio.setValorNotaMaxima(Integer.parseInt(exercicioModel.getValorNotaMaxima()));
 
-		if (!CollectionUtils.isEmpty(exercicioModel.getQuestoes())) {
-
-			exercicio.setQuestoes(new HashSet<Questao>());
-
-			for (QuestaoModel questaoModel : exercicioModel.getQuestoes()) {
-				Questao questao = QuestaoConverter.convert(questaoModel);
-				exercicio.getQuestoes().add(questao);
-			}
-
-		}
+		// TODO: Remover parte de questoes
+		// if (!CollectionUtils.isEmpty(exercicioModel.getQuestoes())) {
+		//
+		// exercicio.setQuestoes(new HashSet<Questao>());
+		//
+		// for (QuestaoModel questaoModel : exercicioModel.getQuestoes()) {
+		// Questao questao = QuestaoConverter.convert(questaoModel);
+		// exercicio.getQuestoes().add(questao);
+		// }
+		//
+		// }
 
 		if (!CollectionUtils.isEmpty(exercicioModel.getGrammarDefinicoes())) {
 
@@ -40,6 +41,17 @@ public class ExercicioConverter {
 				GrammarDefinicao definicaoTemp = GrammarDefinicaoConverter.convert(definicao);
 				exercicio.getGrammarDefinicoes().add(definicaoTemp);
 			}
+		}
+
+		if (!CollectionUtils.isEmpty(exercicioModel.getReadingQuestoes())) {
+
+			exercicio.setReadingQuestoes(new HashSet<ReadingQuestao>());
+
+			for (ReadingQuestaoModel questao : exercicioModel.getReadingQuestoes()) {
+				ReadingQuestao questaoTemp = ReadingQuestaoConverter.convert(questao);
+				exercicio.getReadingQuestoes().add(questaoTemp);
+			}
+
 		}
 
 		return exercicio;

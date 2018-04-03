@@ -10,6 +10,7 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		return $http.get(constants.baseUrl + "/searchAllExercises/" + professorId);
 	}
 	
+	// TODO: Remove
 	// Calls the searchQuestionsByExercise service from ExercisesManagementController class
 	this.searchQuestionsByExercise = function(exercicioId){
 		return $http.get(constants.baseUrl + "/searchQuestionsByExercise/" + exercicioId);
@@ -23,6 +24,11 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 	// Calls the searchGrammarAlternativesByExercise service from ExercisesManagementController class
 	this.searchGrammarAlternativesByExercise = function(exercicioId){
 		return $http.get(constants.baseUrl + "/searchGrammarAlternativesByExercise/" + exercicioId);
+	}
+	
+	// Calls the searchReadingQuestionsByExercise service from ExercisesManagementController class
+	this.searchReadingQuestionsByExercise = function(exercicioId){
+		return $http.get(constants.baseUrl + "/searchReadingQuestionsByExercise/" + exercicioId);
 	}
 	
 	// Calls the searchOptionsByQuestion service from ExercisesManagementController class

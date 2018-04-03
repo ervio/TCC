@@ -365,23 +365,27 @@
 															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Questions</legend>
 															
 															<div class="col-md-12 form-group">
-																<a class="list-group-item" class="optionSelected">
-															  		1) The first verse of the song talks about:
-														  		</a>
-														  		<a class="list-group-item active" class="optionSelected">
-																	2) The second verse talks about:
-														  		</a>
+																<div class="scrolly">
+																	<div class="list-group" style="margin-top: 20px;">
+																	  <a ng-repeat="question in readingQuestions" 
+																	  	 ng-click="selectQuestion(question, $index); grammarPractice.readingQuestionInput = question.pergunta;" 
+																	  	 class="list-group-item" 
+																	  	 ng-class="{active:questionSelected == question}">
+																	  	 {{$index + 1}}) {{question.pergunta}}
+																  	  </a>
+																	</div>
+																</div>
 															</div>
 															
 															<div class="col-md-12 form-group" style="text-align: center;">
-																<button type="button" class="btn btn-default">Save Option</button>
-																<button type="button" class="btn btn-default">Edit</button>
-																<button type="button" class="btn btn-default">Delete</button>
+																<button ng-click="addQuestion()" ng-disabled="!grammarPractice.readingQuestionInput" type="button" class="btn btn-default">Save Option</button>
+																<button ng-if="readingQuestions.length > 0" ng-click="editQuestion()" ng-disabled="!questionSelected" type="button" class="btn btn-default">Edit</button>
+																<button ng-if="readingQuestions.length > 0" ng-click="deleteQuestion()" ng-disabled="!questionSelected" type="button" class="btn btn-default">Delete</button>
 															</div>
 															
 															<div class="col-md-12 form-group">
 																<label>Question</label>
-																<input class="form-control" type="text" maxlength="30" value="The second verse talks about:"/>
+																<input ng-model="grammarPractice.readingQuestionInput" class="form-control" type="text" maxlength="500"/>
 															</div>
 														</fieldset>
 													</div>
