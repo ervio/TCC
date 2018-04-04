@@ -10,6 +10,7 @@ import webplatform.dao.ExercicioDao;
 import webplatform.dao.GrammarDefinicaoDao;
 import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.MusicaDao;
+import webplatform.dao.ReadingAlternativaDao;
 import webplatform.dao.ReadingQuestaoDao;
 import webplatform.model.ExercicioModel;
 import webplatform.model.entity.Exercicio;
@@ -17,6 +18,7 @@ import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Musica;
 import webplatform.model.entity.Professor;
+import webplatform.model.entity.ReadingAlternativa;
 import webplatform.model.entity.ReadingQuestao;
 
 @Service
@@ -43,6 +45,9 @@ public class ExercisesManagementBo {
 
 	@Autowired
 	private ReadingQuestaoDao readingQuestaoDao;
+
+	@Autowired
+	private ReadingAlternativaDao readingAlternativaDao;
 
 	@Transactional
 	public Exercicio saveExercise(ExercicioModel exercicioModel) {
@@ -76,6 +81,11 @@ public class ExercisesManagementBo {
 		for (ReadingQuestao questao : exercicio.getReadingQuestoes()) {
 			questao.setExercicio(exercicio);
 			readingQuestaoDao.saveOrUpdate(questao);
+
+			for (ReadingAlternativa alternativa : questao.getReadingAlternativas()) {
+				alternativa.setQuestao(questao);
+				readingAlternativaDao.saveOrUpdate(alternativa);
+			}
 		}
 
 		return exercicio;

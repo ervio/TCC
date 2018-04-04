@@ -29,7 +29,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		definitionInput : "",
 		alternativeInput : "",
 		alternativeAnswer : "",
-		readingQuestionInput : ""
+		readingQuestionInput : "",
+		readingAlternativeInput : "",
+		readingAlternativeAnswer : ""
 	};
 	$scope.definitionSelected = "";
 	$scope.definitionSelectedIndex = "";
@@ -37,6 +39,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.alternativeSelectedIndex = "";
 	$scope.questionSelected = "";
 	$scope.questionSelectedIndex = "";
+	$scope.readingAlternativeSelected = "";
+	$scope.readingAlternativeSelectedIndex = "";
 	
 	$scope.questao = {
 		pergunta : "",
@@ -122,6 +126,34 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		);
 	};
 	
+	// Calls searchReadingAlternativesByExercise from exercisesManagementService considering the selected exercise
+	$scope.searchReadingAlternativesByExercise = function(idExercicio){
+		
+		exercisesManagementService.searchReadingAlternativesByExercise(idExercicio).then( 
+			function successCallback(response) {
+				
+				$(response.data).each(function(index, alternative) {
+					
+					for(var i = 0; i < $scope.exercicio.readingQuestoes.length; i++){
+						var questao = $scope.exercicio.readingQuestoes[i];
+						
+						if(alternative.questao.id == questao.id){
+							alternative.correta = alternative.correta + "";
+							questao.readingAlternativas.push(angular.copy(alternative));
+							break;
+						}
+					}
+					
+				});
+				
+			}, 
+			function errorCallback(response) {
+				console.log('Deu errado');
+			}
+		);
+		
+	};
+	
 	// Calls searchGrammarDefinitionsByExercise from exercisesManagementService considering the selected exercise
 	$scope.searchReadingQuestionsByExercise = function(idExercicio){
 		exercisesManagementService.searchReadingQuestionsByExercise(idExercicio).then( 
@@ -133,6 +165,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 					$scope.exercicio.readingQuestoes[index].readingAlternativas = [];
 				 });
 				
+				$scope.searchReadingAlternativesByExercise($scope.exercicio.idExercicio);
 			}, 
 			function errorCallback(response) {
 				console.log('Deu errado');
@@ -685,6 +718,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		$scope.grammarPractice.definitionInput = "";
 		$scope.grammarPractice.alternativeInput = "";
 		$scope.grammarPractice.alternativeAnswer = "";
+		$scope.grammarPractice.readingQuestionInput = "";
+		$scope.grammarPractice.readingAlternativeInput = "";
+		$scope.grammarPractice.readingAlternativeAnswer = "";
 		$scope.definitionSelected = "";
 		$scope.definitionSelectedIndex = "";
 		$scope.alternativeSelected = "";
@@ -804,6 +840,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	  $scope.selectQuestion = function(question, index){
 		  $scope.questionSelected = question;
 		  $scope.questionSelectedIndex = index;
+		  $scope.readingAlternativeSelected = "";
 	  };
 	  
 	  $scope.addQuestion = function(){
@@ -812,11 +849,16 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		  };
 		  $scope.readingQuestions.push(angular.copy(question));
 		  $scope.grammarPractice.readingQuestionInput = "";
+		  $scope.grammarPractice.readingAlternativeInput = "";
+		  $scope.grammarPractice.readingAlternativeAnswer = "";
+		  $scope.questionSelected = "";
 	  };
 	  
 	  $scope.editQuestion = function(){
 		  $scope.readingQuestions[$scope.questionSelectedIndex].pergunta = angular.copy($scope.grammarPractice.readingQuestionInput);
 		  $scope.grammarPractice.readingQuestionInput = "";
+		  $scope.grammarPractice.readingAlternativeInput = "";
+		  $scope.grammarPractice.readingAlternativeAnswer = "";
 		  $scope.questionSelected = "";
 	  };
 	  
@@ -824,6 +866,37 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		  $scope.readingQuestions.splice($scope.questionSelectedIndex, 1);
 		  $scope.grammarPractice.readingQuestionInput = "";
 		  $scope.questionSelected = "";
+	  };
+	  
+	  $scope.selectReadingAlternative = function(alternative, index){
+		  $scope.readingAlternativeSelected = alternative;
+		  $scope.readingAlternativeSelectedIndex = index;
+	  };
+	  
+	  $scope.addReadingAlternative = function(){
+		  var alternative = {
+				  descricao : $scope.grammarPractice.readingAlternativeInput,
+				  correta : $scope.grammarPractice.readingAlternativeAnswer
+	  	  };
+		  $scope.questionSelected.readingAlternativas.push(alternative);
+		  $scope.grammarPractice.readingAlternativeInput = "";
+		  $scope.grammarPractice.readingAlternativeAnswer = "";
+		  $scope.readingAlternativeSelected = "";
+	  };
+	  
+	  $scope.editReadingAlternative = function(){
+		  $scope.questionSelected.readingAlternativas[$scope.readingAlternativeSelectedIndex].descricao = angular.copy($scope.grammarPractice.readingAlternativeInput);
+		  $scope.questionSelected.readingAlternativas[$scope.readingAlternativeSelectedIndex].correta = angular.copy($scope.grammarPractice.readingAlternativeAnswer);
+		  $scope.grammarPractice.readingAlternativeInput = "";
+		  $scope.grammarPractice.readingAlternativeAnswer = "";
+		  $scope.readingAlternativeSelected = "";
+	  };
+	  
+	  $scope.deleteReadingAlternative = function(){
+		  $scope.questionSelected.readingAlternativas.splice($scope.readingAlternativeSelectedIndex, 1);
+		  $scope.grammarPractice.readingAlternativeInput = "";
+		  $scope.grammarPractice.readingAlternativeAnswer = "";
+		  $scope.readingAlternativeSelected = "";
 	  };
 	  
 	  $(document).ready(function () {

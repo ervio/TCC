@@ -1,6 +1,12 @@
 package webplatform.converter;
 
+import java.util.HashSet;
+
+import org.springframework.util.CollectionUtils;
+
+import webplatform.model.ReadingAlternativaModel;
 import webplatform.model.ReadingQuestaoModel;
+import webplatform.model.entity.ReadingAlternativa;
 import webplatform.model.entity.ReadingQuestao;
 
 public class ReadingQuestaoConverter {
@@ -12,19 +18,17 @@ public class ReadingQuestaoConverter {
 		}
 		questao.setPergunta(readingQuestaoModel.getPergunta());
 
-		// if (!CollectionUtils.isEmpty(grammarDefinicaoModel.getQuestoes())) {
-		//
-		// grammarDefinicao.setQuestoes(new HashSet<GrammarQuestao>());
-		//
-		// for (GrammarQuestaoModel grammarQuestaoModel :
-		// grammarDefinicaoModel.getQuestoes()) {
-		// GrammarQuestao grammarQuestao = new
-		// GrammarQuestao(grammarQuestaoModel.getId(),
-		// grammarQuestaoModel.getQuestao(), null);
-		// grammarDefinicao.getQuestoes().add(grammarQuestao);
-		// }
-		//
-		// }
+		if (!CollectionUtils.isEmpty(readingQuestaoModel.getReadingAlternativas())) {
+
+			questao.setReadingAlternativas(new HashSet<ReadingAlternativa>());
+
+			for (ReadingAlternativaModel readingAlternativaModel : readingQuestaoModel.getReadingAlternativas()) {
+				ReadingAlternativa alternativa = new ReadingAlternativa(readingAlternativaModel.getId(), null,
+						readingAlternativaModel.getDescricao(), readingAlternativaModel.getCorreta());
+				questao.getReadingAlternativas().add(alternativa);
+			}
+
+		}
 
 		return questao;
 	}

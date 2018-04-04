@@ -31,6 +31,11 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		return $http.get(constants.baseUrl + "/searchReadingQuestionsByExercise/" + exercicioId);
 	}
 	
+	// Calls the searchReadingAlternativesByExercise service from ExercisesManagementController class
+	this.searchReadingAlternativesByExercise = function(exercicioId){
+		return $http.get(constants.baseUrl + "/searchReadingAlternativesByExercise/" + exercicioId);
+	}
+	
 	// Calls the searchOptionsByQuestion service from ExercisesManagementController class
 	this.searchOptionsByQuestion = function(questionId){
 		return $http.get(constants.baseUrl + "/searchOptionsByQuestion/" + questionId);

@@ -27,6 +27,7 @@ import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.ImagemDao;
 import webplatform.dao.MusicaDao;
 import webplatform.dao.QuestaoDao;
+import webplatform.dao.ReadingAlternativaDao;
 import webplatform.dao.ReadingQuestaoDao;
 import webplatform.model.ExercicioModel;
 import webplatform.model.entity.Alternativa;
@@ -37,6 +38,7 @@ import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Imagem;
 import webplatform.model.entity.Questao;
+import webplatform.model.entity.ReadingAlternativa;
 import webplatform.model.entity.ReadingQuestao;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -77,6 +79,9 @@ public class ExercisesManagementController {
 
 	@Autowired
 	private ReadingQuestaoDao readingQuestaoDao;
+
+	@Autowired
+	private ReadingAlternativaDao readingAlternativaDao;
 
 	/**
 	 * The method saves the exercises including the music of it, the questions and
@@ -141,6 +146,19 @@ public class ExercisesManagementController {
 			@PathVariable("exerciseId") String exerciseId) {
 		List<ReadingQuestao> questoes = readingQuestaoDao.findByExercise(Long.parseLong(exerciseId));
 		return new ResponseEntity(questoes, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all the questions related to the exercise selected
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@RequestMapping(value = "/searchReadingAlternativesByExercise/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchReadingAlternativesByExercise(
+			@PathVariable("exerciseId") String exerciseId) {
+		List<ReadingAlternativa> alternativas = readingAlternativaDao.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(alternativas, HttpStatus.OK);
 	}
 
 	// TODO: Remover
