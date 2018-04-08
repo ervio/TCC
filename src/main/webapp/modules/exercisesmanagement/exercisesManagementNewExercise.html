@@ -195,7 +195,7 @@
 	   				<!-- Activities Modal -->
 					<div id="activitiesModal" class="modal fade" data-backdrop="static" role="dialog">
 						<div class="modal-dialog modal-lg" style="width: 1000px !important;">
-							<form name="activitiesForm" role="form">
+							<form name="activitiesForm" role="form" enctype="multipart/form-data">
 								<!-- Modal content-->
 								<div class="modal-content">
 									<div class="modal-header">
@@ -230,11 +230,12 @@
 												
 												<div class="row">
 												
-													<div class="col-md-4 form-group" class="uploadedfile" ng-repeat="f in pictures">
+													<div class="col-md-4 form-group" class="uploadedfile" ng-repeat="f in pictures track by $index">
 														<div ng-show="f">
 														    <!-- FILE -->
 														    <div align="center">
-																<img class="thumb" ngf-thumbnail="f"><br>
+														    	<img ng-if="!f.id" class="thumb" ngf-thumbnail="f.file">
+																<img ng-if="f.id" class="thumb" ng-src="data:image/jpg;base64,{{f.base64}}"><br>
 															</div>
 														    
 														    <div class="col-md-10 form-group">
@@ -450,38 +451,43 @@
 															<legend class="scheduler-border" style="font-size: 14px;font-weight: bold;">Questions</legend>
 															
 															<div class="col-md-12 form-group">
-																<a class="list-group-item" class="optionSelected">
-															  		1)	So you think you can tell <b style="color: darkblue;">heaven</b> from <b style="color: darkblue;">hell</b>.
-														  		</a>
-														  		<a class="list-group-item active" class="optionSelected">
-																	2)	Can you tell a green field from a cold <b style="color: darkblue;">steel rail?</b>
-														  		</a>
+																<div class="scrolly">
+																	<div class="list-group" style="margin-top: 20px;">
+																	  <a ng-repeat="question in pronunciationQuestions" 
+																	  	 data-ng-bind-html="question.descricao"
+																	  	 ng-click="selectPronunciationQuestion(question, $index);" 
+																	  	 class="list-group-item" 
+																	  	 ng-class="{active:pronunciationQuestionSelected == question}">
+																  	  </a>
+																	</div>
+																</div>
 															</div>
 															
 															<div class="col-md-12 form-group" style="text-align: center;">
-																<button type="button" class="btn btn-default">Save Option</button>
-																<button type="button" class="btn btn-default">Edit</button>
-																<button type="button" class="btn btn-default">Add line</button>
-																<button type="button" class="btn btn-default">Delete</button>
+																<button ng-click="addPronunciationQuestion()" ng-disabled="!allFieldsPopulated" type="button" class="btn btn-default">Save Option</button>
+																<button ng-if="pronunciationQuestions.length > 0" ng-disabled="!allFieldsPopulated" ng-click="editPronunciationQuestion()" ng-disabled="!pronunciationQuestionSelected" type="button" class="btn btn-default">Edit</button>
+																<button ng-click="addLine()" type="button" class="btn btn-default">Add line</button>
+																<button ng-if="pronunciationQuestions.length > 0" ng-click="deletePronunciationQuestion()" ng-disabled="!pronunciationQuestionSelected" type="button" class="btn btn-default">Delete</button>
 															</div>
 															
 															<div class="col-md-10 form-group">
 																<label>Question</label>
-																<input class="form-control" type="text" maxlength="30" value="Can you tell a green field from a cold"/>
-																<input class="form-control" type="text" maxlength="30" value="steel rail?"/>
 															</div>
 															<div class="col-md-2 form-group">
 																<label>Type</label>
-																<select class="form-control selectpicker">
-																	<option value="">Select</option>
-																	<option>Sentence</option>
-																	<option>Gap</option>
-																</select>
-																<select class="form-control selectpicker">
-																	<option value="">Select</option>
-																	<option>Sentence</option>
-																	<option>Gap</option>
-																</select>
+															</div>
+															
+															<div ng-repeat="question in pronunciationPractice.questions">
+																<div class="col-md-10 form-group">
+																	<input class="form-control" type="text" ng-change="evaluateFieldsPopulated()" maxlength="500" ng-model="question.descricao"/>
+																</div>
+																<div class="col-md-2 form-group">
+																	<select class="form-control selectpicker" ng-change="evaluateFieldsPopulated()" ng-model="question.tipo">
+																		<option value="">Select</option>
+																		<option value="Sentence">Sentence</option>
+																		<option value="Gap">Gap</option>
+																	</select>
+																</div>
 															</div>
 															
 														</fieldset>
@@ -500,7 +506,7 @@
 												<div class="row">
 													<div class="col-md-10 form-group">
 														<label>Question</label>
-														<input class="form-control" type="text" maxlength="30" value="What do you think WISH YOU WERE HERE is about? What does it mean?"/>
+														<input class="form-control" type="text" ng-model="writingQuestao.writingQuestao" maxlength="500"/>
 													</div>
 												</div>	
 											

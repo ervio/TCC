@@ -1,4 +1,4 @@
-angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScope, $state, Upload, LazyRoute, exercisesManagementService, constants){
+angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $timeout, $rootScope, $state, Upload, LazyRoute, exercisesManagementService, constants){
 	
 	$scope.assignSuccess = false;
 	$scope.assignError = false;
@@ -10,8 +10,12 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.definitions = [];
 	$scope.alternatives = [];
 	$scope.readingQuestions = [];
+	$scope.pronunciationQuestions = [];
+	$scope.myText = $sce.trustAsHtml("1)	So you think you can tell <b style='color: #00008b'>heaven</b> from <b style='color: #00008b'>hell</b>.");
+	$scope.myText2 = $sce.trustAsHtml("2)	Can you tell a green field from a cold <b style='color: darkblue;'>steel rail?</b>");
 	
 	/* Temporary variables */
+	$scope.picturesTemp = [];
 	$scope.alternativesToDeleteTemp = [];
 	$scope.questionsToDelete = [];
 	$scope.exercicioToEdit;
@@ -24,6 +28,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.musicLyrics = "";
 	$scope.name = "";
 	$scope.email = "";
+	$scope.writingQuestao = {writingQuestao : ""};
 	$scope.listeningPractice = {letraOrdenar:""};
 	$scope.grammarPractice = {
 		definitionInput : "",
@@ -33,6 +38,12 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		readingAlternativeInput : "",
 		readingAlternativeAnswer : ""
 	};
+	$scope.pronunciationPractice = {
+			questions : [{
+				descricao : "",
+				tipo : ""
+			}]
+	};
 	$scope.definitionSelected = "";
 	$scope.definitionSelectedIndex = "";
 	$scope.alternativeSelected = "";
@@ -41,6 +52,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	$scope.questionSelectedIndex = "";
 	$scope.readingAlternativeSelected = "";
 	$scope.readingAlternativeSelectedIndex = "";
+	$scope.pronunciationQuestionSelected = "";
+	$scope.pronunciationQuestionSelectedIndex = "";
+	$scope.allFieldsPopulated = false;
 	
 	$scope.questao = {
 		pergunta : "",
@@ -173,6 +187,72 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		);
 	};
 	
+	// Calls searchPronunciationQuestionsPartsByExercise from exercisesManagementService considering the selected exercise
+	$scope.searchPronunciationQuestionsPartsByExercise = function(idExercicio){
+		
+		exercisesManagementService.searchPronunciationQuestionsPartsByExercise(idExercicio).then( 
+				function successCallback(response) {
+					
+					$(response.data).each(function(index, questionPart) {
+						
+						for(var i = 0; i < $scope.exercicio.pronunciationQuestions.length; i++){
+							var questao = $scope.exercicio.pronunciationQuestions[i];
+							
+							if(questionPart.pronunciationQuestao.id == questao.id){
+								questao.pronunciationQuestaoPartes.push(angular.copy(questionPart));
+								break;
+							}
+						}
+						
+					});
+					
+				}, 
+				function errorCallback(response) {
+					console.log('Deu errado');
+				}
+			);
+		
+	};
+	
+	// Calls searchPronunciationQuestionsByExercise from exercisesManagementService considering the selected exercise
+	$scope.searchPronunciationQuestionsByExercise = function(idExercicio){
+		exercisesManagementService.searchPronunciationQuestionsByExercise(idExercicio).then( 
+			function successCallback(response) {
+				$scope.exercicio.pronunciationQuestions = [];
+				
+				$(response.data).each(function(index, question) {
+					$scope.exercicio.pronunciationQuestions.push(angular.copy(question));
+					$scope.exercicio.pronunciationQuestions[index].pronunciationQuestaoPartes = [];
+				 });
+				
+				$scope.searchPronunciationQuestionsPartsByExercise($scope.exercicio.idExercicio);
+			}, 
+			function errorCallback(response) {
+				console.log('Deu errado');
+			}
+		);
+	};
+	
+	// Calls searchPicturesByExercise from exercisesManagementService considering the selected exercise
+	$scope.searchPicturesByExercise = function(idExercicio){
+		exercisesManagementService.searchPicturesByExercise(idExercicio).then( 
+			function successCallback(response) {
+				
+				$scope.exercicio.pictures = [];
+				
+				$(response.data).each(function(index, file) {
+					$scope.exercicio.pictures.push(file);
+				 });
+				
+				console.log("asdasdasd");
+				
+			}, 
+			function errorCallback(response) {
+				console.log('Deu errado');
+			}
+		);
+	};
+	
 	// Populates the temporary json with the values from the selected exercise, if it's being edited, or empty values, if it's a new one
 	if(!$rootScope.exercicioToEdit){
 		$scope.exercicio = {
@@ -186,16 +266,20 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 				letraOrdenar : "",
 				link : ""
 	        },
+	        writingQuestao : "",
 	        questoes : [],
 	        pictures : [],
 	        grammarDefinicoes : [],
-	        readingQuestoes : []
+	        readingQuestoes : [],
+	        pronunciationQuestoes : []
 		};
 	}else{
 		$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
+		$scope.searchPicturesByExercise($scope.exercicio.idExercicio);
 		$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
 		$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
 		$scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio);
+		$scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio);
 	}
 	
 	// Function called by "New" button
@@ -554,14 +638,17 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 			 
 			 exercisesManagementService.saveExercise($scope.exercicio).then( 
 				function successCallback(response) {
+					$scope.picturesTemp = angular.copy($scope.exercicio.pictures);
 					$scope.savePictures(response.data.idExercicio);
 					$scope.exercicio = angular.copy(response.data);
 					$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
 					$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
 					$scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio);
+					$scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio);
 					$scope.exerciseSaved = true;
 					$scope.alternativesToDelete = [];
 					$scope.questionsToDelete = [];
+					$scope.exercicio.pictures = angular.copy($scope.picturesTemp);
 				}, 
 				function errorCallback(response) {
 					$scope.error = response.data.status;
@@ -686,6 +773,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	};
 	
 	 $scope.activitiesModal = function(){
+		$scope.writingQuestao.writingQuestao = $scope.exercicio.writingQuestao;
+		
 		$scope.listeningPractice.letraOrdenar =  angular.copy($scope.exercicio.musica.letraOrdenar);
 		if($scope.exercicio.grammarDefinicoes != null && $scope.exercicio.grammarDefinicoes.length > 0){
 			$scope.definitions = angular.copy($scope.exercicio.grammarDefinicoes);
@@ -693,6 +782,32 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		if($scope.exercicio.readingQuestoes != null && $scope.exercicio.readingQuestoes.length > 0){
 			$scope.readingQuestions = angular.copy($scope.exercicio.readingQuestoes);
 		}
+		if($scope.exercicio.pronunciationQuestions != null && $scope.exercicio.pronunciationQuestions.length > 0){
+			$scope.pronunciationQuestions = angular.copy($scope.exercicio.pronunciationQuestions);
+		}
+		
+		$($scope.pronunciationQuestions).each(function(index, question) {
+			
+			var descricao = (index + 1) + ") ";
+			  
+			$(question.pronunciationQuestaoPartes).each(function(index, questionTemp) {
+				//questionTemp.sequencia = index;
+				  
+				if(index > 0){
+					descricao = descricao.concat(" ");
+				}
+				  
+				if(questionTemp.tipo == "Gap"){
+					descricao = descricao.concat("<b style='color: #00008b'>" + questionTemp.descricao + "</b>");
+				}else{
+					descricao = descricao.concat(questionTemp.descricao);
+				}
+			});
+			  
+			question.descricao = $sce.trustAsHtml(descricao);
+			
+		});
+		
 		angular.forEach($scope.exercicio.pictures, function(file) {
 			$scope.pictures.push(file);
 		});
@@ -710,10 +825,13 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	
 	$scope.clearActivitiesModal = function(){
 		$scope.pictures = [];
+		$scope.picturesTemp = [];
 		$scope.listeningPractice.letraOrdenar = "";
+		$scope.writingQuestao.writingQuestao = "";
 		$scope.definitions = [];
 		$scope.alternatives = [];
 		$scope.readingQuestions = [];
+		$scope.pronunciationQuestions = [];
 		
 		$scope.grammarPractice.definitionInput = "";
 		$scope.grammarPractice.alternativeInput = "";
@@ -727,10 +845,18 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		$scope.alternativeSelectedIndex = "";
 		$scope.questionSelected = "";
 		$scope.questionSelectedIndex = "";
+		
+		$scope.pronunciationPractice = {
+				questions : [{
+					descricao : "",
+					tipo : ""
+				}]
+		};
 	};
 	 
 	$scope.saveActivitiesModal = function(){
 		$scope.exercicio.pictures = [];
+		$scope.exercicio.writingQuestao = angular.copy($scope.writingQuestao.writingQuestao);
 		angular.forEach($scope.pictures, function(file) {
 			$scope.exercicio.pictures.push(file);
 		});
@@ -743,12 +869,17 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		angular.forEach($scope.alternatives, function(questao){
 			$scope.exercicio.grammarDefinicoes[questao.definition].questoes.push(angular.copy(questao));
 		});
+		$scope.exercicio.pronunciationQuestoes = angular.copy($scope.pronunciationQuestions);
 		$scope.clearActivitiesModal();
 		$("#activitiesModal").modal("hide");
 	};
 	
 	$scope.addFileToList = function(file){
-		$scope.pictures.push(file);
+		var picture = {
+				file : file,
+				nome : ""
+		};
+		$scope.pictures.push(picture);
 	};
 	  
 	$scope.removePicture = function(pictureToRemove){
@@ -763,14 +894,28 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 	  $scope.savePictures = function(idExercicio) {
 	    
 		  angular.forEach($scope.exercicio.pictures, function(file) {
-		      file.upload = Upload.upload({
-		      	url: constants.baseUrl + '/test',
-		        data: {file: file, 'idExercicio': idExercicio, 'nomeImagem' : file.nome}
-		      });
+			  
+			  if(file.id){
+				  file.upload = Upload.upload({
+			      	url: constants.baseUrl + '/updateFile',
+			        data: {'idExercicio': idExercicio, 'nomeImagem' : file.nome, 'id' : file.id, 'bytes' : file.bytes}
+			      });
+			  }else{
+				  file.upload = Upload.upload({
+			      	url: constants.baseUrl + '/saveFile',
+			        data: {file: file.file, 'idExercicio': idExercicio, 'nomeImagem' : file.nome}
+			      });
+			  }
 	
 		      file.upload.then(function (response) {
+//		    	  var picture = {
+//		  				file : response.config.data.file,
+//		  				nome : ""
+//		  		  };
+//		    	  $scope.exercicio.pictures.push(picture);
+		    	  console.log("eeeee");
 		        $timeout(function () {
-		          file.result = response.data;
+		          //file.result = response.data;
 		        });
 		      }, function (response) {
 		        if (response.status > 0)
@@ -897,6 +1042,99 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $rootScop
 		  $scope.grammarPractice.readingAlternativeInput = "";
 		  $scope.grammarPractice.readingAlternativeAnswer = "";
 		  $scope.readingAlternativeSelected = "";
+	  };
+	  
+	  $scope.selectPronunciationQuestion = function(question, index){
+		  $scope.pronunciationQuestionSelected = question;
+		  $scope.pronunciationQuestionSelectedIndex = index;
+		  $scope.pronunciationPractice.questions = angular.copy($scope.pronunciationQuestionSelected.pronunciationQuestaoPartes);
+		  $scope.evaluateFieldsPopulated();
+	  };
+	  
+	  $scope.addPronunciationQuestion = function(){
+		  var descricao = ($scope.pronunciationQuestions.length + 1) + ") ";
+		  var question = {
+				  descricao : "",
+				  pronunciationQuestaoPartes : []
+		  };
+		  
+		  $($scope.pronunciationPractice.questions).each(function(index, questionTemp) {
+			  questionTemp.sequencia = index;
+			  question.pronunciationQuestaoPartes.push(angular.copy(questionTemp));
+			  
+			  if(index > 0){
+				  descricao = descricao.concat(" ");
+			  }
+			  
+			  if(questionTemp.tipo == "Gap"){
+				  descricao = descricao.concat("<b style='color: #00008b'>" + questionTemp.descricao + "</b>");
+			  }else{
+				  descricao = descricao.concat(questionTemp.descricao);
+			  }
+		  });
+		  
+		  question.descricao = $sce.trustAsHtml(descricao);
+		  
+		  $scope.pronunciationQuestions.push(question);
+		  $scope.pronunciationQuestionSelected = "";
+		  $scope.pronunciationPractice = {
+					questions : [{
+						descricao : "",
+						tipo : ""
+					}]
+		  };
+		  $scope.evaluateFieldsPopulated();
+	  };
+	  
+	  $scope.editPronunciationQuestion = function(){
+		  var descricao = ($scope.pronunciationQuestionSelectedIndex + 1) + ") ";
+		  
+		  $($scope.pronunciationPractice.questions).each(function(index, questionTemp) {
+			  questionTemp.sequencia = index;
+			  
+			  if(index > 0){
+				  descricao = descricao.concat(" ");
+			  }
+			  
+			  if(questionTemp.tipo == "Gap"){
+				  descricao = descricao.concat("<b style='color: #00008b'>" + questionTemp.descricao + "</b>");
+			  }else{
+				  descricao = descricao.concat(questionTemp.descricao);
+			  }
+		  });
+		  
+		  $scope.pronunciationQuestions[$scope.pronunciationQuestionSelectedIndex].descricao = $sce.trustAsHtml(descricao);
+		  $scope.pronunciationQuestions[$scope.pronunciationQuestionSelectedIndex].pronunciationQuestaoPartes = angular.copy($scope.pronunciationPractice.questions);
+		  
+		  $scope.pronunciationQuestionSelected = "";
+		  $scope.pronunciationPractice = {
+					questions : [{
+						descricao : "",
+						tipo : ""
+					}]
+		  };
+		  $scope.evaluateFieldsPopulated();
+	  };
+	  
+	  $scope.addLine = function(){
+		  var question = {
+				  descricao : "",
+				  tipo : ""
+		  };
+		  $scope.pronunciationPractice.questions.push(question);
+		  $scope.evaluateFieldsPopulated();
+	  };
+	  
+	  $scope.evaluateFieldsPopulated = function(){
+		  var allFieldsPopulated = true;
+		  for (var i = 0; i < $scope.pronunciationPractice.questions.length; i++){
+			  var part = $scope.pronunciationPractice.questions[i];
+			  if(part.descricao === "" || part.tipo === ""){
+				  allFieldsPopulated = false;
+				  break;
+			  }
+		  }
+		  $scope.allFieldsPopulated = allFieldsPopulated;
 	  };
 	  
 	  $(document).ready(function () {

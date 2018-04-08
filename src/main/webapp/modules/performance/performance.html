@@ -147,7 +147,7 @@
 						        <tbody>
 									<tr ng-class="{activated:$index==basicSelectedRow}" data-ng-click="rowHighilited($index, 'Basic')" data-ng-repeat="result in basicList">
 										<td>{{result.idExercicioAluno}}</td>
-										<td>{{result.exercicio.nome}}</td>
+										<td>{{result.exercicio.musica.nome}}</td>
 										<td ng-if="loggedUser.tipoConta == 'Teacher'">{{result.aluno.nome}}</td>
 										<td>{{result.nota}}</td>
 										<td>{{result.exercicio.valorNotaMaxima}}</td>
@@ -186,7 +186,7 @@
 						        <tbody>
 									<tr ng-class="{activated:$index==intermediateSelectedRow}" data-ng-click="rowHighilited($index, 'Intermediate')" data-ng-repeat="result in intermediateList">
 										<td>{{result.idExercicioAluno}}</td>
-										<td>{{result.exercicio.nome}}</td>
+										<td>{{result.exercicio.musica.nome}}</td>
 										<td ng-if="loggedUser.tipoConta == 'Teacher'">{{result.aluno.nome}}</td>
 										<td>{{result.nota}}</td>
 										<td>{{result.exercicio.valorNotaMaxima}}</td>

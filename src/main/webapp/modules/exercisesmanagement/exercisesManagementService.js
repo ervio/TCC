@@ -36,6 +36,21 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		return $http.get(constants.baseUrl + "/searchReadingAlternativesByExercise/" + exercicioId);
 	}
 	
+	// Calls the searchPronunciationQuestionsByExercise service from ExercisesManagementController class
+	this.searchPronunciationQuestionsByExercise = function(exercicioId){
+		return $http.get(constants.baseUrl + "/searchPronunciationQuestionsByExercise/" + exercicioId);
+	}
+	
+	// Calls the searchPronunciationQuestionsPartsByExercise service from ExercisesManagementController class
+	this.searchPronunciationQuestionsPartsByExercise = function(exercicioId){
+		return $http.get(constants.baseUrl + "/searchPronunciationQuestionsPartsByExercise/" + exercicioId);
+	}
+	
+	// Calls the searchPicturesByExercise service from ExercisesManagementController class
+	this.searchPicturesByExercise = function(exercicioId){
+		return $http.get(constants.baseUrl + "/searchPicturesByExercise/" + exercicioId);
+	}
+	
 	// Calls the searchOptionsByQuestion service from ExercisesManagementController class
 	this.searchOptionsByQuestion = function(questionId){
 		return $http.get(constants.baseUrl + "/searchOptionsByQuestion/" + questionId);

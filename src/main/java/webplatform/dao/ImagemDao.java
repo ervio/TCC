@@ -10,6 +10,8 @@ public interface ImagemDao {
 
 	public List<Imagem> findByExercise(Long exerciseId);
 
+	public Imagem findById(Long id);
+
 	public void delete(Imagem imagem);
 
 	public void deleteAll(List<Imagem> pictures);

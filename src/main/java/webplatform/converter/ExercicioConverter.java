@@ -6,9 +6,11 @@ import org.springframework.util.CollectionUtils;
 
 import webplatform.model.ExercicioModel;
 import webplatform.model.GrammarDefinicaoModel;
+import webplatform.model.PronunciationQuestaoModel;
 import webplatform.model.ReadingQuestaoModel;
 import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.GrammarDefinicao;
+import webplatform.model.entity.PronunciationQuestao;
 import webplatform.model.entity.ReadingQuestao;
 
 public class ExercicioConverter {
@@ -20,6 +22,7 @@ public class ExercicioConverter {
 		}
 		exercicio.setNivel(exercicioModel.getNivel());
 		exercicio.setValorNotaMaxima(Integer.parseInt(exercicioModel.getValorNotaMaxima()));
+		exercicio.setWritingQuestao(exercicioModel.getWritingQuestao());
 
 		// TODO: Remover parte de questoes
 		// if (!CollectionUtils.isEmpty(exercicioModel.getQuestoes())) {
@@ -50,6 +53,17 @@ public class ExercicioConverter {
 			for (ReadingQuestaoModel questao : exercicioModel.getReadingQuestoes()) {
 				ReadingQuestao questaoTemp = ReadingQuestaoConverter.convert(questao);
 				exercicio.getReadingQuestoes().add(questaoTemp);
+			}
+
+		}
+
+		if (!CollectionUtils.isEmpty(exercicioModel.getPronunciationQuestoes())) {
+
+			exercicio.setPronunciationQuestoes(new HashSet<PronunciationQuestao>());
+
+			for (PronunciationQuestaoModel questao : exercicioModel.getPronunciationQuestoes()) {
+				PronunciationQuestao questaoTemp = PronunciationQuestaoConverter.convert(questao);
+				exercicio.getPronunciationQuestoes().add(questaoTemp);
 			}
 
 		}

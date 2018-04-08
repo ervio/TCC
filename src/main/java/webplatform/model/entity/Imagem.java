@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name = "IMAGEM")
 public class Imagem implements java.io.Serializable {
 
-	private Long idImagem;
+	private Long id;
 	private Exercicio exercicio;
 	private byte[] bytes;
 	private String nome;
@@ -31,11 +31,11 @@ public class Imagem implements java.io.Serializable {
 	}
 
 	public Imagem(Long idImagem) {
-		this.idImagem = idImagem;
+		this.id = idImagem;
 	}
 
-	public Imagem(Long idImagem, byte[] bytes, String nome, Exercicio exercicio) {
-		this.idImagem = idImagem;
+	public Imagem(Long id, byte[] bytes, String nome, Exercicio exercicio) {
+		this.id = id;
 		this.bytes = bytes;
 		this.nome = nome;
 		this.exercicio = exercicio;
@@ -45,12 +45,12 @@ public class Imagem implements java.io.Serializable {
 	@SequenceGenerator(name = "IMAGEM_SEQUENCE", sequenceName = "IMAGEM_SEQUENCE")
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "IMAGEM_SEQUENCE")
 	@Column(name = "ID_IMAGEM", unique = true, nullable = false, precision = 22, scale = 0)
-	public Long getIdImagem() {
-		return this.idImagem;
+	public Long getId() {
+		return id;
 	}
 
-	public void setIdImagem(Long idImagem) {
-		this.idImagem = idImagem;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Lob

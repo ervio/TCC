@@ -31,6 +31,7 @@ public class Exercicio implements java.io.Serializable {
 	// TODO: remover atributo nome
 	private String nome;
 	private String nivel;
+	private String writingQuestao;
 	private int valorNotaMaxima;
 	private Byte media;
 	private Set<ExercicioAluno> exercicioAlunos = new HashSet<ExercicioAluno>();
@@ -38,6 +39,7 @@ public class Exercicio implements java.io.Serializable {
 	private Set<Imagem> imagens = new HashSet<Imagem>();
 	private Set<GrammarDefinicao> grammarDefinicoes = new HashSet<GrammarDefinicao>();
 	private Set<ReadingQuestao> readingQuestoes = new HashSet<ReadingQuestao>();
+	private Set<PronunciationQuestao> pronunciationQuestoes = new HashSet<PronunciationQuestao>();
 
 	public Exercicio() {
 	}
@@ -111,6 +113,15 @@ public class Exercicio implements java.io.Serializable {
 		this.nivel = nivel;
 	}
 
+	@Column(name = "WRITING_QUESTAO", length = 500)
+	public String getWritingQuestao() {
+		return writingQuestao;
+	}
+
+	public void setWritingQuestao(String writingQuestao) {
+		this.writingQuestao = writingQuestao;
+	}
+
 	@Column(name = "VALOR_NOTA_MAXIMA", precision = 2, scale = 0)
 	public int getValorNotaMaxima() {
 		return this.valorNotaMaxima;
@@ -177,6 +188,16 @@ public class Exercicio implements java.io.Serializable {
 
 	public void setReadingQuestoes(Set<ReadingQuestao> readingQuestoes) {
 		this.readingQuestoes = readingQuestoes;
+	}
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicio")
+	public Set<PronunciationQuestao> getPronunciationQuestoes() {
+		return pronunciationQuestoes;
+	}
+
+	public void setPronunciationQuestoes(Set<PronunciationQuestao> pronunciationQuestoes) {
+		this.pronunciationQuestoes = pronunciationQuestoes;
 	}
 
 }

@@ -22,7 +22,7 @@ public class ImagemDaoImpl extends BaseDao<Imagem> implements ImagemDao {
 
 	@Override
 	public Imagem saveOrUpdate(Imagem entity) {
-		if (entity.getIdImagem() != null) {
+		if (entity.getId() != null) {
 			hibernateTemplate.update(entity);
 		} else {
 			hibernateTemplate.save(entity);
@@ -48,5 +48,10 @@ public class ImagemDaoImpl extends BaseDao<Imagem> implements ImagemDao {
 		if (!CollectionUtils.isEmpty(pictures)) {
 			hibernateTemplate.deleteAll(pictures);
 		}
+	}
+
+	@Override
+	public Imagem findById(Long id) {
+		return this.hibernateTemplate.get(Imagem.class, id);
 	}
 }

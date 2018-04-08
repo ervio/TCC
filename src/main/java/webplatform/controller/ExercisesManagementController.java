@@ -1,7 +1,11 @@
 package webplatform.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,10 +30,13 @@ import webplatform.dao.GrammarDefinicaoDao;
 import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.ImagemDao;
 import webplatform.dao.MusicaDao;
+import webplatform.dao.PronunciationQuestaoDao;
+import webplatform.dao.PronunciationQuestaoParteDao;
 import webplatform.dao.QuestaoDao;
 import webplatform.dao.ReadingAlternativaDao;
 import webplatform.dao.ReadingQuestaoDao;
 import webplatform.model.ExercicioModel;
+import webplatform.model.ImagemModel;
 import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.Aluno;
 import webplatform.model.entity.Exercicio;
@@ -37,6 +44,8 @@ import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Imagem;
+import webplatform.model.entity.PronunciationQuestao;
+import webplatform.model.entity.PronunciationQuestaoParte;
 import webplatform.model.entity.Questao;
 import webplatform.model.entity.ReadingAlternativa;
 import webplatform.model.entity.ReadingQuestao;
@@ -82,6 +91,12 @@ public class ExercisesManagementController {
 
 	@Autowired
 	private ReadingAlternativaDao readingAlternativaDao;
+
+	@Autowired
+	private PronunciationQuestaoDao pronunciationQuestaoDao;
+
+	@Autowired
+	private PronunciationQuestaoParteDao pronunciationQuestaoParteDao;
 
 	/**
 	 * The method saves the exercises including the music of it, the questions and
@@ -159,6 +174,66 @@ public class ExercisesManagementController {
 			@PathVariable("exerciseId") String exerciseId) {
 		List<ReadingAlternativa> alternativas = readingAlternativaDao.findByExercise(Long.parseLong(exerciseId));
 		return new ResponseEntity(alternativas, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all the pronunciation questions related to the exercise selected
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/searchPronunciationQuestionsByExercise/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchPronunciationQuestionsByExercise(
+			@PathVariable("exerciseId") String exerciseId) {
+		List<PronunciationQuestao> questoes = pronunciationQuestaoDao.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(questoes, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all the pronunciation questions parts related to the exercise selected
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/searchPronunciationQuestionsPartsByExercise/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchPronunciationQuestionsPartsByExercise(
+			@PathVariable("exerciseId") String exerciseId) {
+		List<PronunciationQuestaoParte> questoes = pronunciationQuestaoParteDao
+				.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(questoes, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all the pictures related to the exercise selected
+	 * 
+	 * @param exerciseId
+	 * @return
+	 * @throws IOException
+	 */
+	@Transactional
+	@RequestMapping(value = "/searchPicturesByExercise/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchPicturesByExercise(@PathVariable("exerciseId") String exerciseId,
+			HttpServletResponse response) throws IOException {
+		List<Imagem> listaImagens = imagemDao.findByExercise(Long.parseLong(exerciseId));
+		List<ImagemModel> lista = new ArrayList<ImagemModel>();
+
+		for (Imagem imagem : listaImagens) {
+			// File file = new File(System.getProperty("java.io.tmpdir") + "/" +
+			// imagem.getNome());
+			// FileOutputStream fOut = new FileOutputStream(file);
+			// fOut.write(imagem.getBytes());
+			// fOut.close();
+			ImagemModel imagemModel = new ImagemModel();
+			imagemModel.setId(imagem.getId());
+			imagemModel.setBase64(DatatypeConverter.printBase64Binary(imagem.getBytes()));
+			imagemModel.setNome(imagem.getNome());
+			imagemModel.setBytes(imagem.getBytes());
+			lista.add(imagemModel);
+		}
+
+		return new ResponseEntity(lista, HttpStatus.OK);
 	}
 
 	// TODO: Remover
@@ -285,20 +360,27 @@ public class ExercisesManagementController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/test", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public @ResponseBody String saveUserDataAndFile(@RequestParam(value = "file") MultipartFile file,
-			@RequestParam("idExercicio") String idExercicio, @RequestParam("nomeImagem") String nomeImagem) {
-		System.out.println("Cacete: ");
+	@RequestMapping(value = "/saveFile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public @ResponseBody ResponseEntity<MultipartFile> saveFile(@RequestParam(value = "file") MultipartFile file,
+			@RequestParam("idExercicio") String idExercicio, @RequestParam("nomeImagem") String nomeImagem)
+			throws IllegalStateException, IOException {
 		Imagem imagem = new Imagem();
-		try {
-			imagem.setBytes(file.getBytes());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		imagem.setBytes(file.getBytes());
 		imagem.setExercicio(new Exercicio(Long.parseLong(idExercicio)));
 		imagem.setNome(nomeImagem);
 		imagemDao.saveOrUpdate(imagem);
-		return "";
+
+		return new ResponseEntity(imagem, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/updateFile", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<MultipartFile> updateFile(@RequestParam("idExercicio") String idExercicio,
+			@RequestParam("nomeImagem") String nomeImagem, @RequestParam("id") Long id,
+			@RequestParam("bytes") byte[] bytes) throws IllegalStateException, IOException {
+		Imagem imagem = imagemDao.findById(id);
+		imagem.setNome(nomeImagem);
+		imagemDao.saveOrUpdate(imagem);
+
+		return new ResponseEntity(imagem, HttpStatus.OK);
 	}
 }

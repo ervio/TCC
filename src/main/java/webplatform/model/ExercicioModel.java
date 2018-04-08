@@ -1,6 +1,7 @@
 package webplatform.model;
 
 import java.util.List;
+import java.util.Set;
 
 public class ExercicioModel {
 
@@ -10,11 +11,13 @@ public class ExercicioModel {
 	private String nome;
 	private String nivel;
 	private String valorNotaMaxima;
+	private String writingQuestao;
 	private MusicaModel musica;
 	private List<QuestaoModel> questoes;
 	private List<ExercicioAlunoModel> exercicioAlunos;
 	private List<GrammarDefinicaoModel> grammarDefinicoes;
 	private List<ReadingQuestaoModel> readingQuestoes;
+	private Set<PronunciationQuestaoModel> pronunciationQuestoes;
 
 	public long getIdExercicio() {
 		return idExercicio;
@@ -56,6 +59,14 @@ public class ExercicioModel {
 		this.valorNotaMaxima = valorNotaMaxima;
 	}
 
+	public String getWritingQuestao() {
+		return writingQuestao;
+	}
+
+	public void setWritingQuestao(String writingQuestao) {
+		this.writingQuestao = writingQuestao;
+	}
+
 	public MusicaModel getMusica() {
 		return musica;
 	}
@@ -94,6 +105,14 @@ public class ExercicioModel {
 
 	public void setReadingQuestoes(List<ReadingQuestaoModel> readingQuestoes) {
 		this.readingQuestoes = readingQuestoes;
+	}
+
+	public Set<PronunciationQuestaoModel> getPronunciationQuestoes() {
+		return pronunciationQuestoes;
+	}
+
+	public void setPronunciationQuestoes(Set<PronunciationQuestaoModel> pronunciationQuestoes) {
+		this.pronunciationQuestoes = pronunciationQuestoes;
 	}
 
 }
