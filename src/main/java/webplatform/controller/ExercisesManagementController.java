@@ -370,17 +370,29 @@ public class ExercisesManagementController {
 		imagem.setNome(nomeImagem);
 		imagemDao.saveOrUpdate(imagem);
 
-		return new ResponseEntity(imagem, HttpStatus.OK);
+		ImagemModel imagemModel = new ImagemModel();
+		imagemModel.setId(imagem.getId());
+		imagemModel.setBase64(DatatypeConverter.printBase64Binary(imagem.getBytes()));
+		imagemModel.setNome(imagem.getNome());
+		imagemModel.setBytes(imagem.getBytes());
+
+		return new ResponseEntity(imagemModel, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/updateFile", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<MultipartFile> updateFile(@RequestParam("idExercicio") String idExercicio,
-			@RequestParam("nomeImagem") String nomeImagem, @RequestParam("id") Long id,
-			@RequestParam("bytes") byte[] bytes) throws IllegalStateException, IOException {
+			@RequestParam("nomeImagem") String nomeImagem, @RequestParam("id") Long id)
+			throws IllegalStateException, IOException {
 		Imagem imagem = imagemDao.findById(id);
 		imagem.setNome(nomeImagem);
 		imagemDao.saveOrUpdate(imagem);
 
-		return new ResponseEntity(imagem, HttpStatus.OK);
+		ImagemModel imagemModel = new ImagemModel();
+		imagemModel.setId(imagem.getId());
+		imagemModel.setBase64(DatatypeConverter.printBase64Binary(imagem.getBytes()));
+		imagemModel.setNome(imagem.getNome());
+		imagemModel.setBytes(imagem.getBytes());
+
+		return new ResponseEntity(imagemModel, HttpStatus.OK);
 	}
 }

@@ -638,7 +638,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 			 
 			 exercisesManagementService.saveExercise($scope.exercicio).then( 
 				function successCallback(response) {
-					$scope.picturesTemp = angular.copy($scope.exercicio.pictures);
+					angular.forEach($scope.exercicio.pictures, function(file) {
+						$scope.picturesTemp.push(file);
+					 });
 					$scope.savePictures(response.data.idExercicio);
 					$scope.exercicio = angular.copy(response.data);
 					$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
@@ -648,7 +650,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 					$scope.exerciseSaved = true;
 					$scope.alternativesToDelete = [];
 					$scope.questionsToDelete = [];
-					$scope.exercicio.pictures = angular.copy($scope.picturesTemp);
 				}, 
 				function errorCallback(response) {
 					$scope.error = response.data.status;
@@ -773,6 +774,14 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	};
 	
 	 $scope.activitiesModal = function(){
+		 if(!$scope.exercicio.pictures && $scope.picturesTemp){
+			 $scope.exercicio.pictures = [];
+			 
+			 angular.forEach($scope.picturesTemp, function(file) {
+				 $scope.exercicio.pictures.push(file);
+			 });
+		 }
+		 
 		$scope.writingQuestao.writingQuestao = $scope.exercicio.writingQuestao;
 		
 		$scope.listeningPractice.letraOrdenar =  angular.copy($scope.exercicio.musica.letraOrdenar);
@@ -898,7 +907,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 			  if(file.id){
 				  file.upload = Upload.upload({
 			      	url: constants.baseUrl + '/updateFile',
-			        data: {'idExercicio': idExercicio, 'nomeImagem' : file.nome, 'id' : file.id, 'bytes' : file.bytes}
+			        data: {'idExercicio': idExercicio, 'nomeImagem' : file.nome, 'id' : file.id}
 			      });
 			  }else{
 				  file.upload = Upload.upload({
@@ -908,11 +917,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 			  }
 	
 		      file.upload.then(function (response) {
-//		    	  var picture = {
-//		  				file : response.config.data.file,
-//		  				nome : ""
-//		  		  };
-//		    	  $scope.exercicio.pictures.push(picture);
+		    	  file.id = response.data.id;
+		    	  file.base64 = response.data.base64;
 		    	  console.log("eeeee");
 		        $timeout(function () {
 		          //file.result = response.data;

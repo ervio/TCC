@@ -8,13 +8,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,8 +46,10 @@ public class ReadingQuestao implements java.io.Serializable {
 	}
 
 	@Id
-	@SequenceGenerator(name = "READING_QUESTAO_SEQUENCE", sequenceName = "READING_QUESTAO_SEQUENCE")
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "READING_QUESTAO_SEQUENCE")
+	@GenericGenerator(name = "READING_QUESTAO_SEQUENCE", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator", parameters = {
+			@Parameter(name = "sequence_name", value = "READING_QUESTAO_SEQUENCE"),
+			@Parameter(name = "initial_value", value = "1"), @Parameter(name = "increment_size", value = "1") })
+	@GeneratedValue(generator = "READING_QUESTAO_SEQUENCE")
 	@Column(name = "ID_READING_QUESTAO", unique = true, nullable = false, precision = 22, scale = 0)
 	public Long getId() {
 		return id;
