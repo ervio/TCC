@@ -9,4 +9,6 @@ public interface ReadingAlternativaDao {
 	public ReadingAlternativa saveOrUpdate(ReadingAlternativa entity);
 
 	public List<ReadingAlternativa> findByExercise(Long exerciseId);
+
+	public void delete(ReadingAlternativa readingAlternativa);
 }

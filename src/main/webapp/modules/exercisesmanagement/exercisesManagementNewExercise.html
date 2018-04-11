@@ -242,7 +242,7 @@
 																<input class="form-control" ng-model="f.nome" type="text" maxlength="50" required/>
 															</div>
 															<div>
-																<button ng-click="removePicture(f)">
+																<button ng-click="deletePicture(f)">
 														         	<i class="fa fa-trash fa-2x" style="color:red"></i>
 														       </button>
 															</div>
@@ -328,7 +328,7 @@
 															</div>
 															
 															<div class="col-md-12 form-group" style="text-align: center;">
-																<button ng-click="addAlternative()" ng-disabled="!grammarPractice.alternativeInput" type="button" class="btn btn-default">Save Option</button>
+																<button ng-click="addAlternative()" ng-disabled="!grammarPractice.alternativeInput || !grammarPractice.alternativeAnswer" type="button" class="btn btn-default">Save Option</button>
 																<button ng-if="alternatives.length > 0" ng-click="editAlternative()" ng-disabled="!alternativeSelected" type="button" class="btn btn-default">Edit</button>
 																<button ng-if="alternatives.length > 0" ng-click="deleteAlternative()" ng-disabled="!alternativeSelected" type="button" class="btn btn-default">Delete</button>
 															</div>
@@ -412,7 +412,7 @@
 															</div>
 															
 															<div class="col-md-12 form-group" style="text-align: center;">
-																<button ng-click="addReadingAlternative()" ng-disabled="!grammarPractice.readingAlternativeInput" type="button" class="btn btn-default">Save Option</button>
+																<button ng-click="addReadingAlternative()" ng-disabled="!grammarPractice.readingAlternativeInput || !grammarPractice.readingAlternativeAnswer" type="button" class="btn btn-default">Save Option</button>
 																<button ng-if="questionSelected.readingAlternativas.length > 0" ng-click="editReadingAlternative()" ng-disabled="!readingAlternativeSelected" type="button" class="btn btn-default">Edit</button>
 																<button ng-if="questionSelected.readingAlternativas.length > 0" ng-click="deleteReadingAlternative()" ng-disabled="!readingAlternativeSelected" type="button" class="btn btn-default">Delete</button>
 															</div>

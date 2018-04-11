@@ -9,4 +9,6 @@ public interface ReadingQuestaoDao {
 	public ReadingQuestao saveOrUpdate(ReadingQuestao entity);
 
 	public List<ReadingQuestao> findByExercise(Long exerciseId);
+
+	public void delete(ReadingQuestao readingQuestao);
 }

@@ -9,4 +9,6 @@ public interface GrammarDefinicaoDao {
 	public GrammarDefinicao saveOrUpdate(GrammarDefinicao entity);
 
 	public List<GrammarDefinicao> findByExercise(Long exerciseId);
+
+	public void delete(GrammarDefinicao grammarDefinicao);
 }

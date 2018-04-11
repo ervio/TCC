@@ -38,4 +38,8 @@ public class ReadingAlternativaDaoImpl extends BaseDao<ReadingAlternativa> imple
 		return (List<ReadingAlternativa>) hibernateTemplate.findByCriteria(criteria);
 	}
 
+	@Override
+	public void delete(ReadingAlternativa readingAlternativa) {
+		hibernateTemplate.delete(readingAlternativa);
+	}
 }

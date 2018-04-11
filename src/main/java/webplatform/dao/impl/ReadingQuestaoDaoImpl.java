@@ -37,4 +37,8 @@ public class ReadingQuestaoDaoImpl extends BaseDao<ReadingQuestao> implements Re
 		return (List<ReadingQuestao>) hibernateTemplate.findByCriteria(criteria);
 	}
 
+	@Override
+	public void delete(ReadingQuestao readingQuestao) {
+		hibernateTemplate.delete(readingQuestao);
+	}
 }

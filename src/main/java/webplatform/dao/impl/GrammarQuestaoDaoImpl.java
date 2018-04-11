@@ -38,4 +38,9 @@ public class GrammarQuestaoDaoImpl extends BaseDao<GrammarQuestao> implements Gr
 		return (List<GrammarQuestao>) hibernateTemplate.findByCriteria(criteria);
 	}
 
+	@Override
+	public void delete(GrammarQuestao grammarQuestao) {
+		hibernateTemplate.delete(grammarQuestao);
+	}
+
 }

@@ -66,6 +66,35 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		return $http.get(constants.baseUrl + "/deleteQuestions/" + questionsToDelete);
 	}
 	
+	// Calls the deletePictures service from ExercisesManagementController class
+	this.deletePictures = function(picturesToDelete){
+		return $http.get(constants.baseUrl + "/deletePictures/" + picturesToDelete);
+	}
+	
+	// Calls the deleteGrammarAlternatives service from ExercisesManagementController class
+	this.deleteGrammarAlternatives = function(grammarAlternativesToDelete){
+		return $http.get(constants.baseUrl + "/deleteGrammarAlternatives/" + grammarAlternativesToDelete);
+	}	
+	
+	// Calls the deleteGrammarDefinitions service from ExercisesManagementController class
+	this.deleteGrammarDefinitions = function(grammarDefinitionsToDelete){
+		return $http.get(constants.baseUrl + "/deleteGrammarDefinitions/" + grammarDefinitionsToDelete);
+	}
+	
+	// Calls the deleteReadingAlternativesAndQuestions service from ExercisesManagementController class
+	this.deleteReadingAlternativesAndQuestions = function(readingAlternativesToDelete, readingQuestionsToDelete){
+		
+		if(readingAlternativesToDelete.length > 0 && readingQuestionsToDelete > 0){
+			return $http.get(constants.baseUrl + "/deleteReadingAlternativesAndQuestions/" + readingAlternativesToDelete + "/" + readingQuestionsToDelete);
+		}
+		else if(readingAlternativesToDelete.length > 0 && readingQuestionsToDelete.length == 0){
+			return $http.get(constants.baseUrl + "/deleteReadingAlternatives/" + readingAlternativesToDelete);
+		}
+		else{
+			return $http.get(constants.baseUrl + "/deleteReadingQuestions/" + readingQuestionsToDelete);
+		}
+	}
+	
 	// Calls the deleteExercise service from ExercisesManagementController class
 	this.deleteExercise = function(exerciseId){
 		return $http.get(constants.baseUrl + "/deleteExercise/" + exerciseId);

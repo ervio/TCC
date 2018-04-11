@@ -5,6 +5,11 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	$scope.allSelected = false;
 	$scope.basicExercisesList = [];
 	$scope.alternativesToDelete = [];
+	$scope.picturesToDelete = [];
+	$scope.grammarAlternativesToDelete = [];
+	$scope.grammarDefinitionsToDelete = [];
+	$scope.readingAlternativesToDelete = [];
+	$scope.readingQuestionsToDelete = [];
 	$scope.students = [];
 	$scope.pictures = [];
 	$scope.definitions = [];
@@ -17,6 +22,11 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	/* Temporary variables */
 	$scope.picturesTemp = [];
 	$scope.alternativesToDeleteTemp = [];
+	$scope.picturesToDeleteTemp = [];
+	$scope.grammarAlternativesToDeleteTemp = [];
+	$scope.grammarDefinitionsToDeleteTemp = [];
+	$scope.readingAlternativesToDeleteTemp = [];
+	$scope.readingQuestionsToDeleteTemp = [];
 	$scope.questionsToDelete = [];
 	$scope.exercicioToEdit;
 	$scope.exerciseSaved;
@@ -568,6 +578,51 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 			);
 	 };
 	 
+	 // Call deletePictures from exercisesManagementService
+	 $scope.deletePictures = function(){
+		 exercisesManagementService.deletePictures($scope.picturesToDelete).then( 
+					function successCallback(response) {
+						
+					}, 
+					function errorCallback(response) {
+					}
+			);
+	 };	 
+	 
+	 // Call deleteGrammarAlternatives from exercisesManagementService
+	 $scope.deleteGrammarAlternatives = function(){
+		 exercisesManagementService.deleteGrammarAlternatives($scope.grammarAlternativesToDelete).then( 
+					function successCallback(response) {
+						$scope.grammarAlternativesToDelete = [];
+					}, 
+					function errorCallback(response) {
+					}
+		 );		 
+	 };
+	 
+	// Call deleteGrammarDefinitions from exercisesManagementService
+	 $scope.deleteGrammarDefinitions = function(){
+		 exercisesManagementService.deleteGrammarDefinitions($scope.grammarDefinitionsToDelete).then( 
+					function successCallback(response) {
+						$scope.grammarDefinitionsToDelete = [];
+					}, 
+					function errorCallback(response) {
+					}
+		 );		 
+	 };
+	 
+	// Call deleteReadingAlternativesAndQuestions from exercisesManagementService
+	 $scope.deleteReadingAlternativesAndQuestions = function(){
+		 exercisesManagementService.deleteReadingAlternativesAndQuestions($scope.readingAlternativesToDelete, $scope.readingQuestionsToDelete).then( 
+					function successCallback(response) {
+						$scope.readingAlternativesToDelete = [];
+						$scope.readingQuestionsToDelete = [];
+					}, 
+					function errorCallback(response) {
+					}
+		 );		 
+	 };
+	 
 	 // Call the method deleteExercise from exercisesManagementService
 	 $scope.deleteExercise = function(){
 		 exercisesManagementService.deleteExercise($scope.exercicio.idExercicio).then( 
@@ -628,12 +683,30 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 				 $scope.exercicio.professorId = $scope.exercicio.professor.id; 
 			 }
 			 
+			 // TODO: Remover			 
 			 if($scope.alternativesToDelete.length > 0){
 				 $scope.deleteAlternatives();
 			 }
-				
+			
+			 // TODO: Remover
 			 if($scope.questionsToDelete.length > 0){
 				 $scope.deleteQuestions();
+			 }
+			 
+			 if($scope.picturesToDelete.length > 0){
+				 $scope.deletePictures();
+			 }
+			 
+			 if($scope.grammarAlternativesToDelete.length > 0){
+				 $scope.deleteGrammarAlternatives();
+			 }
+			 
+			 if($scope.grammarDefinitionsToDelete.length > 0){
+				 $scope.deleteGrammarDefinitions();
+			 }
+			 
+			 if($scope.readingAlternativesToDelete.length > 0 || $scope.readingQuestionsToDelete.length > 0){
+				 $scope.deleteReadingAlternativesAndQuestions();
 			 }
 			 
 			 exercisesManagementService.saveExercise($scope.exercicio).then( 
@@ -841,6 +914,12 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 		$scope.alternatives = [];
 		$scope.readingQuestions = [];
 		$scope.pronunciationQuestions = [];
+		$scope.picturesToDeleteTemp = [];
+		$scope.grammarAlternativesToDeleteTemp = [];
+		$scope.grammarDefinitionsToDeleteTemp = [];
+		$scope.readingAlternativesToDeleteTemp = [];
+		$scope.readingQuestionsToDeleteTemp = [];
+		$scope.modalError = "";
 		
 		$scope.grammarPractice.definitionInput = "";
 		$scope.grammarPractice.alternativeInput = "";
@@ -856,28 +935,52 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 		$scope.questionSelectedIndex = "";
 		
 		$scope.pronunciationPractice = {
-				questions : [{
-					descricao : "",
-					tipo : ""
-				}]
+			questions : [{
+				descricao : "",
+				tipo : ""
+			}]
 		};
 	};
 	 
 	$scope.saveActivitiesModal = function(){
 		$scope.exercicio.pictures = [];
 		$scope.exercicio.writingQuestao = angular.copy($scope.writingQuestao.writingQuestao);
+		
 		angular.forEach($scope.pictures, function(file) {
 			$scope.exercicio.pictures.push(file);
 		});
+		
+		 $($scope.picturesToDeleteTemp).each(function(index, pictureId) {
+			 $scope.picturesToDelete.push(pictureId);
+		 });
+		 
+		 $($scope.grammarAlternativesToDeleteTemp).each(function(index, grammarAlternativeId) {
+			 $scope.grammarAlternativesToDelete.push(grammarAlternativeId);
+		 });
+		 
+		 $($scope.grammarDefinitionsToDeleteTemp).each(function(index, definitionId) {
+			 $scope.grammarDefinitionsToDelete.push(definitionId);
+		 });
+		 
+		 $($scope.readingAlternativesToDeleteTemp).each(function(index, readingAlternativeId) {
+			 $scope.readingAlternativesToDelete.push(readingAlternativeId);
+		 });
+		 
+		 $($scope.readingQuestionsToDeleteTemp).each(function(index, readingQuestionId) {
+			 $scope.readingQuestionsToDelete.push(readingQuestionId);
+		 });
+		 
 		$scope.exercicio.musica.letraOrdenar = angular.copy($scope.listeningPractice.letraOrdenar);
 		$scope.exercicio.grammarDefinicoes = angular.copy($scope.definitions);
 		$scope.exercicio.readingQuestoes = angular.copy($scope.readingQuestions);
+		
 		angular.forEach($scope.exercicio.grammarDefinicoes, function(definicao){
 			definicao.questoes = [];
 		});
 		angular.forEach($scope.alternatives, function(questao){
 			$scope.exercicio.grammarDefinicoes[questao.definition].questoes.push(angular.copy(questao));
 		});
+		
 		$scope.exercicio.pronunciationQuestoes = angular.copy($scope.pronunciationQuestions);
 		$scope.clearActivitiesModal();
 		$("#activitiesModal").modal("hide");
@@ -891,15 +994,18 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 		$scope.pictures.push(picture);
 	};
 	  
-	$scope.removePicture = function(pictureToRemove){
+	$scope.deletePicture = function(pictureToRemove){
 		for (var i = 0; i < $scope.pictures.length; i++) {
 		    if ($scope.pictures[i] == pictureToRemove) {
+		    	if(pictureToRemove.id){
+		    		$scope.picturesToDeleteTemp.push(pictureToRemove.id);
+		    	}
 		    	$scope.pictures.splice(i, 1);
 		        break;
 		    }
 		}
 	};
-	  
+	
 	  $scope.savePictures = function(idExercicio) {
 	    
 		  angular.forEach($scope.exercicio.pictures, function(file) {
@@ -939,21 +1045,73 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  };
 	  
 	  $scope.addDefinition = function(){
-		  var definition = {
-				  definicao : angular.copy($scope.grammarPractice.definitionInput)
-		  };
-		  $scope.definitions.push(angular.copy(definition));
-		  $scope.grammarPractice.definitionInput = "";
+		  
+		  $scope.modalError = "";
+		  var existentDefinition = false;
+		  
+		  angular.forEach($scope.definitions, function(definition) {
+			  if(definition.definicao.trim() == $scope.grammarPractice.definitionInput.trim()){
+				  existentDefinition = true;
+			  }
+		  });
+		  
+		  if(existentDefinition){
+		  	$scope.modalError = "The definition is already registered for this exercise.";
+		  }else{
+			
+			  var definition = {
+					  definicao : angular.copy($scope.grammarPractice.definitionInput)
+			  };
+			  $scope.definitions.push(angular.copy(definition));
+			  $scope.grammarPractice.definitionInput = "";
+			  
+		  }
+		  
 	  };
 	  
 	  $scope.editDefinition = function(){
-		  $scope.definitions[$scope.definitionSelectedIndex].definicao = angular.copy($scope.grammarPractice.definitionInput);
-		  $scope.grammarPractice.definitionInput = "";
-		  $scope.definitionSelected = "";
+		  
+		  $scope.modalError = "";
+		  var existentDefinition = false;
+		  
+		  $($scope.definitions).each(function(index, definition) {
+			  if(index != $scope.definitionSelectedIndex && definition.definicao == $scope.grammarPractice.definitionInput){
+				  existentDefinition = true;
+			  }
+		  });
+		  
+		  if(existentDefinition){
+			  $scope.modalError = "The definition is already registered for this exercise.";
+		  }else{
+			  $scope.definitions[$scope.definitionSelectedIndex].definicao = angular.copy($scope.grammarPractice.definitionInput);
+			  $scope.grammarPractice.definitionInput = "";
+			  $scope.definitionSelected = "";
+		  }
 	  };
 	  
 	  $scope.deleteDefinition = function(){
+		  if($scope.definitionSelected.id){
+			  $scope.grammarDefinitionsToDeleteTemp.push($scope.definitionSelected.id);
+		  }
+		  
+		  for (var i = 0; i < $scope.alternatives.length; i++) {
+			  if($scope.alternatives[i].definition == $scope.definitionSelectedIndex + ""){
+				  $scope.alternativeSelected = $scope.alternatives[i];
+				  $scope.alternativeSelectedIndex = i;
+				  $scope.deleteAlternative();
+			  }
+		  }
+			  
 		  $scope.definitions.splice($scope.definitionSelectedIndex, 1);
+		  
+		  $($scope.definitions).each(function(indexDefinition, definition) {
+			  $($scope.alternatives).each(function(indexAlternative, alternative) {
+				  if(alternative.definicaoResposta.definicao == definition.definicao){
+					  alternative.definition = indexDefinition + "";
+				  }
+			  });
+		  });
+		  
 		  $scope.grammarPractice.definitionInput = "";
 		  $scope.definitionSelected = "";
 	  };
@@ -966,7 +1124,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  $scope.addAlternative = function(){
 		  var alternative = {
 				  questao : $scope.grammarPractice.alternativeInput,
-				  definition : $scope.grammarPractice.alternativeAnswer
+				  definition : $scope.grammarPractice.alternativeAnswer,
+				  definicaoResposta : $scope.definitions[Number($scope.grammarPractice.alternativeAnswer)]
 	  	  };
 		  $scope.alternatives.push(alternative);
 		  $scope.grammarPractice.alternativeInput = "";
@@ -982,6 +1141,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  };
 	  
 	  $scope.deleteAlternative = function(){
+		  if($scope.alternativeSelected.id){
+			  $scope.grammarAlternativesToDeleteTemp.push($scope.alternativeSelected.id);
+		  }
 		  $scope.alternatives.splice($scope.alternativeSelectedIndex, 1);
 		  $scope.grammarPractice.alternativeInput = "";
 		  $scope.grammarPractice.alternativeAnswer = "";
@@ -995,17 +1157,35 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  };
 	  
 	  $scope.addQuestion = function(){
-		  var question = {
-				  pergunta : angular.copy($scope.grammarPractice.readingQuestionInput)
-		  };
-		  $scope.readingQuestions.push(angular.copy(question));
-		  $scope.grammarPractice.readingQuestionInput = "";
-		  $scope.grammarPractice.readingAlternativeInput = "";
-		  $scope.grammarPractice.readingAlternativeAnswer = "";
-		  $scope.questionSelected = "";
+		  var existentDefinition = false;
+		  $scope.modalError = "";
+		  
+		  angular.forEach($scope.readingQuestions, function(question) {
+			  if(question.pergunta.trim() == $scope.grammarPractice.readingQuestionInput.trim()){
+				  existentDefinition = true;
+			  }
+		  });
+		  
+		  if(existentDefinition){
+				$scope.modalError = "The question is already registered for this exercise.";
+		  }else{
+			  
+			  var question = {
+				  pergunta : angular.copy($scope.grammarPractice.readingQuestionInput),
+				  readingAlternativas : []
+			  };
+			  $scope.readingQuestions.push(angular.copy(question));
+			  $scope.grammarPractice.readingQuestionInput = "";
+			  $scope.grammarPractice.readingAlternativeInput = "";
+			  $scope.grammarPractice.readingAlternativeAnswer = "";
+			  $scope.questionSelected = "";
+			  
+		  }
+		  
 	  };
 	  
 	  $scope.editQuestion = function(){
+		  $scope.modalError = "";
 		  $scope.readingQuestions[$scope.questionSelectedIndex].pergunta = angular.copy($scope.grammarPractice.readingQuestionInput);
 		  $scope.grammarPractice.readingQuestionInput = "";
 		  $scope.grammarPractice.readingAlternativeInput = "";
@@ -1014,6 +1194,16 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  };
 	  
 	  $scope.deleteQuestion = function(){
+		  if($scope.questionSelected.id){
+			  $scope.readingQuestionsToDeleteTemp.push($scope.questionSelected.id);
+		  }
+		  
+		  $($scope.questionSelected.readingAlternativas).each(function(index, alternative) {
+			  $scope.readingAlternativeSelectedIndex = index;
+			  $scope.readingAlternativeSelected = alternative;
+			  $scope.deleteReadingAlternative();
+		  });
+		  
 		  $scope.readingQuestions.splice($scope.questionSelectedIndex, 1);
 		  $scope.grammarPractice.readingQuestionInput = "";
 		  $scope.questionSelected = "";
@@ -1044,6 +1234,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  };
 	  
 	  $scope.deleteReadingAlternative = function(){
+		  if($scope.readingAlternativeSelected.id){
+			  $scope.readingAlternativesToDeleteTemp.push($scope.readingAlternativeSelected.id);
+		  }
 		  $scope.questionSelected.readingAlternativas.splice($scope.readingAlternativeSelectedIndex, 1);
 		  $scope.grammarPractice.readingAlternativeInput = "";
 		  $scope.grammarPractice.readingAlternativeAnswer = "";

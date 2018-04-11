@@ -299,6 +299,98 @@ public class ExercisesManagementController {
 	}
 
 	/**
+	 * Delete the pictures related to the exercise selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deletePictures/{ids}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deletePictures(@PathVariable String[] ids) {
+		for (String pictureId : ids) {
+			imagemDao.delete(new Imagem(Long.parseLong(pictureId)));
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Delete the grammar alternatives related to the exercise selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteGrammarAlternatives/{ids}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deleteGrammarAlternatives(@PathVariable String[] ids) {
+		for (String alternativeId : ids) {
+			grammarQuestaoDao.delete(new GrammarQuestao(Long.parseLong(alternativeId)));
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Delete the grammar definitions related to the exercise selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteGrammarDefinitions/{ids}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deleteGrammarDefinitions(@PathVariable String[] ids) {
+		for (String definitionId : ids) {
+			grammarDefinicaoDao.delete(new GrammarDefinicao(Long.parseLong(definitionId)));
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Delete the reading alternatives and questions related to the exercise
+	 * selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteReadingAlternativesAndQuestions/{readingAlternativesToDelete}/{readingQuestionsToDelete}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deleteReadingAlternativesAndQuestions(
+			@PathVariable("readingAlternativesToDelete") String[] readingAlternativesToDelete,
+			@PathVariable("readingQuestionsToDelete") String[] readingQuestionsToDelete) {
+		for (String alternativeId : readingAlternativesToDelete) {
+			readingAlternativaDao.delete(new ReadingAlternativa(Long.parseLong(alternativeId)));
+		}
+
+		for (String questionId : readingQuestionsToDelete) {
+			readingQuestaoDao.delete(new ReadingQuestao(Long.parseLong(questionId)));
+		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Delete the reading alternatives related to the exercise selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteReadingAlternatives/{ids}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deleteReadingAlternatives(@PathVariable String[] ids) {
+		for (String readingAlternativaId : ids) {
+			readingAlternativaDao.delete(new ReadingAlternativa(Long.parseLong(readingAlternativaId)));
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Delete the reading questions related to the exercise selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteReadingQuestions/{ids}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deleteReadingQuestions(@PathVariable String[] ids) {
+		for (String readingQuestionId : ids) {
+			readingQuestaoDao.delete(new ReadingQuestao(Long.parseLong(readingQuestionId)));
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
 	 * Delete the exercise, the questions of it and also all the alternatives
 	 * related to the questions
 	 * 
