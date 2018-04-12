@@ -17,7 +17,7 @@ public class ExercicioModel {
 	private List<ExercicioAlunoModel> exercicioAlunos;
 	private List<GrammarDefinicaoModel> grammarDefinicoes;
 	private List<ReadingQuestaoModel> readingQuestoes;
-	private Set<PronunciationQuestaoModel> pronunciationQuestoes;
+	private Set<PronunciationQuestaoModel> pronunciationQuestions;
 
 	public long getIdExercicio() {
 		return idExercicio;
@@ -107,12 +107,12 @@ public class ExercicioModel {
 		this.readingQuestoes = readingQuestoes;
 	}
 
-	public Set<PronunciationQuestaoModel> getPronunciationQuestoes() {
-		return pronunciationQuestoes;
+	public Set<PronunciationQuestaoModel> getPronunciationQuestions() {
+		return pronunciationQuestions;
 	}
 
-	public void setPronunciationQuestoes(Set<PronunciationQuestaoModel> pronunciationQuestoes) {
-		this.pronunciationQuestoes = pronunciationQuestoes;
+	public void setPronunciationQuestions(Set<PronunciationQuestaoModel> pronunciationQuestions) {
+		this.pronunciationQuestions = pronunciationQuestions;
 	}
 
 }

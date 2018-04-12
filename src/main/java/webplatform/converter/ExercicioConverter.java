@@ -57,11 +57,11 @@ public class ExercicioConverter {
 
 		}
 
-		if (!CollectionUtils.isEmpty(exercicioModel.getPronunciationQuestoes())) {
+		if (!CollectionUtils.isEmpty(exercicioModel.getPronunciationQuestions())) {
 
 			exercicio.setPronunciationQuestoes(new HashSet<PronunciationQuestao>());
 
-			for (PronunciationQuestaoModel questao : exercicioModel.getPronunciationQuestoes()) {
+			for (PronunciationQuestaoModel questao : exercicioModel.getPronunciationQuestions()) {
 				PronunciationQuestao questaoTemp = PronunciationQuestaoConverter.convert(questao);
 				exercicio.getPronunciationQuestoes().add(questaoTemp);
 			}

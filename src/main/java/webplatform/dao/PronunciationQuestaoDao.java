@@ -9,4 +9,6 @@ public interface PronunciationQuestaoDao {
 	public PronunciationQuestao saveOrUpdate(PronunciationQuestao entity);
 
 	public List<PronunciationQuestao> findByExercise(Long exerciseId);
+
+	public void delete(PronunciationQuestao PronunciationQuestao);
 }

@@ -95,6 +95,20 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		}
 	}
 	
+	// Calls the deletePronunciationPartsAndQuestions service from ExercisesManagementController class
+	this.deletePronunciationPartsAndQuestions = function(pronunciationQuestionPartToDelete, pronunciationQuestionToDelete){
+		
+		if(pronunciationQuestionPartToDelete.length > 0 && pronunciationQuestionToDelete > 0){
+			return $http.get(constants.baseUrl + "/deletePronunciationPartsAndQuestions/" + pronunciationQuestionPartToDelete + "/" + pronunciationQuestionToDelete);
+		}
+		else if(pronunciationQuestionPartToDelete.length > 0 && pronunciationQuestionToDelete.length == 0){
+			return $http.get(constants.baseUrl + "/deletePronunciationQuestionParts/" + pronunciationQuestionPartToDelete);
+		}
+		else{
+			return $http.get(constants.baseUrl + "/deletePronunciationQuestions/" + pronunciationQuestionToDelete);
+		}
+	}
+	
 	// Calls the deleteExercise service from ExercisesManagementController class
 	this.deleteExercise = function(exerciseId){
 		return $http.get(constants.baseUrl + "/deleteExercise/" + exerciseId);

@@ -391,6 +391,55 @@ public class ExercisesManagementController {
 	}
 
 	/**
+	 * Delete the pronunciation questions and parts related to the exercise selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deletePronunciationPartsAndQuestions/{pronunciationQuestionPartsToDelete}/{pronunciationQuestionsToDelete}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deletePronunciationPartsAndQuestions(
+			@PathVariable("pronunciationQuestionPartsToDelete") String[] pronunciationQuestionPartsToDelete,
+			@PathVariable("pronunciationQuestionsToDelete") String[] pronunciationQuestionsToDelete) {
+		for (String questionPartId : pronunciationQuestionPartsToDelete) {
+			pronunciationQuestaoParteDao.delete(new PronunciationQuestaoParte(Long.parseLong(questionPartId)));
+		}
+
+		for (String questionId : pronunciationQuestionsToDelete) {
+			pronunciationQuestaoDao.delete(new PronunciationQuestao(Long.parseLong(questionId)));
+		}
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Delete the pronunciation parts related to the exercise selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deletePronunciationQuestionParts/{ids}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deletePronunciationQuestionParts(@PathVariable String[] ids) {
+		for (String questionPartId : ids) {
+			pronunciationQuestaoParteDao.delete(new PronunciationQuestaoParte(Long.parseLong(questionPartId)));
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Delete the reading questions related to the exercise selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deletePronunciationQuestions/{ids}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deletePronunciationQuestions(@PathVariable String[] ids) {
+		for (String questionId : ids) {
+			pronunciationQuestaoDao.delete(new PronunciationQuestao(Long.parseLong(questionId)));
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
 	 * Delete the exercise, the questions of it and also all the alternatives
 	 * related to the questions
 	 * 

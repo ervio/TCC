@@ -41,4 +41,8 @@ public class PronunciationQuestaoParteDaoImpl extends BaseDao<PronunciationQuest
 		return (List<PronunciationQuestaoParte>) hibernateTemplate.findByCriteria(criteria);
 	}
 
+	@Override
+	public void delete(PronunciationQuestaoParte pronunciationQuestaoParte) {
+		hibernateTemplate.delete(pronunciationQuestaoParte);
+	}
 }

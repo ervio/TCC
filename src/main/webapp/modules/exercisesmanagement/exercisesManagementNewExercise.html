@@ -470,7 +470,7 @@
 																<button ng-if="pronunciationQuestions.length > 0" ng-click="deletePronunciationQuestion()" ng-disabled="!pronunciationQuestionSelected" type="button" class="btn btn-default">Delete</button>
 															</div>
 															
-															<div class="col-md-10 form-group">
+															<div class="col-md-8 form-group">
 																<label>Question</label>
 															</div>
 															<div class="col-md-2 form-group">
@@ -478,7 +478,7 @@
 															</div>
 															
 															<div ng-repeat="question in pronunciationPractice.questions">
-																<div class="col-md-10 form-group">
+																<div class="col-md-8 form-group">
 																	<input class="form-control" type="text" ng-change="evaluateFieldsPopulated()" maxlength="500" ng-model="question.descricao"/>
 																</div>
 																<div class="col-md-2 form-group">
@@ -487,6 +487,11 @@
 																		<option value="Sentence">Sentence</option>
 																		<option value="Gap">Gap</option>
 																	</select>
+																</div>
+																<div class="col-md-2 form-group">
+																	<button ng-click="deletePronunciationQuestionPart(question, $index)">
+															         	<i class="fa fa-trash fa-2x" style="color:red"></i>
+															       </button>
 																</div>
 															</div>
 															
