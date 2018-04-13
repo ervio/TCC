@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'youtube-embed', 'dndLists', 'ngAnimate', 'ngSanitize', 'ngFileUpload'])
+var app = angular.module('app', ['pubnub.angular.service', 'ui.router', 'ui.bootstrap', 'youtube-embed', 'dndLists', 'ngAnimate', 'ngSanitize', 'ngFileUpload'])
 
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $injector) {
 	
@@ -126,4 +126,13 @@ app.directive('webPlatformLoading', function() {
 				'<img src="img/loading-animation-square.gif">' +
 			'</div>'
 	}
+});
+
+app.filter('range', function() {
+  return function(input, total) {
+    total = parseInt(total);
+    for (var i=0; i<total; i++)
+      input.push(i);
+    return input;
+  };
 });

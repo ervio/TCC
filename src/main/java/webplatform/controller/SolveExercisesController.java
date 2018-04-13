@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import webplatform.dao.AlternativaDao;
 import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioAlunoRespostaDao;
+import webplatform.dao.ImagemDao;
 import webplatform.dao.QuestaoDao;
 import webplatform.model.AlternativaModel;
 import webplatform.model.ExercicioAlunoModel;
@@ -24,6 +25,7 @@ import webplatform.model.QuestaoModel;
 import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.ExercicioAlunoResposta;
+import webplatform.model.entity.Imagem;
 import webplatform.model.entity.Questao;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -41,6 +43,9 @@ public class SolveExercisesController {
 
 	@Autowired
 	private ExercicioAlunoRespostaDao exercicioAlunoRespostaDao;
+
+	@Autowired
+	private ImagemDao imagemDao;
 
 	/**
 	 * Search all the exercises to be resolved by the logged student
@@ -67,9 +72,9 @@ public class SolveExercisesController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
+	// TODO: Remover método abaixo
 	/**
-	 * Search all questions related to the exercise being resolved by the
-	 * student
+	 * Search all questions related to the exercise being resolved by the student
 	 * 
 	 * @param exerciseId
 	 * @return
@@ -79,6 +84,13 @@ public class SolveExercisesController {
 	public @ResponseBody ResponseEntity searchQuestions(@PathVariable("exerciseId") String exerciseId) {
 		List<Questao> questionsToResolve = questaoDao.findByExercise(Long.parseLong(exerciseId));
 		return new ResponseEntity(questionsToResolve, HttpStatus.OK);
+	}
+
+	@Transactional
+	@RequestMapping(value = "/searchVocabularyPictures/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchVocabularyPictures(@PathVariable("exerciseId") String exerciseId) {
+		List<Imagem> imagens = imagemDao.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(imagens, HttpStatus.OK);
 	}
 
 	/**

@@ -109,196 +109,27 @@
 		               	
 		               	<div class="row">
 		               		
-		               		<div class="col-md-2">
-		               			1)	heaven <i class="fa fa-volume-up" style="color:red"></i>
-		               		</div>
-		               		<div class="col-md-2">
-		               			2)	hell <i class="fa fa-volume-up" style="color:red"></i>
-		               		</div>
-		               		<div class="col-md-2">
-		               			3)	steel rail <i class="fa fa-volume-up" style="color:red"></i>
-		               		</div>
-		               		<div class="col-md-2">
-		               			4)	ghost <i class="fa fa-volume-up" style="color:red"></i>
-		               		</div>
-		               		<div class="col-md-2">
-		               			5)	ashes <i class="fa fa-volume-up" style="color:red"></i>
-		               		</div>
-		               		<div class="col-md-2">
-		               			6)	war <i class="fa fa-volume-up" style="color:red"></i>
-		               		</div>
-		               		
-		               		<div class="col-md-2">
-		               			7)	cage <i class="fa fa-volume-up" style="color:red"></i>
-		               		</div>
-		               		<div class="col-md-2">
-		               			8)	fish bowl <i class="fa fa-volume-up" style="color:red"></i>
+		               		<div class="col-md-2" ng-repeat="f in vocabularyPictures">
+		               			{{$index + 1}})	{{f.nome}} <a href="#" ng-click="sayIt(f.nome)"><i class="fa fa-volume-up" style="color:red"></i></a>
 		               		</div>
 		               		
 		               	</div><br>
 		               	
 		               	<div class="row">
-							<div class="col-md-3 form-group">
-								<div align="center">
-									<img src="img/heaven.jpg" height="150" width="180"/><br>
-								</div>
-									
-								<div class="col-md-12 form-group" align="center">
-									<select class="form-control selectpicker" style="width: 50%;">
-										<option value="">Select</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="col-md-3 form-group">
-								<div align="center">
-									<img src="img/fishbowl.jpg" height="150" width="180"/><br>
-								</div>
-									
-								<div class="col-md-12 form-group" align="center">
-									<select class="form-control selectpicker" style="width: 50%;">
-										<option value="">Select</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="col-md-3 form-group">
-								<div align="center">
-									<img src="img/cage.jpg" height="150" width="180"/><br>
-								</div>
-									
-								<div class="col-md-12 form-group" align="center">
-									<select class="form-control selectpicker" style="width: 50%;">
-										<option value="">Select</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="col-md-3 form-group">
-								<div align="center">
-									<img src="img/ghost.jpg" height="150" width="180"/><br>
-								</div>
-									
-								<div class="col-md-12 form-group" align="center">
-									<select class="form-control selectpicker" style="width: 50%;">
-										<option value="">Select</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
-									</select>
-								</div>
-							</div>
-						</div>
 		               	
-		               	<div class="row">
-							<div class="col-md-3 form-group">
+							<div class="col-md-3 form-group" ng-repeat="f in vocabularyPictures track by $index">
 								<div align="center">
-									<img src="img/war.jpg" height="150" width="180"/><br>
+									<img ng-src="data:image/jpg;base64,{{f.bytes}}" height="150" width="180"/><br>
 								</div>
 									
 								<div class="col-md-12 form-group" align="center">
 									<select class="form-control selectpicker" style="width: 50%;">
 										<option value="">Select</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
+										<option ng-repeat="n in [] | range:vocabularyPictures.length" value="{{n}}">{{n + 1}}</option>
 									</select>
 								</div>
 							</div>
 							
-							<div class="col-md-3 form-group">
-								<div align="center">
-									<img src="img/hell.jpg" height="150" width="180"/><br>
-								</div>
-									
-								<div class="col-md-12 form-group" align="center">
-									<select class="form-control selectpicker" style="width: 50%;">
-										<option value="">Select</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="col-md-3 form-group">
-								<div align="center">
-									<img src="img/steel_rail.jpg" height="150" width="180"/><br>
-								</div>
-									
-								<div class="col-md-12 form-group" align="center">
-									<select class="form-control selectpicker" style="width: 50%;">
-										<option value="">Select</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
-									</select>
-								</div>
-							</div>
-							
-							<div class="col-md-3 form-group">
-								<div align="center">
-									<img src="img/ashes.png" height="150" width="180"/><br>
-								</div>
-									
-								<div class="col-md-12 form-group" align="center">
-									<select class="form-control selectpicker" style="width: 50%;">
-										<option value="">Select</option>
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
-									</select>
-								</div>
-							</div>
 						</div>
 		               	
 		 			</div>
@@ -314,6 +145,6 @@
     </div>
     <!-- /#wrapper -->
     
-    <div ng-init="initSong()"></div>
+    <div ng-init="initVocabulary()"></div>
 
 </body>

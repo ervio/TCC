@@ -56,6 +56,8 @@ dependencies {
 	compile('org.webjars:angular-ui-bootstrap:2.2.0')
 	compile('org.webjars:font-awesome:4.7.0')
 	compile('org.webjars:jquery:2.2.4')
+	// https://mvnrepository.com/artifact/org.webjars.bower/pubnub-angular
+	compile('org.webjars.bower:pubnub-angular:3.2.1')
 	
 	
 	compile files('libs/ojdbc6.jar')

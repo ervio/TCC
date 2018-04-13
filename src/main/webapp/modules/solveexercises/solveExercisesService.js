@@ -10,9 +10,14 @@ angular.module("app").service("solveExercisesService", function($http, constants
 		return $http.post(constants.baseUrl + "/updateExercise", exercise);
 	};
 	
+	// TODO: Remover chamada abaixo
 	// Call the searchQuestions service from SolveExercisesController class
 	this.searchQuestions = function(exerciseId){
 		return $http.get(constants.baseUrl + "/searchQuestions/" + exerciseId);
+	};
+	
+	this.searchVocabularyPictures = function(exerciseId){
+		return $http.get(constants.baseUrl + "/searchVocabularyPictures/" + exerciseId);
 	};
 	
 	// Call the searchAlternativesByQuestion service from SolveExercisesController class

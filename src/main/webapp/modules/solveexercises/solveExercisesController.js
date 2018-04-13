@@ -1,4 +1,4 @@
-angular.module('app').controller("solveExercisesCtrl", function($scope, $rootScope, $state, LazyRoute, solveExercisesService){
+angular.module('app').controller("solveExercisesCtrl", function($scope, $rootScope, $state, Pubnub, LazyRoute, solveExercisesService){
 	
 	$scope.exercises = [];
 	$scope.exercise;
@@ -6,6 +6,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	$scope.error;
 	$scope.questionsSubmitted = false;
 	
+	// TODO: Remover verificação de questões
 	if(!$rootScope.questions){
 		$rootScope.questions = [];
 	}
@@ -16,12 +17,17 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	        lists: {"A": [], "B": []}
 	    };
 	}
+	
+	if(!$rootScope.vocabularyPictures){
+		$rootScope.vocabularyPictures = [];
+	}
 
 	// Method called when the main screen with exercises to be resolved is open. It calls the method searchExercises from solveExercisesService
 	$scope.init = function(){
 		
 		delete $rootScope.models;
 		delete $rootScope.questions;
+		delete $rootScope.vocabularyPictures;
 		
 		solveExercisesService.searchExercises($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
@@ -60,6 +66,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		}
 	};
 	
+	// TODO: Remover este método
 	// Method called when the questions screen is open. It calls the method searchAlternatives from solveExercisesService
 	$scope.initQuestions = function(){
 		if($rootScope.questions.length == 0){
@@ -84,6 +91,26 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 									
 								}
 							);
+					});
+					
+				}, 
+				function errorCallback(response) {
+					
+				}
+			);
+		}
+	};
+	
+	// Method called when the vocabulary screen is open. It calls the method searchVocabularyPictures from solveExercisesService
+	$scope.initVocabulary = function(){
+		if($rootScope.vocabularyPictures.length == 0){
+			solveExercisesService.searchVocabularyPictures($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
+				function successCallback(response) {
+					
+					$(response.data).each(function(index, picture) {
+						
+						$rootScope.vocabularyPictures.push(angular.copy(picture));
+						console.log("Teste");
 					});
 					
 				}, 
@@ -214,5 +241,9 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 				}
 			);
 		}
+	};
+	
+	$scope.sayIt = function (text) {
+		window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
 	};
 });
