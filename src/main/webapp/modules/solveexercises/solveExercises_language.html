@@ -101,6 +101,9 @@
 			   				</div>
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
+		               			<a ui-sref="resolveExerciseVocabulary" href="#">
+			   						<input class="btn btn-md btn-primary" type="submit" value="Back"/>
+								</a>
 								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
 								<input type="submit" ng-click="goToReading()" class="btn btn-md btn-primary" value="Reading"/>
 			   				</div>
@@ -108,118 +111,20 @@
 		               	</div><br>
 		               	
 		               	<div class="row">
-		               		<div class="col-md-12">
-		               			A)	TELL  sth/sb FROM sth/sb: to distinguish one from another.
-		               		</div>
-		               	</div>
-		               	
-		               	<div class="row">
-		               		<div class="col-md-12">
-		               			B)	TELL: to say sth to sb such as a story, a lie, the truth, a secret, a joke, etc. 
+		               		<div class="col-md-12" ng-repeat="definition in grammarDefinitions">
+		               			{{$index + 1}})	{{definition.definicao}} 
 		               		</div>
 		               	</div><br>
 		               	
-		               	<div class="row">
+		               	<div class="row" style="margin-top: 10px;" ng-repeat="question in grammarQuestions">
 		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker">
+		               			<select class="form-control selectpicker" ng-model="question.resposta">
 									<option value="">Select</option>
-									<option>A</option>
-									<option>B</option>
+									<option ng-repeat="n in [] | range:grammarDefinitions.length" value="{{n}}">{{n + 1}}</option>
 								</select>
 		               		</div>
 		               		<div class="col-md-9">
-		               			Can you tell heaven from hell?
-		               		</div>
-		               	</div>
-		               	
-		               	<div class="row" style="margin-top: 10px;">
-		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker">
-									<option value="">Select</option>
-									<option>A</option>
-									<option>B</option>
-								</select>
-		               		</div>
-		               		<div class="col-md-9">
-		               			Have you told her your grade in English?
-		               		</div>
-		               	</div>
-		               	
-		               	<div class="row" style="margin-top: 10px;">
-		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker">
-									<option value="">Select</option>
-									<option>A</option>
-									<option>B</option>
-								</select>
-		               		</div>
-		               		<div class="col-md-9">
-		               			The mother told the child a story from a fairy tale book.
-		               		</div>
-		               	</div>
-		               	
-		               	<div class="row" style="margin-top: 10px;">
-		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker">
-									<option value="">Select</option>
-									<option>A</option>
-									<option>B</option>
-								</select>
-		               		</div>
-		               		<div class="col-md-9">
-		               			I can't tell one twin from the other.
-		               		</div>
-		               	</div>
-		               	
-		               	<div class="row" style="margin-top: 10px;">
-		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker">
-									<option value="">Select</option>
-									<option>A</option>
-									<option>B</option>
-								</select>
-		               		</div>
-		               		<div class="col-md-9">
-		               			She couldn't tell the homemade bread from the one we bought at the bakery.
-		               		</div>
-		               	</div>
-		               	
-		               	<div class="row" style="margin-top: 10px;">
-		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker">
-									<option value="">Select</option>
-									<option>A</option>
-									<option>B</option>
-								</select>
-		               		</div>
-		               		<div class="col-md-9">
-		               			He never told anyone he was from Syria.
-		               		</div>
-		               	</div>
-		               	
-		               	<div class="row" style="margin-top: 10px;">
-		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker">
-									<option value="">Select</option>
-									<option>A</option>
-									<option>B</option>
-								</select>
-		               		</div>
-		               		<div class="col-md-9">
-		               			Are you good at telling jokes from your country?
-		               		</div>
-		               	</div>
-		               	
-		               	<div class="row" style="margin-top: 10px;">
-		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker">
-									<option value="">Select</option>
-									<option>A</option>
-									<option>B</option>
-								</select>
-		               		</div>
-		               		<div class="col-md-9">
-		               			Do you think you can tell an influenza from a common cold?
+		               			{{question.questao}}
 		               		</div>
 		               	</div>
 		               	
@@ -236,6 +141,6 @@
     </div>
     <!-- /#wrapper -->
     
-    <div ng-init="initSong()"></div>
+    <div ng-init="initGrammar()"></div>
 
 </body>

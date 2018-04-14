@@ -25,6 +25,11 @@ angular.module("app").service("solveExercisesService", function($http, constants
 		return $http.get(constants.baseUrl + "/searchAlternativesByQuestion/" + questionId);
 	};
 	
+	// Call the searchGrammarQuestions service from SolveExercisesController class
+	this.searchGrammarQuestions = function(exerciseId){
+		return $http.get(constants.baseUrl + "/searchGrammarQuestions/" + exerciseId);
+	};
+	
 	// Call the submitQuestions service from SolveExercisesController class
 	this.submitQuestions = function(exercise){
 		return $http.post(constants.baseUrl + "/submitQuestions", exercise);

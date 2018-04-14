@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import webplatform.dao.AlternativaDao;
 import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioAlunoRespostaDao;
+import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.ImagemDao;
 import webplatform.dao.QuestaoDao;
 import webplatform.model.AlternativaModel;
@@ -25,6 +26,7 @@ import webplatform.model.QuestaoModel;
 import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.ExercicioAlunoResposta;
+import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Imagem;
 import webplatform.model.entity.Questao;
 
@@ -46,6 +48,9 @@ public class SolveExercisesController {
 
 	@Autowired
 	private ImagemDao imagemDao;
+
+	@Autowired
+	private GrammarQuestaoDao grammarQuestaoDao;
 
 	/**
 	 * Search all the exercises to be resolved by the logged student
@@ -86,11 +91,32 @@ public class SolveExercisesController {
 		return new ResponseEntity(questionsToResolve, HttpStatus.OK);
 	}
 
+	/**
+	 * Search all vocabulary pictures related to the exercise being resolved by the
+	 * student
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
 	@Transactional
 	@RequestMapping(value = "/searchVocabularyPictures/{exerciseId}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity searchVocabularyPictures(@PathVariable("exerciseId") String exerciseId) {
 		List<Imagem> imagens = imagemDao.findByExercise(Long.parseLong(exerciseId));
 		return new ResponseEntity(imagens, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all grammar questions related to the exercise being resolved by the
+	 * student
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/searchGrammarQuestions/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchGrammarQuestions(@PathVariable("exerciseId") String exerciseId) {
+		List<GrammarQuestao> grammarQuestions = grammarQuestaoDao.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(grammarQuestions, HttpStatus.OK);
 	}
 
 	/**

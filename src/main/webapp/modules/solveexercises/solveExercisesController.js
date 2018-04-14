@@ -21,6 +21,14 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	if(!$rootScope.vocabularyPictures){
 		$rootScope.vocabularyPictures = [];
 	}
+	
+	if(!$rootScope.grammarQuestions){
+		$rootScope.grammarQuestions = [];
+	}
+	
+	if(!$rootScope.grammarDefinitions){
+		$rootScope.grammarDefinitions = [];
+	}
 
 	// Method called when the main screen with exercises to be resolved is open. It calls the method searchExercises from solveExercisesService
 	$scope.init = function(){
@@ -28,6 +36,8 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		delete $rootScope.models;
 		delete $rootScope.questions;
 		delete $rootScope.vocabularyPictures;
+		delete $rootScope.grammarQuestions;
+		delete $rootScope.grammarDefinitions;
 		
 		solveExercisesService.searchExercises($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
@@ -109,8 +119,60 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 					
 					$(response.data).each(function(index, picture) {
 						
+						picture.resposta = "";
 						$rootScope.vocabularyPictures.push(angular.copy(picture));
 						console.log("Teste");
+					});
+					
+				}, 
+				function errorCallback(response) {
+					
+				}
+			);
+		}
+	};
+	
+	$scope.initGrammar = function(){
+		if($rootScope.grammarQuestions.length == 0){
+			solveExercisesService.searchGrammarQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
+				function successCallback(response) {
+					
+					$(response.data).each(function(index, question) {
+						
+						var definitionExists = false;
+						
+						if($rootScope.grammarDefinitions.length == 0){
+							$rootScope.grammarDefinitions.push(question.definicaoResposta);
+							var definitionExists = true;
+						}else{
+							for(var i = 0; i < $rootScope.grammarDefinitions.length; i++){
+								if(angular.equals($rootScope.grammarDefinitions[i], question.definicaoResposta)){
+									definitionExists = true;
+									break;
+								}
+							}
+						}
+						
+						if(!definitionExists){
+							$rootScope.grammarDefinitions.push(question.definicaoResposta);
+						}
+						
+						question.resposta = "";
+						$rootScope.grammarQuestions.push(angular.copy(question));
+					});
+					
+					// The definitions are sorted by the id
+					$rootScope.grammarDefinitions.sort(function(a, b) {
+						 return b.id < a.id ?  1 // if b should come earlier, push a to end
+						         : b.id > a.id ? -1 // if b should come later, push a to begin
+						         : 0;                   // a and b are equal
+					});
+					
+					// The questions are sorted by the question
+					$rootScope.grammarQuestions.sort(function(a, b) {
+						 return b.questao < a.questao ?  1 // if b should come earlier, push a to end
+						         : b.questao > a.questao ? -1 // if b should come later, push a to begin
+						         : 0;                   // a and b are equal
 					});
 					
 				}, 
