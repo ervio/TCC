@@ -20,6 +20,8 @@ import webplatform.dao.ExercicioAlunoRespostaDao;
 import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.ImagemDao;
 import webplatform.dao.QuestaoDao;
+import webplatform.dao.ReadingAlternativaDao;
+import webplatform.dao.ReadingQuestaoDao;
 import webplatform.model.AlternativaModel;
 import webplatform.model.ExercicioAlunoModel;
 import webplatform.model.QuestaoModel;
@@ -29,6 +31,8 @@ import webplatform.model.entity.ExercicioAlunoResposta;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Imagem;
 import webplatform.model.entity.Questao;
+import webplatform.model.entity.ReadingAlternativa;
+import webplatform.model.entity.ReadingQuestao;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @RestController
@@ -51,6 +55,12 @@ public class SolveExercisesController {
 
 	@Autowired
 	private GrammarQuestaoDao grammarQuestaoDao;
+
+	@Autowired
+	private ReadingQuestaoDao readingQuestaoDao;
+
+	@Autowired
+	private ReadingAlternativaDao readingAlternativaDao;
 
 	/**
 	 * Search all the exercises to be resolved by the logged student
@@ -117,6 +127,34 @@ public class SolveExercisesController {
 	public @ResponseBody ResponseEntity searchGrammarQuestions(@PathVariable("exerciseId") String exerciseId) {
 		List<GrammarQuestao> grammarQuestions = grammarQuestaoDao.findByExercise(Long.parseLong(exerciseId));
 		return new ResponseEntity(grammarQuestions, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all reading questions related to the exercise being resolved by the
+	 * student
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/searchReadingQuestions/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchReadingQuestions(@PathVariable("exerciseId") String exerciseId) {
+		List<ReadingQuestao> readingQuestions = readingQuestaoDao.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(readingQuestions, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all reading alternatives related to the exercise being resolved by the
+	 * student
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/searchReadingAlternatives/{questionId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchReadingAlternatives(@PathVariable("questionId") String questionId) {
+		List<ReadingAlternativa> readingAlternativas = readingAlternativaDao.findByQuestion(Long.parseLong(questionId));
+		return new ResponseEntity(readingAlternativas, HttpStatus.OK);
 	}
 
 	/**

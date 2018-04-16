@@ -1247,7 +1247,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  $scope.addReadingAlternative = function(){
 		  var alternative = {
 				  descricao : $scope.grammarPractice.readingAlternativeInput,
-				  correta : $scope.grammarPractice.readingAlternativeAnswer
+				  correta : $scope.grammarPractice.readingAlternativeAnswer,
+				  sequencia : $scope.questionSelected.readingAlternativas.length + 1
 	  	  };
 		  $scope.questionSelected.readingAlternativas.push(alternative);
 		  $scope.grammarPractice.readingAlternativeInput = "";

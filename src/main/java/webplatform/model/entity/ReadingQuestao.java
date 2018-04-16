@@ -1,8 +1,8 @@
 package webplatform.model.entity;
 // default package
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ public class ReadingQuestao implements java.io.Serializable {
 	private Long id;
 	private Exercicio exercicio;
 	private String pergunta;
-	private Set<ReadingAlternativa> readingAlternativas = new HashSet<ReadingAlternativa>();
+	private List<ReadingAlternativa> readingAlternativas = new ArrayList<ReadingAlternativa>();
 
 	public ReadingQuestao() {
 	}
@@ -38,7 +38,8 @@ public class ReadingQuestao implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public ReadingQuestao(Long id, Exercicio exercicio, String pergunta, Set<ReadingAlternativa> readingAlternativas) {
+	public ReadingQuestao(Long id, Exercicio exercicio, String pergunta,
+			ArrayList<ReadingAlternativa> readingAlternativas) {
 		this.id = id;
 		this.exercicio = exercicio;
 		this.pergunta = pergunta;
@@ -80,11 +81,11 @@ public class ReadingQuestao implements java.io.Serializable {
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "questao")
-	public Set<ReadingAlternativa> getReadingAlternativas() {
+	public List<ReadingAlternativa> getReadingAlternativas() {
 		return readingAlternativas;
 	}
 
-	public void setReadingAlternativas(Set<ReadingAlternativa> readingAlternativas) {
+	public void setReadingAlternativas(List<ReadingAlternativa> readingAlternativas) {
 		this.readingAlternativas = readingAlternativas;
 	}
 

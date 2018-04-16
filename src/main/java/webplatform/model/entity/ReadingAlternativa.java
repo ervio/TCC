@@ -25,6 +25,7 @@ public class ReadingAlternativa implements java.io.Serializable {
 	private ReadingQuestao questao;
 	private String descricao;
 	private Boolean correta;
+	private Integer sequencia;
 
 	public ReadingAlternativa() {
 	}
@@ -33,11 +34,13 @@ public class ReadingAlternativa implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public ReadingAlternativa(Long id, ReadingQuestao readingQuestao, String descricao, Boolean correta) {
+	public ReadingAlternativa(Long id, ReadingQuestao readingQuestao, String descricao, Boolean correta,
+			Integer sequencia) {
 		this.id = id;
 		this.questao = readingQuestao;
 		this.descricao = descricao;
 		this.correta = correta;
+		this.sequencia = sequencia;
 	}
 
 	@Id
@@ -81,6 +84,15 @@ public class ReadingAlternativa implements java.io.Serializable {
 
 	public void setCorreta(Boolean correta) {
 		this.correta = correta;
+	}
+
+	@Column(name = "SEQUENCIA", precision = 2, scale = 0)
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void setSequencia(Integer sequencia) {
+		this.sequencia = sequencia;
 	}
 
 }

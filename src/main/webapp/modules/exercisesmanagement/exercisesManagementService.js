@@ -84,7 +84,7 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 	// Calls the deleteReadingAlternativesAndQuestions service from ExercisesManagementController class
 	this.deleteReadingAlternativesAndQuestions = function(readingAlternativesToDelete, readingQuestionsToDelete){
 		
-		if(readingAlternativesToDelete.length > 0 && readingQuestionsToDelete > 0){
+		if(readingAlternativesToDelete.length > 0 && readingQuestionsToDelete.length > 0){
 			return $http.get(constants.baseUrl + "/deleteReadingAlternativesAndQuestions/" + readingAlternativesToDelete + "/" + readingQuestionsToDelete);
 		}
 		else if(readingAlternativesToDelete.length > 0 && readingQuestionsToDelete.length == 0){
@@ -98,7 +98,7 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 	// Calls the deletePronunciationPartsAndQuestions service from ExercisesManagementController class
 	this.deletePronunciationPartsAndQuestions = function(pronunciationQuestionPartToDelete, pronunciationQuestionToDelete){
 		
-		if(pronunciationQuestionPartToDelete.length > 0 && pronunciationQuestionToDelete > 0){
+		if(pronunciationQuestionPartToDelete.length > 0 && pronunciationQuestionToDelete.length > 0){
 			return $http.get(constants.baseUrl + "/deletePronunciationPartsAndQuestions/" + pronunciationQuestionPartToDelete + "/" + pronunciationQuestionToDelete);
 		}
 		else if(pronunciationQuestionPartToDelete.length > 0 && pronunciationQuestionToDelete.length == 0){

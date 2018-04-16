@@ -1,4 +1,4 @@
-angular.module('app').controller("solveExercisesCtrl", function($scope, $rootScope, $state, Pubnub, LazyRoute, solveExercisesService){
+angular.module('app').controller("solveExercisesCtrl", function($scope, $rootScope, $state, Pubnub, LazyRoute, solveExercisesService, tts){
 	
 	$scope.exercises = [];
 	$scope.exercise;
@@ -29,7 +29,11 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	if(!$rootScope.grammarDefinitions){
 		$rootScope.grammarDefinitions = [];
 	}
-
+	
+	if(!$rootScope.readingQuestions){
+		$rootScope.readingQuestions = [];
+	}
+	
 	// Method called when the main screen with exercises to be resolved is open. It calls the method searchExercises from solveExercisesService
 	$scope.init = function(){
 		
@@ -38,6 +42,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		delete $rootScope.vocabularyPictures;
 		delete $rootScope.grammarQuestions;
 		delete $rootScope.grammarDefinitions;
+		delete $rootScope.readingQuestions;
 		
 		solveExercisesService.searchExercises($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
@@ -55,7 +60,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	
 	// Method called when the youtube video screen is open
 	$scope.initSong = function(){
-		$scope.splittedLyrics = $rootScope.exerciseToEdit.exercicio.musica.letra.split("\n");
+		$scope.splittedLyrics = $rootScope.exerciseToEdit.exercicio.musica.letraOrdenar.split("\n");
 		if($rootScope.models.lists.A.length == 0 && $rootScope.models.lists.B.length == 0){
 			$($scope.splittedLyrics).each(function(index, sentence) {
 				$rootScope.models.lists.A.push({label: sentence});
@@ -132,6 +137,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		}
 	};
 	
+	// Method called when the grammar screen is open. It calls the method searchGrammarQuestions from solveExercisesService
 	$scope.initGrammar = function(){
 		if($rootScope.grammarQuestions.length == 0){
 			solveExercisesService.searchGrammarQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
@@ -175,6 +181,41 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 						         : 0;                   // a and b are equal
 					});
 					
+				}, 
+				function errorCallback(response) {
+					
+				}
+			);
+		}
+	};
+	
+	// Method called when the reading screen is open. It calls the method searchReadingQuestions and searchReadingAlternatives from solveExercisesService
+	$scope.initReading = function(){
+		if($rootScope.readingQuestions.length == 0){
+			solveExercisesService.searchReadingQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
+				function successCallback(response) {
+					
+					$(response.data).each(function(index, question) {
+						
+						$rootScope.readingQuestions.push(angular.copy(question));
+						$rootScope.readingQuestions[index].alternativas = [];
+						$rootScope.readingQuestions[index].resposta = "";
+						
+						solveExercisesService.searchReadingAlternatives($rootScope.readingQuestions[index].id).then( 
+								function successCallback(response) {
+									
+									$(response.data).each(function(indexAlternative, alternative) {
+										$rootScope.readingQuestions[index].alternativas.push(angular.copy(alternative));
+									});
+									
+								}, 
+								function errorCallback(response) {
+									
+								}
+							);
+					});
+					
+					console.log("Teste");
 				}, 
 				function errorCallback(response) {
 					
@@ -306,6 +347,20 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	};
 	
 	$scope.sayIt = function (text) {
-		window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+		var utterance = new SpeechSynthesisUtterance(text);
+		utterance.lang = 'en-US';
+		window.speechSynthesis.speak(utterance);
 	};
+	
+	$scope.speak = function(text){
+		tts.speech({
+	        src: text,
+	        hl: 'en-us',
+	        r: 0, 
+	        c: 'mp3',
+	        f: '44khz_16bit_stereo',
+	        ssml: false
+	    });
+	};
+
 });

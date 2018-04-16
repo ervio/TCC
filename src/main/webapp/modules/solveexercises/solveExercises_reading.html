@@ -114,96 +114,22 @@
 			   				
 			   				<div class="col-md-6" align="center">
 			   				
-			   					<b style="color: red;">Wish You Were Here</b> <b>- Pink Floyd</b>
+			   					<b style="color: red;">{{exerciseToEdit.exercicio.musica.nome}}</b> <b>- {{exerciseToEdit.exercicio.musica.cantor}}</b>
 			   					
 			   					<br><br> 
 								
-								So, so you think you can tell<br>
-								Heaven from hell<br>
-								Blue skies from pain<br>
-								Can you tell a green field<br>
-								From a cold steel rail<br>
-								A smile from a veil<br>
-								Do you think you can tell<br><br>
-								
-								Did they get you to trade<br>
-								Your heroes for ghosts<br>
-								Hot ashes for trees<br>
-								Hot air for a cool breeze<br>
-								Cold comfort for change<br>
-								Did you exchange<br>
-								A walk on part in the war<br>
-								For a lead role in a cage<br><br>
-								
-								How I wish<br>
-								How I wish you were here<br>
-								We're just two lost souls<br>
-								Swimming in a fish bowl<br>
-								Year after year<br>
-								Running over the same old ground<br>
-								What have we found<br>
-								The same old fears<br>
-								Wish you were here<br>
+								<div style="white-space:pre-wrap;">{{exerciseToEdit.exercicio.musica.letra}}</div>
 								
 			   				</div>
 			   				
-			   				<div class="col-md-6">
+			   				<div class="col-md-6" ng-repeat="question in readingQuestions">
 			   				
-			   					<label>1) The first verse of the song talks about:</label>
-							    <div class="radio">
+			   					<label>{{$index + 1}}) {{question.pergunta}}</label>
+						    	<div ng-repeat="alternative in question.alternativas" class="radio">
 							        <label>
-							            <input type="radio">a) distinct things  
-							        </label><br>
-							        <label>
-							            <input type="radio">b) similar things 
-							        </label><br>
-							        <label>
-							            <input type="radio">c) business 
-							        </label><br>
-							        <label>
-							            <input type="radio">d) missing someone 
+							            <input type="radio" ng-model="question.resposta" value="{{alternative.id}}">{{alternative.descricao}}
 							        </label>
-							    </div>
-			   				
-			   				</div>
-			   				
-			   				<div class="col-md-6">
-			   				
-			   					<label>2) The second verse talks about:</label>
-							    <div class="radio">
-							        <label>
-							            <input type="radio">a) missing someone  
-							        </label><br>
-							        <label>
-							            <input type="radio">b) similar things 
-							        </label><br>
-							        <label>
-							            <input type="radio">c) business 
-							        </label><br>
-							        <label>
-							            <input type="radio">d) choices in life 
-							        </label>
-							    </div>
-			   				
-			   				</div>
-			   				
-			   				<div class="col-md-6">
-			   				
-			   					<label>3) The third verse talks about:</label>
-							    <div class="radio">
-							        <label>
-							            <input type="radio">a) missing someone  
-							        </label><br>
-							        <label>
-							            <input type="radio">b) distinct things 
-							        </label><br>
-							        <label>
-							            <input type="radio">c) business 
-							        </label><br>
-							        <label>
-							            <input type="radio">d) choices in life 
-							        </label>
-							    </div>
+						    	</div>
 			   				
 			   				</div>
 			   				
@@ -222,6 +148,6 @@
     </div>
     <!-- /#wrapper -->
     
-    <div ng-init="initSong()"></div>
+    <div ng-init="initReading()"></div>
 
 </body>

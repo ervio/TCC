@@ -1,6 +1,6 @@
 package webplatform.converter;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import org.springframework.util.CollectionUtils;
 
@@ -20,11 +20,12 @@ public class ReadingQuestaoConverter {
 
 		if (!CollectionUtils.isEmpty(readingQuestaoModel.getReadingAlternativas())) {
 
-			questao.setReadingAlternativas(new HashSet<ReadingAlternativa>());
+			questao.setReadingAlternativas(new ArrayList<ReadingAlternativa>());
 
 			for (ReadingAlternativaModel readingAlternativaModel : readingQuestaoModel.getReadingAlternativas()) {
 				ReadingAlternativa alternativa = new ReadingAlternativa(readingAlternativaModel.getId(), null,
-						readingAlternativaModel.getDescricao(), readingAlternativaModel.getCorreta());
+						readingAlternativaModel.getDescricao(), readingAlternativaModel.getCorreta(),
+						readingAlternativaModel.getSequencia());
 				questao.getReadingAlternativas().add(alternativa);
 			}
 

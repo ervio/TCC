@@ -10,5 +10,7 @@ public interface ReadingAlternativaDao {
 
 	public List<ReadingAlternativa> findByExercise(Long exerciseId);
 
+	public List<ReadingAlternativa> findByQuestion(Long questaoId);
+
 	public void delete(ReadingAlternativa readingAlternativa);
 }

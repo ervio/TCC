@@ -1,4 +1,4 @@
-var app = angular.module('app', ['pubnub.angular.service', 'ui.router', 'ui.bootstrap', 'youtube-embed', 'dndLists', 'ngAnimate', 'ngSanitize', 'ngFileUpload'])
+var app = angular.module('app', ['voiceRss', 'pubnub.angular.service', 'ui.router', 'ui.bootstrap', 'youtube-embed', 'dndLists', 'ngAnimate', 'ngSanitize', 'ngFileUpload'])
 
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $injector) {
 	
@@ -44,6 +44,10 @@ var app = angular.module('app', ['pubnub.angular.service', 'ui.router', 'ui.boot
 	// Cache injector
     config_injector = $injector;
 });
+
+app.config(['ttsProvider', function (ttsProvider) {
+    ttsProvider.setSettings({ key: '9587c11d941e45cb879a243524ced01e' });
+}]);
 
 app.factory("LazyRoute", function ($log) {
     

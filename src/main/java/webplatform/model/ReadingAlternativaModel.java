@@ -5,6 +5,7 @@ public class ReadingAlternativaModel {
 	private Long id;
 	private String descricao;
 	private Boolean correta;
+	private Integer sequencia;
 
 	public Long getId() {
 		return id;
@@ -28,6 +29,14 @@ public class ReadingAlternativaModel {
 
 	public void setCorreta(Boolean correta) {
 		this.correta = correta;
+	}
+
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void setSequencia(Integer sequencia) {
+		this.sequencia = sequencia;
 	}
 
 }
