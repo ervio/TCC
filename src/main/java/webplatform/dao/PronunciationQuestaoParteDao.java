@@ -10,5 +10,7 @@ public interface PronunciationQuestaoParteDao {
 
 	public List<PronunciationQuestaoParte> findByExercise(Long exerciseId);
 
+	public List<PronunciationQuestaoParte> findByQuestion(Long questaoId);
+
 	public void delete(PronunciationQuestaoParte pronunciationQuestaoParte);
 }

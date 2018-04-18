@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import webplatform.dao.PronunciationQuestaoParteDao;
+import webplatform.model.entity.PronunciationQuestao;
 import webplatform.model.entity.PronunciationQuestaoParte;
 
 @Transactional
@@ -37,6 +38,15 @@ public class PronunciationQuestaoParteDaoImpl extends BaseDao<PronunciationQuest
 		criteria.createAlias("pronunciationQuestao", "pronunciationQuestao");
 		criteria.createAlias("pronunciationQuestao.exercicio", "exercicio");
 		criteria.add(Restrictions.eq("exercicio.idExercicio", exerciseId));
+		criteria.addOrder(Order.asc("sequencia"));
+		return (List<PronunciationQuestaoParte>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PronunciationQuestaoParte> findByQuestion(Long questaoId) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.eq("pronunciationQuestao", new PronunciationQuestao(questaoId)));
 		criteria.addOrder(Order.asc("sequencia"));
 		return (List<PronunciationQuestaoParte>) hibernateTemplate.findByCriteria(criteria);
 	}

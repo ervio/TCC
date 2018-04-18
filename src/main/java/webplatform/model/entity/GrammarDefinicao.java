@@ -1,8 +1,8 @@
 package webplatform.model.entity;
 // default package
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ public class GrammarDefinicao implements java.io.Serializable {
 	private Long id;
 	private Exercicio exercicio;
 	private String definicao;
-	private Set<GrammarQuestao> questoes = new HashSet<GrammarQuestao>();
+	private List<GrammarQuestao> questoes = new ArrayList<GrammarQuestao>();
 
 	public GrammarDefinicao() {
 	}
@@ -38,7 +38,7 @@ public class GrammarDefinicao implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public GrammarDefinicao(Long id, Exercicio exercicio, String definicao, Set<GrammarQuestao> questoes) {
+	public GrammarDefinicao(Long id, Exercicio exercicio, String definicao, ArrayList<GrammarQuestao> questoes) {
 		this.id = id;
 		this.exercicio = exercicio;
 		this.definicao = definicao;
@@ -80,11 +80,11 @@ public class GrammarDefinicao implements java.io.Serializable {
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "definicaoResposta")
-	public Set<GrammarQuestao> getQuestoes() {
+	public List<GrammarQuestao> getQuestoes() {
 		return questoes;
 	}
 
-	public void setQuestoes(Set<GrammarQuestao> questoes) {
+	public void setQuestoes(List<GrammarQuestao> questoes) {
 		this.questoes = questoes;
 	}
 

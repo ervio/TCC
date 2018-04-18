@@ -101,48 +101,23 @@
 			   				</div>
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
+		               			<a ui-sref="resolveExerciseReading" href="#">
+			   						<input class="btn btn-md btn-primary" type="submit" value="Back"/>
+								</a>
 								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
 								<input type="submit" ng-click="goToWriting()" class="btn btn-md btn-primary" value="Writing"/>
 			   				</div>
 			   				
 		               	</div><br>
 		               	
-		               	<div class="row">
+		               	<div class="row" style="margin-top: 10px;" ng-repeat="question in pronunciationQuestions">
 		               	
 		               		<div class="col-md-12">
-		               			1) So you think you can tell <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> from <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>.
-		               		</div>
-		               	
-		               	</div>
-		               	
-		               	<div class="row">
-		               	
-		               		<div class="col-md-12" style="margin-top: 10px;">
-		               			2) Can you tell a green field from a cold <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>?
-		               		</div>
-		               	
-		               	</div>
-		               	
-		               	<div class="row">
-		               	
-		               		<div class="col-md-12" style="margin-top: 10px;">
-		               			3) Did they get you to trade your heroes for <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>, hot <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> for trees?
-		               		</div>
-		               	
-		               	</div>
-		               	
-		               	<div class="row">
-		               	
-		               		<div class="col-md-12" style="margin-top: 10px;">
-		               			4) Did you exchange a walk on part in the <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> for a lead role in a <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>.
-		               		</div>
-		               	
-		               	</div>
-		               	
-		               	<div class="row">
-		               	
-		               		<div class="col-md-12" style="margin-top: 10px;">
-		               			5) We're just two lost souls swimming in a <span style="background-color: #eee6e6;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> year after year. 
+		               			<span>{{$index + 1}})</span>
+		               			<span ng-repeat="part in question.partes">
+		               				<span ng-if="part.tipo == 'Sentence'">{{part.descricao}}</span>
+		               				<input type="submit" ng-if="part.tipo == 'Gap'" style="background-color: #eee6e6;" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+	               				</span>
 		               		</div>
 		               	
 		               	</div>
@@ -160,6 +135,6 @@
     </div>
     <!-- /#wrapper -->
     
-    <div ng-init="initSong()"></div>
+    <div ng-init="initPronunciation()"></div>
 
 </body>

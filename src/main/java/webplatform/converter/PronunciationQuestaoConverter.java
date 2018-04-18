@@ -1,6 +1,6 @@
 package webplatform.converter;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import org.springframework.util.CollectionUtils;
 
@@ -19,7 +19,7 @@ public class PronunciationQuestaoConverter {
 
 		if (!CollectionUtils.isEmpty(pronunciationQuestaoModel.getPronunciationQuestaoPartes())) {
 
-			questao.setPronunciationQuestaoPartes(new HashSet<PronunciationQuestaoParte>());
+			questao.setPronunciationQuestaoPartes(new ArrayList<PronunciationQuestaoParte>());
 
 			for (PronunciationQuestaoParteModel pronunciationQuestaoParteModel : pronunciationQuestaoModel
 					.getPronunciationQuestaoPartes()) {

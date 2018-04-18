@@ -34,6 +34,10 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		$rootScope.readingQuestions = [];
 	}
 	
+	if(!$rootScope.pronunciationQuestions){
+		$rootScope.pronunciationQuestions = [];
+	}
+	
 	// Method called when the main screen with exercises to be resolved is open. It calls the method searchExercises from solveExercisesService
 	$scope.init = function(){
 		
@@ -43,6 +47,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		delete $rootScope.grammarQuestions;
 		delete $rootScope.grammarDefinitions;
 		delete $rootScope.readingQuestions;
+		delete $rootScope.pronunciationQuestions;
 		
 		solveExercisesService.searchExercises($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
@@ -222,6 +227,42 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 				}
 			);
 		}
+	};
+	
+	// Method called when the pronunciation screen is open. It calls the method searchPronunciationQuestions from solveExercisesService
+	$scope.initPronunciation = function(){
+		if($rootScope.pronunciationQuestions.length == 0){
+			solveExercisesService.searchPronunciationQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
+				function successCallback(response) {
+					
+					$(response.data).each(function(index, question) {
+						
+						$rootScope.pronunciationQuestions.push(angular.copy(question));
+						$rootScope.pronunciationQuestions[index].partes = [];
+						//$rootScope.pronunciationQuestions[index].resposta = "";
+						
+						solveExercisesService.searchPronunciationParts($rootScope.pronunciationQuestions[index].id).then( 
+								function successCallback(response) {
+									
+									$(response.data).each(function(indexPart, part) {
+										$rootScope.pronunciationQuestions[index].partes.push(angular.copy(part));
+									});
+									
+								}, 
+								function errorCallback(response) {
+									
+								}
+							);
+					});
+					
+					console.log("Teste");
+				}, 
+				function errorCallback(response) {
+					
+				}
+			);
+		}
+		
 	};
 	
 	// The method gets the selected exercise

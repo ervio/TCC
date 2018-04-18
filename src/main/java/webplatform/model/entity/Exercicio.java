@@ -1,6 +1,8 @@
 package webplatform.model.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -37,10 +39,10 @@ public class Exercicio implements java.io.Serializable {
 	private Byte media;
 	private Set<ExercicioAluno> exercicioAlunos = new HashSet<ExercicioAluno>();
 	private Set<Questao> questoes = new HashSet<Questao>();
-	private Set<Imagem> imagens = new HashSet<Imagem>();
-	private Set<GrammarDefinicao> grammarDefinicoes = new HashSet<GrammarDefinicao>();
-	private Set<ReadingQuestao> readingQuestoes = new HashSet<ReadingQuestao>();
-	private Set<PronunciationQuestao> pronunciationQuestoes = new HashSet<PronunciationQuestao>();
+	private List<Imagem> imagens = new ArrayList<Imagem>();
+	private List<GrammarDefinicao> grammarDefinicoes = new ArrayList<GrammarDefinicao>();
+	private List<ReadingQuestao> readingQuestoes = new ArrayList<ReadingQuestao>();
+	private List<PronunciationQuestao> pronunciationQuestoes = new ArrayList<PronunciationQuestao>();
 
 	public Exercicio() {
 	}
@@ -51,7 +53,7 @@ public class Exercicio implements java.io.Serializable {
 
 	public Exercicio(Long idExercicio, Professor professor, Musica musica, String nome, String nivel,
 			int valorNotaMaxima, Byte media, Set<ExercicioAluno> exercicioAlunos, Set<Questao> questoes,
-			Set<Imagem> imagens) {
+			ArrayList<Imagem> imagens) {
 		this.idExercicio = idExercicio;
 		this.professor = professor;
 		this.musica = musica;
@@ -165,41 +167,41 @@ public class Exercicio implements java.io.Serializable {
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicio")
-	public Set<Imagem> getImagens() {
+	public List<Imagem> getImagens() {
 		return imagens;
 	}
 
-	public void setImagens(Set<Imagem> imagens) {
+	public void setImagens(List<Imagem> imagens) {
 		this.imagens = imagens;
 	}
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicio")
-	public Set<GrammarDefinicao> getGrammarDefinicoes() {
+	public List<GrammarDefinicao> getGrammarDefinicoes() {
 		return grammarDefinicoes;
 	}
 
-	public void setGrammarDefinicoes(Set<GrammarDefinicao> grammarDefinicoes) {
+	public void setGrammarDefinicoes(List<GrammarDefinicao> grammarDefinicoes) {
 		this.grammarDefinicoes = grammarDefinicoes;
 	}
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicio")
-	public Set<ReadingQuestao> getReadingQuestoes() {
+	public List<ReadingQuestao> getReadingQuestoes() {
 		return readingQuestoes;
 	}
 
-	public void setReadingQuestoes(Set<ReadingQuestao> readingQuestoes) {
+	public void setReadingQuestoes(List<ReadingQuestao> readingQuestoes) {
 		this.readingQuestoes = readingQuestoes;
 	}
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicio")
-	public Set<PronunciationQuestao> getPronunciationQuestoes() {
+	public List<PronunciationQuestao> getPronunciationQuestoes() {
 		return pronunciationQuestoes;
 	}
 
-	public void setPronunciationQuestoes(Set<PronunciationQuestao> pronunciationQuestoes) {
+	public void setPronunciationQuestoes(List<PronunciationQuestao> pronunciationQuestoes) {
 		this.pronunciationQuestoes = pronunciationQuestoes;
 	}
 

@@ -1,6 +1,6 @@
 package webplatform.converter;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import org.springframework.util.CollectionUtils;
 
@@ -38,7 +38,7 @@ public class ExercicioConverter {
 
 		if (!CollectionUtils.isEmpty(exercicioModel.getGrammarDefinicoes())) {
 
-			exercicio.setGrammarDefinicoes(new HashSet<GrammarDefinicao>());
+			exercicio.setGrammarDefinicoes(new ArrayList<GrammarDefinicao>());
 
 			for (GrammarDefinicaoModel definicao : exercicioModel.getGrammarDefinicoes()) {
 				GrammarDefinicao definicaoTemp = GrammarDefinicaoConverter.convert(definicao);
@@ -48,7 +48,7 @@ public class ExercicioConverter {
 
 		if (!CollectionUtils.isEmpty(exercicioModel.getReadingQuestoes())) {
 
-			exercicio.setReadingQuestoes(new HashSet<ReadingQuestao>());
+			exercicio.setReadingQuestoes(new ArrayList<ReadingQuestao>());
 
 			for (ReadingQuestaoModel questao : exercicioModel.getReadingQuestoes()) {
 				ReadingQuestao questaoTemp = ReadingQuestaoConverter.convert(questao);
@@ -59,7 +59,7 @@ public class ExercicioConverter {
 
 		if (!CollectionUtils.isEmpty(exercicioModel.getPronunciationQuestions())) {
 
-			exercicio.setPronunciationQuestoes(new HashSet<PronunciationQuestao>());
+			exercicio.setPronunciationQuestoes(new ArrayList<PronunciationQuestao>());
 
 			for (PronunciationQuestaoModel questao : exercicioModel.getPronunciationQuestions()) {
 				PronunciationQuestao questaoTemp = PronunciationQuestaoConverter.convert(questao);

@@ -1,6 +1,6 @@
 package webplatform.converter;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import org.springframework.util.CollectionUtils;
 
@@ -20,7 +20,7 @@ public class GrammarDefinicaoConverter {
 
 		if (!CollectionUtils.isEmpty(grammarDefinicaoModel.getQuestoes())) {
 
-			grammarDefinicao.setQuestoes(new HashSet<GrammarQuestao>());
+			grammarDefinicao.setQuestoes(new ArrayList<GrammarQuestao>());
 
 			for (GrammarQuestaoModel grammarQuestaoModel : grammarDefinicaoModel.getQuestoes()) {
 				GrammarQuestao grammarQuestao = new GrammarQuestao(grammarQuestaoModel.getId(),

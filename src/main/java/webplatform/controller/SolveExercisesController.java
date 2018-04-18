@@ -19,6 +19,8 @@ import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioAlunoRespostaDao;
 import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.ImagemDao;
+import webplatform.dao.PronunciationQuestaoDao;
+import webplatform.dao.PronunciationQuestaoParteDao;
 import webplatform.dao.QuestaoDao;
 import webplatform.dao.ReadingAlternativaDao;
 import webplatform.dao.ReadingQuestaoDao;
@@ -30,6 +32,8 @@ import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.ExercicioAlunoResposta;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.Imagem;
+import webplatform.model.entity.PronunciationQuestao;
+import webplatform.model.entity.PronunciationQuestaoParte;
 import webplatform.model.entity.Questao;
 import webplatform.model.entity.ReadingAlternativa;
 import webplatform.model.entity.ReadingQuestao;
@@ -61,6 +65,12 @@ public class SolveExercisesController {
 
 	@Autowired
 	private ReadingAlternativaDao readingAlternativaDao;
+
+	@Autowired
+	private PronunciationQuestaoDao pronunciationQuestaoDao;
+
+	@Autowired
+	private PronunciationQuestaoParteDao pronunciationQuestaoParteDao;
 
 	/**
 	 * Search all the exercises to be resolved by the logged student
@@ -155,6 +165,36 @@ public class SolveExercisesController {
 	public @ResponseBody ResponseEntity searchReadingAlternatives(@PathVariable("questionId") String questionId) {
 		List<ReadingAlternativa> readingAlternativas = readingAlternativaDao.findByQuestion(Long.parseLong(questionId));
 		return new ResponseEntity(readingAlternativas, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all pronunciation questions related to the exercise being resolved by
+	 * the student
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/searchPronunciationQuestions/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchPronunciationQuestions(@PathVariable("exerciseId") String exerciseId) {
+		List<PronunciationQuestao> pronunciationQuestions = pronunciationQuestaoDao
+				.findByExercise(Long.parseLong(exerciseId));
+		return new ResponseEntity(pronunciationQuestions, HttpStatus.OK);
+	}
+
+	/**
+	 * Search all pronunciation question parts related to the exercise being
+	 * resolved by the student
+	 * 
+	 * @param exerciseId
+	 * @return
+	 */
+	@Transactional
+	@RequestMapping(value = "/searchPronunciationParts/{questionId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchPronunciationParts(@PathVariable("questionId") String questionId) {
+		List<PronunciationQuestaoParte> pronunciationQuestionParts = pronunciationQuestaoParteDao
+				.findByQuestion(Long.parseLong(questionId));
+		return new ResponseEntity(pronunciationQuestionParts, HttpStatus.OK);
 	}
 
 	/**

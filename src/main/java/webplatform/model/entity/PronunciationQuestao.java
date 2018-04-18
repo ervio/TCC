@@ -1,8 +1,8 @@
 package webplatform.model.entity;
 // default package
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +28,7 @@ public class PronunciationQuestao implements java.io.Serializable {
 
 	private Long id;
 	private Exercicio exercicio;
-	private Set<PronunciationQuestaoParte> pronunciationQuestaoPartes = new HashSet<PronunciationQuestaoParte>();
+	private List<PronunciationQuestaoParte> pronunciationQuestaoPartes = new ArrayList<PronunciationQuestaoParte>();
 
 	public PronunciationQuestao() {
 	}
@@ -38,7 +38,7 @@ public class PronunciationQuestao implements java.io.Serializable {
 	}
 
 	public PronunciationQuestao(Long id, Exercicio exercicio,
-			Set<PronunciationQuestaoParte> pronunciationQuestaoPartes) {
+			ArrayList<PronunciationQuestaoParte> pronunciationQuestaoPartes) {
 		this.id = id;
 		this.exercicio = exercicio;
 		this.pronunciationQuestaoPartes = pronunciationQuestaoPartes;
@@ -70,11 +70,11 @@ public class PronunciationQuestao implements java.io.Serializable {
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pronunciationQuestao")
-	public Set<PronunciationQuestaoParte> getPronunciationQuestaoPartes() {
+	public List<PronunciationQuestaoParte> getPronunciationQuestaoPartes() {
 		return pronunciationQuestaoPartes;
 	}
 
-	public void setPronunciationQuestaoPartes(Set<PronunciationQuestaoParte> pronunciationQuestaoPartes) {
+	public void setPronunciationQuestaoPartes(List<PronunciationQuestaoParte> pronunciationQuestaoPartes) {
 		this.pronunciationQuestaoPartes = pronunciationQuestaoPartes;
 	}
 
