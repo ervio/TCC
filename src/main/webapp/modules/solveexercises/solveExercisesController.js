@@ -5,6 +5,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	$scope.splittedLyrics = [];
 	$scope.error;
 	$scope.questionsSubmitted = false;
+	$scope.speaking = false;
 	
 	// TODO: Remover verificação de questões
 	if(!$rootScope.questions){
@@ -245,6 +246,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 								function successCallback(response) {
 									
 									$(response.data).each(function(indexPart, part) {
+										part.resposta = "";
 										$rootScope.pronunciationQuestions[index].partes.push(angular.copy(part));
 									});
 									
@@ -404,4 +406,49 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	    });
 	};
 
+	$scope.onerror = function(event, message) {
+		console.log('onerror', event, message);
+	};
+	
+	// Angular JS Voice
+	$scope.dictateIt = function (part) {
+		
+		$scope.error = "";
+		
+		if('webkitSpeechRecognition' in window){
+			part.resposta = "";
+		      
+			var recognition = new webkitSpeechRecognition();
+			recognition.continuous = false;
+			recognition.interimResults = true;
+			recognition.lang = 'en-US';
+			recognition.start();
+		      
+			recognition.onresult = function (event) {
+				$scope.$apply(function() {
+					for (var i = event.resultIndex; i < event.results.length; i++) {
+						if (event.results[i].isFinal) {
+							part.resposta  += event.results[i][0].transcript;
+						}
+					}
+		          
+		          //recognition.stop();
+				});
+			};
+			
+			recognition.onstart = function(){
+				$scope.speaking = true;
+			};
+		      
+			recognition.onspeechend = function() {
+				$scope.speaking = false;
+			};
+			
+			recognition.onerror = $scope.onerror;
+		      
+		}else{
+			$scope.error = "Your browser is not supported. If google chrome, please upgrade!";
+		}
+	      
+	  };
 });

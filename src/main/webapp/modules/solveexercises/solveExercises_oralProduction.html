@@ -97,7 +97,7 @@
 			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
 			               	
 			               	<div class="col-md-12">
-								<b>Say aloud the correct word to complete the lines of the lyrics.</b>
+								<b>Say aloud the correct word to complete the lines of the lyrics.</b> <img ng-if="!speaking" src="img/mic.gif"><img ng-if="speaking" src="img/mic-animate.gif"><br>
 			   				</div>
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
@@ -116,7 +116,8 @@
 		               			<span>{{$index + 1}})</span>
 		               			<span ng-repeat="part in question.partes">
 		               				<span ng-if="part.tipo == 'Sentence'">{{part.descricao}}</span>
-		               				<input type="submit" ng-if="part.tipo == 'Gap'" style="background-color: #eee6e6;" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
+		               				<input type="submit" ng-click="dictateIt(part)" ng-if="part.tipo == 'Gap' && part.resposta != ''" style="background-color: #eee6e6;" value="{{part.resposta}}"/>
+		               				<input type="submit" ng-click="dictateIt(part)" ng-if="part.tipo == 'Gap' && part.resposta == ''" style="background-color: #eee6e6;" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
 	               				</span>
 		               		</div>
 		               	

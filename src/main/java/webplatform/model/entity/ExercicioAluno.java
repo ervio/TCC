@@ -35,6 +35,7 @@ public class ExercicioAluno implements java.io.Serializable {
 	private Integer chances;
 	private Date dataInicio;
 	private Date dataFim;
+	private String writingQuestaoResposta;
 	private Set<ExercicioAlunoResposta> exercicioAlunoRespostas = new HashSet<ExercicioAlunoResposta>();
 
 	public ExercicioAluno() {
@@ -124,6 +125,15 @@ public class ExercicioAluno implements java.io.Serializable {
 
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
+	}
+
+	@Column(name = "WRITING_QUESTAO_RESPOSTA", length = 1000)
+	public String getWritingQuestaoResposta() {
+		return writingQuestaoResposta;
+	}
+
+	public void setWritingQuestaoResposta(String writingQuestaoResposta) {
+		this.writingQuestaoResposta = writingQuestaoResposta;
 	}
 
 	@JsonIgnore
