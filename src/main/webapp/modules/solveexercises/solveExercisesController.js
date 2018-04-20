@@ -35,8 +35,8 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		$rootScope.readingQuestions = [];
 	}
 	
-	if(!$rootScope.pronunciationQuestions){
-		$rootScope.pronunciationQuestions = [];
+	if(!$rootScope.pronunciationQuestoes){
+		$rootScope.pronunciationQuestoes = [];
 	}
 	
 	// Method called when the main screen with exercises to be resolved is open. It calls the method searchExercises from solveExercisesService
@@ -48,7 +48,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		delete $rootScope.grammarQuestions;
 		delete $rootScope.grammarDefinitions;
 		delete $rootScope.readingQuestions;
-		delete $rootScope.pronunciationQuestions;
+		delete $rootScope.pronunciationQuestoes;
 		
 		solveExercisesService.searchExercises($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
@@ -204,14 +204,14 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 					$(response.data).each(function(index, question) {
 						
 						$rootScope.readingQuestions.push(angular.copy(question));
-						$rootScope.readingQuestions[index].alternativas = [];
+						$rootScope.readingQuestions[index].readingAlternativas = [];
 						$rootScope.readingQuestions[index].resposta = "";
 						
 						solveExercisesService.searchReadingAlternatives($rootScope.readingQuestions[index].id).then( 
 								function successCallback(response) {
 									
 									$(response.data).each(function(indexAlternative, alternative) {
-										$rootScope.readingQuestions[index].alternativas.push(angular.copy(alternative));
+										$rootScope.readingQuestions[index].readingAlternativas.push(angular.copy(alternative));
 									});
 									
 								}, 
@@ -232,22 +232,21 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	
 	// Method called when the pronunciation screen is open. It calls the method searchPronunciationQuestions from solveExercisesService
 	$scope.initPronunciation = function(){
-		if($rootScope.pronunciationQuestions.length == 0){
+		if($rootScope.pronunciationQuestoes.length == 0){
 			solveExercisesService.searchPronunciationQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
 				function successCallback(response) {
 					
 					$(response.data).each(function(index, question) {
 						
-						$rootScope.pronunciationQuestions.push(angular.copy(question));
-						$rootScope.pronunciationQuestions[index].partes = [];
-						//$rootScope.pronunciationQuestions[index].resposta = "";
+						$rootScope.pronunciationQuestoes.push(angular.copy(question));
+						$rootScope.pronunciationQuestoes[index].partes = [];
 						
-						solveExercisesService.searchPronunciationParts($rootScope.pronunciationQuestions[index].id).then( 
+						solveExercisesService.searchPronunciationParts($rootScope.pronunciationQuestoes[index].id).then( 
 								function successCallback(response) {
 									
 									$(response.data).each(function(indexPart, part) {
 										part.resposta = "";
-										$rootScope.pronunciationQuestions[index].partes.push(angular.copy(part));
+										$rootScope.pronunciationQuestoes[index].partes.push(angular.copy(part));
 									});
 									
 								}, 
@@ -306,6 +305,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		);
 	};
 	
+	// TODO: Remover
 	// Method called by "Go to questions" button
 	$scope.goToQuestionsResolution = function(){
 		
@@ -338,25 +338,112 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	};
 	
 	$scope.goToVocabulary = function(){
-		$state.go("resolveExerciseVocabulary");
+		
+//		$scope.error = "";
+//		$scope.isLyricsCorrect = true;
+//		
+//		// Compares the lyrics length with the ordered list
+//		if($rootScope.models.lists.B.length == $scope.splittedLyrics.length){
+//			
+//			// Validates if it's in the correct order, if it's not error out
+//			$($scope.splittedLyrics).each(function(index, lyrics) {
+//				if(lyrics != $rootScope.models.lists.B[index].label){
+//					$scope.isLyricsCorrect = false;
+//					return false;
+//				}
+//			});
+//			
+//			if(!$scope.isLyricsCorrect){
+//				$scope.incrementChances();
+//				$scope.error = "The lyrics are not in the correct order.";
+//			}else{
+				$state.go("resolveExerciseVocabulary");
+//			}
+//			
+//		}else{
+//			$scope.incrementChances();
+//			$scope.error = "The lyrics are not in the correct order.";
+//		}
+		
 	};
 	
 	$scope.goToLanguage = function(){
-		$state.go("resolveExerciseLanguage");
+//		var questionsResolved = true
+//		$scope.error = "";
+//			
+//		for(var i = 0; i < $rootScope.vocabularyPictures.length; i++){
+//			if(!$rootScope.vocabularyPictures[i].resposta){
+//				questionsResolved = false;
+//				break;
+//			}
+//		}
+//		
+//		if(questionsResolved){
+			$state.go("resolveExerciseLanguage");
+//		}else{
+//			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+//		}
 	};
 	
 	$scope.goToReading = function(){
-		$state.go("resolveExerciseReading");
+//		var questionsResolved = true
+//		$scope.error = "";
+//			
+//		for(var i = 0; i < $rootScope.grammarQuestions.length; i++){
+//			if(!$rootScope.grammarQuestions[i].resposta){
+//				questionsResolved = false;
+//				break;
+//			}
+//		}
+//		
+//		if(questionsResolved){
+			$state.go("resolveExerciseReading");
+//		}else{
+//			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+//		}
 	};
 	
-	$scope.goToOralPrdocution = function(){
-		$state.go("resolveExerciseOralProduction");
+	$scope.goToOralProduction = function(){
+//		var questionsResolved = true
+//		$scope.error = "";
+//			
+//		for(var i = 0; i < $rootScope.readingQuestions.length; i++){
+//			if(!$rootScope.readingQuestions[i].resposta){
+//				questionsResolved = false;
+//				break;
+//			}
+//		}
+//		
+//		if(questionsResolved){
+			$state.go("resolveExerciseOralProduction");
+//		}else{
+//			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+//		}
+		
 	};
 	
 	$scope.goToWriting = function(){
-		$state.go("resolveExerciseWriting");
+//		var questionsResolved = true
+//		$scope.error = "";
+//			
+//		for(var i = 0; i < $rootScope.pronunciationQuestoes.length; i++){
+//			for(var j = 0; j < $rootScope.pronunciationQuestoes[i].partes.length; j++){
+//				if(angular.equals($rootScope.pronunciationQuestoes[i].partes[j].tipo, "Gap") && !$rootScope.pronunciationQuestoes[i].partes[j].resposta){
+//					questionsResolved = false;
+//					break;
+//				}
+//			}
+//		}
+//		
+//		if(questionsResolved){
+			$state.go("resolveExerciseWriting");
+//		}else{
+//			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+//		}
+		
 	};
 	
+	// TODO: Remover
 	// Method to submit the questions resolved by the student. It calls the method submitQuestions from solveExercisesService
 	$scope.submitQuestions = function(){
 		
@@ -386,6 +473,46 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 					
 				}
 			);
+		}
+	};
+	
+	$scope.submitExercise = function(){
+		$scope.error = "";
+		
+		if(!$scope.exerciseToEdit.writingQuestaoResposta){
+			$scope.error = "It's needed to answer the question before submitting the exercise.";
+		}else{
+			
+			// Pictures
+			$rootScope.exerciseToEdit.imagens = [];
+			$rootScope.exerciseToEdit.imagens = angular.copy($rootScope.vocabularyPictures);
+
+			// Grammar definitions
+			$rootScope.exerciseToEdit.grammarDefinitions = [];
+			$rootScope.exerciseToEdit.grammarDefinitions = angular.copy($rootScope.grammarDefinitions);
+			
+			// Grammar questions
+			$rootScope.exerciseToEdit.grammarQuestions = [];
+			$rootScope.exerciseToEdit.grammarQuestions = angular.copy($rootScope.grammarQuestions);
+			
+			// Reading questions
+			$rootScope.exerciseToEdit.readingQuestions = [];
+			$rootScope.exerciseToEdit.readingQuestions = angular.copy($rootScope.readingQuestions);
+			
+			// Pronunciation questions
+			$rootScope.exerciseToEdit.pronunciationQuestoes = [];
+			$rootScope.exerciseToEdit.pronunciationQuestoes = angular.copy($rootScope.pronunciationQuestoes);
+			
+			solveExercisesService.submitExercise($rootScope.exerciseToEdit).then( 
+//				function successCallback(response) {
+//					$rootScope.exerciseToEdit.nota = response.data.nota;
+//					$scope.questionsSubmitted = true;
+//				}, 
+//				function errorCallback(response) {
+//					
+//				}
+			);
+			
 		}
 	};
 	

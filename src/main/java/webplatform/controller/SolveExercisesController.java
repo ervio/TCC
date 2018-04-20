@@ -197,6 +197,7 @@ public class SolveExercisesController {
 		return new ResponseEntity(pronunciationQuestionParts, HttpStatus.OK);
 	}
 
+	// TODO: REMOVER
 	/**
 	 * Search all alternatives related to the question that is being loaded
 	 * 
@@ -210,6 +211,18 @@ public class SolveExercisesController {
 		return new ResponseEntity(questionAlternatives, HttpStatus.OK);
 	}
 
+	/**
+	 * Submit the questions resolved by the logged student
+	 * 
+	 * @param exercicioAlunoModel
+	 * @return
+	 */
+	@RequestMapping(value = "/submitExercise", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity submitExercise(@RequestBody ExercicioAlunoModel exercicioAlunoModel) {
+		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	// TODO: Remover
 	/**
 	 * Submit the questions resolved by the logged student
 	 * 

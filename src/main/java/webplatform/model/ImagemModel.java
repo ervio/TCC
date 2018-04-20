@@ -6,6 +6,7 @@ public class ImagemModel {
 	private String base64;
 	private String nome;
 	private byte[] bytes;
+	private Integer resposta;
 
 	public Long getId() {
 		return id;
@@ -37,6 +38,14 @@ public class ImagemModel {
 
 	public void setBytes(byte[] bytes) {
 		this.bytes = bytes;
+	}
+
+	public Integer getResposta() {
+		return resposta;
+	}
+
+	public void setResposta(Integer resposta) {
+		this.resposta = resposta;
 	}
 
 }

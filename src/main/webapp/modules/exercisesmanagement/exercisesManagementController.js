@@ -1202,7 +1202,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 			  
 			  var question = {
 				  pergunta : angular.copy($scope.grammarPractice.readingQuestionInput),
-				  readingAlternativas : []
+				  readingAlternativas : [],
+				  sequencia : $scope.readingQuestions.length + 1
 			  };
 			  $scope.readingQuestions.push(angular.copy(question));
 			  $scope.grammarPractice.readingQuestionInput = "";

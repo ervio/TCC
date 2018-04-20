@@ -17,6 +17,7 @@ public class ReadingQuestaoConverter {
 			questao.setId(readingQuestaoModel.getId());
 		}
 		questao.setPergunta(readingQuestaoModel.getPergunta());
+		questao.setSequencia(readingQuestaoModel.getSequencia());
 
 		if (!CollectionUtils.isEmpty(readingQuestaoModel.getReadingAlternativas())) {
 

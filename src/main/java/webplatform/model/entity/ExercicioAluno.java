@@ -1,7 +1,9 @@
 package webplatform.model.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -37,6 +39,7 @@ public class ExercicioAluno implements java.io.Serializable {
 	private Date dataFim;
 	private String writingQuestaoResposta;
 	private Set<ExercicioAlunoResposta> exercicioAlunoRespostas = new HashSet<ExercicioAlunoResposta>();
+	private List<ForumPost> forumPosts = new ArrayList<ForumPost>();
 
 	public ExercicioAluno() {
 	}
@@ -144,6 +147,16 @@ public class ExercicioAluno implements java.io.Serializable {
 
 	public void setExercicioAlunoRespostas(Set<ExercicioAlunoResposta> exercicioAlunoRespostas) {
 		this.exercicioAlunoRespostas = exercicioAlunoRespostas;
+	}
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicioAluno")
+	public List<ForumPost> getForumPosts() {
+		return forumPosts;
+	}
+
+	public void setForumPosts(List<ForumPost> forumPosts) {
+		this.forumPosts = forumPosts;
 	}
 
 }

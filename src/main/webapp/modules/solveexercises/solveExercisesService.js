@@ -20,6 +20,7 @@ angular.module("app").service("solveExercisesService", function($http, constants
 		return $http.get(constants.baseUrl + "/searchVocabularyPictures/" + exerciseId);
 	};
 	
+	// TODO: Remover
 	// Call the searchAlternativesByQuestion service from SolveExercisesController class
 	this.searchAlternatives = function(questionId){
 		return $http.get(constants.baseUrl + "/searchAlternativesByQuestion/" + questionId);
@@ -50,6 +51,12 @@ angular.module("app").service("solveExercisesService", function($http, constants
 		return $http.get(constants.baseUrl + "/searchPronunciationParts/" + questionId);
 	};
 	
+	// Call the submitExercise service from SolveExercisesController class
+	this.submitExercise = function(exercise){
+		return $http.post(constants.baseUrl + "/submitExercise", exercise);
+	};
+	
+	// TODO: Remover
 	// Call the submitQuestions service from SolveExercisesController class
 	this.submitQuestions = function(exercise){
 		return $http.post(constants.baseUrl + "/submitQuestions", exercise);

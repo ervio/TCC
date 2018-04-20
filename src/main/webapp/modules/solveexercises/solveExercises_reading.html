@@ -105,7 +105,7 @@
 			   						<input class="btn btn-md btn-primary" type="submit" value="Back"/>
 								</a>
 								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
-								<input type="submit" ng-click="goToOralPrdocution()" class="btn btn-md btn-primary" value="Oral Production"/>
+								<input type="submit" ng-click="goToOralProduction()" class="btn btn-md btn-primary" value="Oral Production"/>
 			   				</div>
 			   				
 							<div class="col-md-12">
@@ -125,7 +125,7 @@
 			   				<div class="col-md-6" ng-repeat="question in readingQuestions">
 			   				
 			   					<label>{{$index + 1}}) {{question.pergunta}}</label>
-						    	<div ng-repeat="alternative in question.alternativas" class="radio">
+						    	<div ng-repeat="alternative in question.readingAlternativas" class="radio">
 							        <label>
 							            <input type="radio" ng-model="question.resposta" value="{{alternative.id}}">{{alternative.descricao}}
 							        </label>

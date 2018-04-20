@@ -12,6 +12,11 @@ public class ExercicioAlunoModel {
 	private int nota;
 	private int chances;
 	private List<QuestaoModel> questions;
+	private List<ImagemModel> imagens;
+	private List<GrammarQuestaoModel> grammarQuestions;
+	private List<GrammarDefinicaoModel> grammarDefinitions;
+	private List<ReadingQuestaoModel> readingQuestions;
+	private List<PronunciationQuestaoModel> pronunciationQuestoes;
 	private long tempoResolucaoMillis;
 	private String tempoResolucaoString;
 
@@ -85,6 +90,46 @@ public class ExercicioAlunoModel {
 
 	public void setTempoResolucaoString(String tempoResolucaoString) {
 		this.tempoResolucaoString = tempoResolucaoString;
+	}
+
+	public List<ImagemModel> getImagens() {
+		return imagens;
+	}
+
+	public void setImagens(List<ImagemModel> imagens) {
+		this.imagens = imagens;
+	}
+
+	public List<GrammarQuestaoModel> getGrammarQuestions() {
+		return grammarQuestions;
+	}
+
+	public void setGrammarQuestions(List<GrammarQuestaoModel> grammarQuestions) {
+		this.grammarQuestions = grammarQuestions;
+	}
+
+	public List<GrammarDefinicaoModel> getGrammarDefinitions() {
+		return grammarDefinitions;
+	}
+
+	public void setGrammarDefinitions(List<GrammarDefinicaoModel> grammarDefinitions) {
+		this.grammarDefinitions = grammarDefinitions;
+	}
+
+	public List<ReadingQuestaoModel> getReadingQuestions() {
+		return readingQuestions;
+	}
+
+	public void setReadingQuestions(List<ReadingQuestaoModel> readingQuestions) {
+		this.readingQuestions = readingQuestions;
+	}
+
+	public List<PronunciationQuestaoModel> getPronunciationQuestoes() {
+		return pronunciationQuestoes;
+	}
+
+	public void setPronunciationQuestoes(List<PronunciationQuestaoModel> pronunciationQuestoes) {
+		this.pronunciationQuestoes = pronunciationQuestoes;
 	}
 
 }

@@ -3,6 +3,7 @@ package webplatform.dao.impl;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class ReadingQuestaoDaoImpl extends BaseDao<ReadingQuestao> implements Re
 	public List<ReadingQuestao> findByExercise(Long exerciseId) {
 		DetachedCriteria criteria = getDetachedCriteria();
 		criteria.add(Restrictions.eq("exercicio", new Exercicio(exerciseId)));
+		criteria.addOrder(Order.asc("sequencia"));
 		return (List<ReadingQuestao>) hibernateTemplate.findByCriteria(criteria);
 	}
 

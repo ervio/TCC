@@ -29,6 +29,7 @@ public class ReadingQuestao implements java.io.Serializable {
 	private Long id;
 	private Exercicio exercicio;
 	private String pergunta;
+	private Integer sequencia;
 	private List<ReadingAlternativa> readingAlternativas = new ArrayList<ReadingAlternativa>();
 
 	public ReadingQuestao() {
@@ -87,6 +88,15 @@ public class ReadingQuestao implements java.io.Serializable {
 
 	public void setReadingAlternativas(List<ReadingAlternativa> readingAlternativas) {
 		this.readingAlternativas = readingAlternativas;
+	}
+
+	@Column(name = "SEQUENCIA", precision = 2, scale = 0)
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void setSequencia(Integer sequencia) {
+		this.sequencia = sequencia;
 	}
 
 }

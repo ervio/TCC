@@ -4,6 +4,7 @@ public class GrammarQuestaoModel {
 
 	private Long id;
 	private String questao;
+	private Long resposta;
 
 	public Long getId() {
 		return id;
@@ -19,6 +20,14 @@ public class GrammarQuestaoModel {
 
 	public void setQuestao(String questao) {
 		this.questao = questao;
+	}
+
+	public Long getResposta() {
+		return resposta;
+	}
+
+	public void setResposta(Long resposta) {
+		this.resposta = resposta;
 	}
 
 }

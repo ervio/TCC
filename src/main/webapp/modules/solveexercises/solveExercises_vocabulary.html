@@ -120,7 +120,7 @@
 		               	
 		               	<div class="row">
 		               	
-							<div class="col-md-3 form-group" ng-repeat="f in vocabularyPictures track by $index">
+							<div class="col-md-3 form-group" ng-repeat="f in vocabularyPictures | orderBy:'nome'">
 								<div align="center">
 									<img ng-src="data:image/jpg;base64,{{f.bytes}}" height="150" width="180"/><br>
 								</div>
