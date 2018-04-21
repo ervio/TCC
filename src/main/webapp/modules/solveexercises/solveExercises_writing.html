@@ -90,6 +90,8 @@
 	                
 	                <div ng-show="error" class="alert alert-danger">{{error}}</div>
 	                
+	                <div ng-show="exerciseSubmitted" class="alert alert-info">The lesson was successfully submitted. You got {{exerciseToEdit.questoesCorretas}} out of {{exerciseToEdit.totalQuestoes}} questions.</div>
+	                
 	                <div>
 						
 		               	<div class="row">
@@ -100,11 +102,14 @@
 								<b>Leave your opinion in the forum for discussion:</b>
 			   				</div>
 			               	
-		               		<div class="col-md-12" style="text-align: right;">
+		               		<div class="col-md-12" style="text-align: right;" >
 		               			<a ui-sref="resolveExerciseOralProduction" href="#">
-			   						<input class="btn btn-md btn-primary" type="submit" value="Back"/>
+			   						<input class="btn btn-md btn-primary" type="button" value="Back"/>
 								</a>
-								<input type="submit" ng-click="submitExercise()" class="btn btn-md btn-primary" value="Submit"/>
+								<input type="submit" ng-click="submitExercise()" class="btn btn-md btn-primary" value="button" ng-if="!exerciseSubmitted"/>
+								<a ui-sref="solveExercises" ng-if="exerciseSubmitted">
+			   						<input class="btn btn-md btn-primary" type="submit" value="Back to Lessons Screen"/>
+								</a>
 			   				</div>
 			   				
 		               	</div><br>
@@ -118,7 +123,7 @@
 		               	<div class="row">
 		               	
 		               		<div class="col-md-12 form-group">
-								<textarea ng-model="exerciseToEdit.writingQuestaoResposta" class="form-control" rows="8"></textarea>
+								<textarea ng-model="exerciseToEdit.writingQuestaoResposta" class="form-control" rows="8" ng-disabled="exerciseSubmitted"></textarea>
 							</div>
 		               	
 		               	</div>

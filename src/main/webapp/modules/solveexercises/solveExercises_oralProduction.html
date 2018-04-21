@@ -102,10 +102,9 @@
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
 		               			<a ui-sref="resolveExerciseReading" href="#">
-			   						<input class="btn btn-md btn-primary" type="submit" value="Back"/>
+			   						<input class="btn btn-md btn-primary" type="button" value="Back"/>
 								</a>
-								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
-								<input type="submit" ng-click="goToWriting()" class="btn btn-md btn-primary" value="Writing"/>
+								<input type="button" ng-click="goToWriting()" class="btn btn-md btn-primary" value="Writing"/>
 			   				</div>
 			   				
 		               	</div><br>
@@ -114,9 +113,9 @@
 		               	
 		               		<div class="col-md-12">
 		               			<span>{{$index + 1}})</span>
-		               			<span ng-repeat="part in question.partes">
+		               			<span ng-repeat="part in question.pronunciationQuestaoPartes">
 		               				<span ng-if="part.tipo == 'Sentence'">{{part.descricao}}</span>
-		               				<input type="submit" ng-click="dictateIt(part)" ng-if="part.tipo == 'Gap' && part.resposta != ''" style="background-color: #eee6e6;" value="{{part.resposta}}"/>
+		               				<input type="submit" ng-click="dictateIt(part)" ng-if="part.tipo == 'Gap' && part.resposta != ''" style="background-color: #eee6e6;" value="{{part.resposta}}" ng-class="exerciseSubmitted && part.tipo == 'Gap' ? (part.resposta | uppercase | removeSpaces) == (part.descricao | uppercase | removeSpaces) ? 'correctOption' : 'wrongOption' : ''" ng-disabled="exerciseSubmitted"/>
 		               				<input type="submit" ng-click="dictateIt(part)" ng-if="part.tipo == 'Gap' && part.resposta == ''" style="background-color: #eee6e6;" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
 	               				</span>
 		               		</div>

@@ -7,6 +7,7 @@ public class ReadingQuestaoModel {
 	private Long id;
 	private String pergunta;
 	private Integer sequencia;
+	private Long resposta;
 	private List<ReadingAlternativaModel> readingAlternativas;
 
 	public Long getId() {
@@ -39,6 +40,14 @@ public class ReadingQuestaoModel {
 
 	public void setSequencia(Integer sequencia) {
 		this.sequencia = sequencia;
+	}
+
+	public Long getResposta() {
+		return resposta;
+	}
+
+	public void setResposta(Long resposta) {
+		this.resposta = resposta;
 	}
 
 }

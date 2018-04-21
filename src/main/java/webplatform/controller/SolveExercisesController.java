@@ -18,25 +18,40 @@ import webplatform.dao.AlternativaDao;
 import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioAlunoRespostaDao;
 import webplatform.dao.GrammarQuestaoDao;
+import webplatform.dao.GrammarRespostaDao;
 import webplatform.dao.ImagemDao;
 import webplatform.dao.PronunciationQuestaoDao;
 import webplatform.dao.PronunciationQuestaoParteDao;
+import webplatform.dao.PronunciationRespostaDao;
 import webplatform.dao.QuestaoDao;
 import webplatform.dao.ReadingAlternativaDao;
 import webplatform.dao.ReadingQuestaoDao;
+import webplatform.dao.ReadingRespostaDao;
+import webplatform.dao.VocabularyRespostaDao;
 import webplatform.model.AlternativaModel;
 import webplatform.model.ExercicioAlunoModel;
+import webplatform.model.GrammarQuestaoModel;
+import webplatform.model.ImagemModel;
+import webplatform.model.PronunciationQuestaoModel;
+import webplatform.model.PronunciationQuestaoParteModel;
 import webplatform.model.QuestaoModel;
+import webplatform.model.ReadingAlternativaModel;
+import webplatform.model.ReadingQuestaoModel;
 import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.ExercicioAlunoResposta;
+import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
+import webplatform.model.entity.GrammarResposta;
 import webplatform.model.entity.Imagem;
 import webplatform.model.entity.PronunciationQuestao;
 import webplatform.model.entity.PronunciationQuestaoParte;
+import webplatform.model.entity.PronunciationResposta;
 import webplatform.model.entity.Questao;
 import webplatform.model.entity.ReadingAlternativa;
 import webplatform.model.entity.ReadingQuestao;
+import webplatform.model.entity.ReadingResposta;
+import webplatform.model.entity.VocabularyResposta;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @RestController
@@ -71,6 +86,18 @@ public class SolveExercisesController {
 
 	@Autowired
 	private PronunciationQuestaoParteDao pronunciationQuestaoParteDao;
+
+	@Autowired
+	private VocabularyRespostaDao vocabularyRespostaDao;
+
+	@Autowired
+	private GrammarRespostaDao grammarRespostaDao;
+
+	@Autowired
+	private ReadingRespostaDao readingRespostaDao;
+
+	@Autowired
+	private PronunciationRespostaDao pronunciationRespostaDao;
 
 	/**
 	 * Search all the exercises to be resolved by the logged student
@@ -212,14 +239,95 @@ public class SolveExercisesController {
 	}
 
 	/**
-	 * Submit the questions resolved by the logged student
+	 * Submit the exercise resolved by the logged student
 	 * 
 	 * @param exercicioAlunoModel
 	 * @return
 	 */
 	@RequestMapping(value = "/submitExercise", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity submitExercise(@RequestBody ExercicioAlunoModel exercicioAlunoModel) {
-		return new ResponseEntity(HttpStatus.OK);
+		Integer totalQuestoes = 0;
+		Integer questoesCorretas = 0;
+
+		for (ImagemModel imagem : exercicioAlunoModel.getImagens()) {
+			totalQuestoes++;
+			VocabularyResposta vocabularyResposta = new VocabularyResposta();
+			vocabularyResposta.setExercicioAluno(new ExercicioAluno(exercicioAlunoModel.getIdExercicioAluno()));
+			vocabularyResposta.setImagem(new Imagem(imagem.getId()));
+			vocabularyResposta.setImagemResposta(exercicioAlunoModel.getImagens().get(imagem.getResposta()).getNome());
+			vocabularyRespostaDao.saveOrUpdate(vocabularyResposta);
+
+			if (imagem.getNome().equals(vocabularyResposta.getImagemResposta())) {
+				questoesCorretas++;
+			}
+		}
+
+		for (GrammarQuestaoModel grammarQuestaoModel : exercicioAlunoModel.getGrammarQuestions()) {
+			totalQuestoes++;
+			GrammarResposta grammarResposta = new GrammarResposta();
+			grammarResposta.setExercicioAluno(new ExercicioAluno(exercicioAlunoModel.getIdExercicioAluno()));
+			grammarResposta.setGrammarQuestao(new GrammarQuestao(grammarQuestaoModel.getId()));
+			grammarResposta.setGrammarQuestaoResposta(new GrammarDefinicao(
+					exercicioAlunoModel.getGrammarDefinitions().get(grammarQuestaoModel.getResposta()).getId()));
+			grammarRespostaDao.saveOrUpdate(grammarResposta);
+
+			if (grammarQuestaoModel.getDefinicaoResposta().getId() == grammarResposta.getGrammarQuestaoResposta()
+					.getId()) {
+				questoesCorretas++;
+			}
+		}
+
+		for (ReadingQuestaoModel readingQuestaoModel : exercicioAlunoModel.getReadingQuestions()) {
+			totalQuestoes++;
+			ReadingResposta readingResposta = new ReadingResposta();
+			readingResposta.setExercicioAluno(new ExercicioAluno(exercicioAlunoModel.getIdExercicioAluno()));
+			readingResposta.setReadingQuestao(new ReadingQuestao(readingQuestaoModel.getId()));
+			readingResposta.setReadingQuestaoResposta(new ReadingAlternativa(readingQuestaoModel.getResposta()));
+			readingRespostaDao.saveOrUpdate(readingResposta);
+			for (ReadingAlternativaModel readingAlternativaModel : readingQuestaoModel.getReadingAlternativas()) {
+				if (readingAlternativaModel.getCorreta()
+						&& readingAlternativaModel.getId() == readingResposta.getReadingQuestaoResposta().getId()) {
+					questoesCorretas++;
+					break;
+				}
+			}
+		}
+
+		for (PronunciationQuestaoModel pronunciationQuestaoModel : exercicioAlunoModel.getPronunciationQuestoes()) {
+			for (PronunciationQuestaoParteModel pronunciationQuestaoParteModel : pronunciationQuestaoModel
+					.getPronunciationQuestaoPartes()) {
+				if (pronunciationQuestaoParteModel.getTipo().equals("Gap")) {
+					totalQuestoes++;
+					PronunciationResposta pronunciationResposta = new PronunciationResposta();
+					pronunciationResposta
+							.setExercicioAluno(new ExercicioAluno(exercicioAlunoModel.getIdExercicioAluno()));
+					pronunciationResposta.setPronunciationQuestaoParte(
+							new PronunciationQuestaoParte(pronunciationQuestaoParteModel.getId()));
+					pronunciationResposta.setResposta(pronunciationQuestaoParteModel.getResposta());
+					pronunciationRespostaDao.saveOrUpdate(pronunciationResposta);
+
+					if (pronunciationQuestaoParteModel.getDescricao().replaceAll(" ", "").toLowerCase()
+							.equalsIgnoreCase(pronunciationResposta.getResposta().replaceAll(" ", "").toLowerCase())) {
+						questoesCorretas++;
+					}
+				}
+			}
+		}
+
+		ExercicioAluno exercicioAluno = exercicioAlunoDao.findById(exercicioAlunoModel.getIdExercicioAluno());
+		if (exercicioAluno.getChances() == 0) {
+			exercicioAluno.setChances(1);
+		}
+		exercicioAluno.setDataFim(new Date());
+		exercicioAluno.setWritingQuestaoResposta(exercicioAlunoModel.getWritingQuestaoResposta());
+		exercicioAluno.setTotalQuestoes(totalQuestoes);
+		exercicioAlunoModel.setTotalQuestoes(totalQuestoes);
+		exercicioAluno.setQuestoesCorretas(questoesCorretas);
+		exercicioAlunoModel.setQuestoesCorretas(questoesCorretas);
+		exercicioAlunoDao.saveOrUpdate(exercicioAluno);
+
+		return new ResponseEntity(exercicioAlunoModel, HttpStatus.OK);
+
 	}
 
 	// TODO: Remover

@@ -1,9 +1,7 @@
 package webplatform.model.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -35,11 +33,12 @@ public class ExercicioAluno implements java.io.Serializable {
 	private Exercicio exercicio;
 	private Integer nota;
 	private Integer chances;
+	private Integer totalQuestoes;
+	private Integer questoesCorretas;
 	private Date dataInicio;
 	private Date dataFim;
 	private String writingQuestaoResposta;
 	private Set<ExercicioAlunoResposta> exercicioAlunoRespostas = new HashSet<ExercicioAlunoResposta>();
-	private List<ForumPost> forumPosts = new ArrayList<ForumPost>();
 
 	public ExercicioAluno() {
 	}
@@ -110,6 +109,24 @@ public class ExercicioAluno implements java.io.Serializable {
 		this.chances = chances;
 	}
 
+	@Column(name = "TOTAL_QUESTOES", precision = 5, scale = 0)
+	public Integer getTotalQuestoes() {
+		return totalQuestoes;
+	}
+
+	public void setTotalQuestoes(Integer totalQuestoes) {
+		this.totalQuestoes = totalQuestoes;
+	}
+
+	@Column(name = "QUESTOES_CORRETAS", precision = 5, scale = 0)
+	public Integer getQuestoesCorretas() {
+		return questoesCorretas;
+	}
+
+	public void setQuestoesCorretas(Integer questoesCorretas) {
+		this.questoesCorretas = questoesCorretas;
+	}
+
 	@Column(name = "DATA_INICIO")
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getDataInicio() {
@@ -147,16 +164,6 @@ public class ExercicioAluno implements java.io.Serializable {
 
 	public void setExercicioAlunoRespostas(Set<ExercicioAlunoResposta> exercicioAlunoRespostas) {
 		this.exercicioAlunoRespostas = exercicioAlunoRespostas;
-	}
-
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicioAluno")
-	public List<ForumPost> getForumPosts() {
-		return forumPosts;
-	}
-
-	public void setForumPosts(List<ForumPost> forumPosts) {
-		this.forumPosts = forumPosts;
 	}
 
 }

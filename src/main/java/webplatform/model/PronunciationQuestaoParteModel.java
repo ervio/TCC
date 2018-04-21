@@ -6,6 +6,7 @@ public class PronunciationQuestaoParteModel {
 	private String descricao;
 	private String tipo;
 	private Integer sequencia;
+	private String resposta;
 
 	public Long getId() {
 		return id;
@@ -37,6 +38,14 @@ public class PronunciationQuestaoParteModel {
 
 	public void setSequencia(Integer sequencia) {
 		this.sequencia = sequencia;
+	}
+
+	public String getResposta() {
+		return resposta;
+	}
+
+	public void setResposta(String resposta) {
+		this.resposta = resposta;
 	}
 
 }

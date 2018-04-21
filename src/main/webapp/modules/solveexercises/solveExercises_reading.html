@@ -102,10 +102,9 @@
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
 		               			<a ui-sref="resolveExerciseLanguage" href="#">
-			   						<input class="btn btn-md btn-primary" type="submit" value="Back"/>
+			   						<input class="btn btn-md btn-primary" type="button" value="Back"/>
 								</a>
-								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
-								<input type="submit" ng-click="goToOralProduction()" class="btn btn-md btn-primary" value="Oral Production"/>
+								<input type="button" ng-click="goToOralProduction()" class="btn btn-md btn-primary" value="Oral Production"/>
 			   				</div>
 			   				
 							<div class="col-md-12">
@@ -126,8 +125,8 @@
 			   				
 			   					<label>{{$index + 1}}) {{question.pergunta}}</label>
 						    	<div ng-repeat="alternative in question.readingAlternativas" class="radio">
-							        <label>
-							            <input type="radio" ng-model="question.resposta" value="{{alternative.id}}">{{alternative.descricao}}
+							        <label ng-class="(exerciseSubmitted && alternative.correta ? 'correctOption' : exerciseSubmitted && !alternative.correta && (alternative.id == question.resposta) ? 'wrongOption' : '')">
+							            <input type="radio" ng-model="question.resposta" ng-class="exerciseSubmitted ? alternative.id == question.resposta ? 'correctOption' : 'wrongOption' : ''" ng-disabled="exerciseSubmitted" value="{{alternative.id}}">{{alternative.descricao}}
 							        </label>
 						    	</div>
 			   				

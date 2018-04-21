@@ -4,7 +4,8 @@ public class GrammarQuestaoModel {
 
 	private Long id;
 	private String questao;
-	private Long resposta;
+	private GrammarDefinicaoModel definicaoResposta;
+	private Integer resposta;
 
 	public Long getId() {
 		return id;
@@ -22,12 +23,20 @@ public class GrammarQuestaoModel {
 		this.questao = questao;
 	}
 
-	public Long getResposta() {
+	public Integer getResposta() {
 		return resposta;
 	}
 
-	public void setResposta(Long resposta) {
+	public void setResposta(Integer resposta) {
 		this.resposta = resposta;
+	}
+
+	public GrammarDefinicaoModel getDefinicaoResposta() {
+		return definicaoResposta;
+	}
+
+	public void setDefinicaoResposta(GrammarDefinicaoModel definicaoResposta) {
+		this.definicaoResposta = definicaoResposta;
 	}
 
 }

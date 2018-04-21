@@ -101,11 +101,10 @@
 			   				</div>
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
-		               			<a ui-sref="resolveExerciseVocabulary" href="#">
-			   						<input class="btn btn-md btn-primary" type="submit" value="Back"/>
-								</a>
-								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
-								<input type="submit" ng-click="goToReading()" class="btn btn-md btn-primary" value="Reading"/>
+		               			<a ui-sref="resolveExerciseVocabulary">
+									<input class="btn btn-md btn-primary" type="button" value="Back"/>		               			
+		               			</a>
+								<input type="button" ng-click="goToReading()" class="btn btn-md btn-primary" value="Reading"/>
 			   				</div>
 			   				
 		               	</div><br>
@@ -118,7 +117,7 @@
 		               	
 		               	<div class="row" style="margin-top: 10px;" ng-repeat="question in grammarQuestions">
 		               		<div class="col-md-2">
-		               			<select class="form-control selectpicker" ng-model="question.resposta">
+		               			<select class="form-control selectpicker" ng-model="question.resposta" ng-class="exerciseSubmitted ? question.definicaoResposta.id == grammarDefinitions[question.resposta].id ? 'correctOption' : 'wrongOption' : ''" ng-disabled="exerciseSubmitted">
 									<option value="">Select</option>
 									<option ng-repeat="n in [] | range:grammarDefinitions.length" value="{{n}}">{{n + 1}}</option>
 								</select>

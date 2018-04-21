@@ -19,6 +19,9 @@ public class ExercicioAlunoModel {
 	private List<PronunciationQuestaoModel> pronunciationQuestoes;
 	private long tempoResolucaoMillis;
 	private String tempoResolucaoString;
+	private String writingQuestaoResposta;
+	private Integer totalQuestoes;
+	private Integer questoesCorretas;
 
 	public AlunoModel getAluno() {
 		return aluno;
@@ -130,6 +133,30 @@ public class ExercicioAlunoModel {
 
 	public void setPronunciationQuestoes(List<PronunciationQuestaoModel> pronunciationQuestoes) {
 		this.pronunciationQuestoes = pronunciationQuestoes;
+	}
+
+	public String getWritingQuestaoResposta() {
+		return writingQuestaoResposta;
+	}
+
+	public void setWritingQuestaoResposta(String writingQuestaoResposta) {
+		this.writingQuestaoResposta = writingQuestaoResposta;
+	}
+
+	public Integer getTotalQuestoes() {
+		return totalQuestoes;
+	}
+
+	public void setTotalQuestoes(Integer totalQuestoes) {
+		this.totalQuestoes = totalQuestoes;
+	}
+
+	public Integer getQuestoesCorretas() {
+		return questoesCorretas;
+	}
+
+	public void setQuestoesCorretas(Integer questoesCorretas) {
+		this.questoesCorretas = questoesCorretas;
 	}
 
 }

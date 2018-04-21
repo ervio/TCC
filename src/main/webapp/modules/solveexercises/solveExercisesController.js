@@ -4,7 +4,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	$scope.exercise;
 	$scope.splittedLyrics = [];
 	$scope.error;
-	$scope.questionsSubmitted = false;
+	$rootScope.questionsSubmitted = false;
 	$scope.speaking = false;
 	
 	// TODO: Remover verificação de questões
@@ -49,6 +49,8 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		delete $rootScope.grammarDefinitions;
 		delete $rootScope.readingQuestions;
 		delete $rootScope.pronunciationQuestoes;
+		$rootScope.questionsSubmitted = false;
+		$rootScope.exerciseSubmitted = false;
 		
 		solveExercisesService.searchExercises($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
@@ -239,14 +241,14 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 					$(response.data).each(function(index, question) {
 						
 						$rootScope.pronunciationQuestoes.push(angular.copy(question));
-						$rootScope.pronunciationQuestoes[index].partes = [];
+						$rootScope.pronunciationQuestoes[index].pronunciationQuestaoPartes = [];
 						
 						solveExercisesService.searchPronunciationParts($rootScope.pronunciationQuestoes[index].id).then( 
 								function successCallback(response) {
 									
 									$(response.data).each(function(indexPart, part) {
 										part.resposta = "";
-										$rootScope.pronunciationQuestoes[index].partes.push(angular.copy(part));
+										$rootScope.pronunciationQuestoes[index].pronunciationQuestaoPartes.push(angular.copy(part));
 									});
 									
 								}, 
@@ -339,107 +341,107 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	
 	$scope.goToVocabulary = function(){
 		
-//		$scope.error = "";
-//		$scope.isLyricsCorrect = true;
-//		
-//		// Compares the lyrics length with the ordered list
-//		if($rootScope.models.lists.B.length == $scope.splittedLyrics.length){
-//			
-//			// Validates if it's in the correct order, if it's not error out
-//			$($scope.splittedLyrics).each(function(index, lyrics) {
-//				if(lyrics != $rootScope.models.lists.B[index].label){
-//					$scope.isLyricsCorrect = false;
-//					return false;
-//				}
-//			});
-//			
-//			if(!$scope.isLyricsCorrect){
-//				$scope.incrementChances();
-//				$scope.error = "The lyrics are not in the correct order.";
-//			}else{
+		$scope.error = "";
+		$scope.isLyricsCorrect = true;
+		
+		// Compares the lyrics length with the ordered list
+		if($rootScope.models.lists.B.length == $scope.splittedLyrics.length){
+			
+			// Validates if it's in the correct order, if it's not error out
+			$($scope.splittedLyrics).each(function(index, lyrics) {
+				if(lyrics != $rootScope.models.lists.B[index].label){
+					$scope.isLyricsCorrect = false;
+					return false;
+				}
+			});
+			
+			if(!$scope.isLyricsCorrect){
+				$scope.incrementChances();
+				$scope.error = "The lyrics are not in the correct order.";
+			}else{
 				$state.go("resolveExerciseVocabulary");
-//			}
-//			
-//		}else{
-//			$scope.incrementChances();
-//			$scope.error = "The lyrics are not in the correct order.";
-//		}
+			}
+			
+		}else{
+			$scope.incrementChances();
+			$scope.error = "The lyrics are not in the correct order.";
+		}
 		
 	};
 	
 	$scope.goToLanguage = function(){
-//		var questionsResolved = true
-//		$scope.error = "";
-//			
-//		for(var i = 0; i < $rootScope.vocabularyPictures.length; i++){
-//			if(!$rootScope.vocabularyPictures[i].resposta){
-//				questionsResolved = false;
-//				break;
-//			}
-//		}
-//		
-//		if(questionsResolved){
+		var questionsResolved = true
+		$scope.error = "";
+			
+		for(var i = 0; i < $rootScope.vocabularyPictures.length; i++){
+			if(!$rootScope.vocabularyPictures[i].resposta){
+				questionsResolved = false;
+				break;
+			}
+		}
+		
+		if(questionsResolved){
 			$state.go("resolveExerciseLanguage");
-//		}else{
-//			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
-//		}
+		}else{
+			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+		}
 	};
 	
 	$scope.goToReading = function(){
-//		var questionsResolved = true
-//		$scope.error = "";
-//			
-//		for(var i = 0; i < $rootScope.grammarQuestions.length; i++){
-//			if(!$rootScope.grammarQuestions[i].resposta){
-//				questionsResolved = false;
-//				break;
-//			}
-//		}
-//		
-//		if(questionsResolved){
+		var questionsResolved = true
+		$scope.error = "";
+			
+		for(var i = 0; i < $rootScope.grammarQuestions.length; i++){
+			if(!$rootScope.grammarQuestions[i].resposta){
+				questionsResolved = false;
+				break;
+			}
+		}
+		
+		if(questionsResolved){
 			$state.go("resolveExerciseReading");
-//		}else{
-//			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
-//		}
+		}else{
+			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+		}
 	};
 	
 	$scope.goToOralProduction = function(){
-//		var questionsResolved = true
-//		$scope.error = "";
-//			
-//		for(var i = 0; i < $rootScope.readingQuestions.length; i++){
-//			if(!$rootScope.readingQuestions[i].resposta){
-//				questionsResolved = false;
-//				break;
-//			}
-//		}
-//		
-//		if(questionsResolved){
+		var questionsResolved = true
+		$scope.error = "";
+			
+		for(var i = 0; i < $rootScope.readingQuestions.length; i++){
+			if(!$rootScope.readingQuestions[i].resposta){
+				questionsResolved = false;
+				break;
+			}
+		}
+		
+		if(questionsResolved){
 			$state.go("resolveExerciseOralProduction");
-//		}else{
-//			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
-//		}
+		}else{
+			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+		}
 		
 	};
 	
 	$scope.goToWriting = function(){
-//		var questionsResolved = true
-//		$scope.error = "";
-//			
-//		for(var i = 0; i < $rootScope.pronunciationQuestoes.length; i++){
-//			for(var j = 0; j < $rootScope.pronunciationQuestoes[i].partes.length; j++){
-//				if(angular.equals($rootScope.pronunciationQuestoes[i].partes[j].tipo, "Gap") && !$rootScope.pronunciationQuestoes[i].partes[j].resposta){
-//					questionsResolved = false;
-//					break;
-//				}
-//			}
-//		}
-//		
-//		if(questionsResolved){
+		var questionsResolved = true
+		$scope.error = "";
+			
+		for(var i = 0; i < $rootScope.pronunciationQuestoes.length; i++){
+			for(var j = 0; j < $rootScope.pronunciationQuestoes[i].pronunciationQuestaoPartes.length; j++){
+				if(angular.equals($rootScope.pronunciationQuestoes[i].pronunciationQuestaoPartes[j].tipo, "Gap") && !$rootScope.pronunciationQuestoes[i].pronunciationQuestaoPartes[j].resposta){
+					questionsResolved = false;
+					break;
+				}
+			}
+		}
+		
+		if(questionsResolved){
 			$state.go("resolveExerciseWriting");
-//		}else{
-//			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
-//		}
+		}else{
+			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+		}
 		
 	};
 	
@@ -504,13 +506,14 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 			$rootScope.exerciseToEdit.pronunciationQuestoes = angular.copy($rootScope.pronunciationQuestoes);
 			
 			solveExercisesService.submitExercise($rootScope.exerciseToEdit).then( 
-//				function successCallback(response) {
-//					$rootScope.exerciseToEdit.nota = response.data.nota;
-//					$scope.questionsSubmitted = true;
-//				}, 
-//				function errorCallback(response) {
-//					
-//				}
+				function successCallback(response) {
+					$rootScope.exerciseSubmitted = true;
+					$rootScope.exerciseToEdit.totalQuestoes = response.data.totalQuestoes;
+					$rootScope.exerciseToEdit.questoesCorretas = response.data.questoesCorretas;
+				}, 
+				function errorCallback(response) {
+					
+				}
 			);
 			
 		}

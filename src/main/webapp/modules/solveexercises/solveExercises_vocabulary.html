@@ -102,10 +102,9 @@
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
 		               			<a ui-sref="resolveExerciseLyrics" href="#">
-			   						<input class="btn btn-md btn-primary" type="submit" value="Back"/>
+			   						<input class="btn btn-md btn-primary" type="button" value="Back"/>
 								</a>
-								<input type="submit" ng-click="goToQuestionsResolution()" class="btn btn-md btn-primary" value="Next activity"/>
-								<input type="submit" ng-click="goToLanguage()" class="btn btn-md btn-primary" value="Grammar"/>
+								<input type="button" ng-click="goToLanguage()" class="btn btn-md btn-primary" value="Grammar"/>
 			   				</div>
 			   				
 		               	</div><br>
@@ -126,7 +125,7 @@
 								</div>
 									
 								<div class="col-md-12 form-group" align="center">
-									<select class="form-control selectpicker" ng-model="f.resposta" style="width: 50%;">
+									<select class="form-control selectpicker" ng-class="(exerciseSubmitted ? vocabularyPictures[f.resposta].nome == f.nome ? 'correctOption' : 'wrongOption' : '')" ng-model="f.resposta" ng-disabled="exerciseSubmitted" style="width: 50%;">
 										<option value="">Select</option>
 										<option ng-repeat="n in [] | range:vocabularyPictures.length" value="{{n}}">{{n + 1}}</option>
 									</select>
