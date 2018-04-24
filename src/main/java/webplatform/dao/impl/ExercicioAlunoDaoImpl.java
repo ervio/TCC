@@ -28,11 +28,13 @@ public class ExercicioAlunoDaoImpl extends BaseDao<ExercicioAluno> implements Ex
 		hibernateTemplate.saveOrUpdate(exercicioAluno);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ExercicioAluno> findNotResolvedByStudentId(Long studentId) {
 		DetachedCriteria criteria = getDetachedCriteria();
 		criteria.add(Restrictions.eq("aluno", new Aluno(studentId)));
-		criteria.add(Restrictions.isNull("nota"));
+		criteria.add(Restrictions.isNull("totalQuestoes"));
+		criteria.add(Restrictions.isNull("questoesCorretas"));
 		return (List<ExercicioAluno>) hibernateTemplate.findByCriteria(criteria);
 	}
 

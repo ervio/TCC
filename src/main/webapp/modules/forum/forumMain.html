@@ -8,15 +8,7 @@
 <!-- Custom Fonts -->
 <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
 
-<style>
-
-	.list-group{
-		margin-top: 20px;
-	}
-	
-</style>
-
-<body ng-controller="solveExercisesCtrl">
+<body ng-controller="forumCtrl">
 
 	<div class="row"></div>
 
@@ -46,7 +38,7 @@
                     <li ng-if="loggedUser.tipoConta == 'Teacher'">
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
                     </li>
-                    <li class="active" ng-if="loggedUser.tipoConta == 'Student'">
+                    <li ng-if="loggedUser.tipoConta == 'Student'">
                         <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
                     </li>
                     <li>
@@ -59,7 +51,7 @@
                     <li>
                         <a ui-sref="personalData"><i class="fa fa-fw fa-address-book"></i> Personal Data</a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a ui-sref="forumMain"><i class="fa fa-fw fa-comments"></i> Forum</a>
                     </li>
                     <li>
@@ -72,7 +64,7 @@
 
         <div id="page-wrapper">
         
-       		<form name="exercisesForm" role="form">
+       		<form name="forumMainForm" role="form">
 
 	            <div class="container-fluid">
 	
@@ -80,46 +72,68 @@
 	                <div class="row">
 	                    <div class="col-lg-12">
 	                        <h1 class="page-header">
-	                            Lessons Resolution
+	                            Forum
 	                        </h1>
 	                        <ol class="breadcrumb">
 	                            <li>
 	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
 	                            </li>
 	                            <li class="active">
-	                                <i class="fa fa-edit"></i> Solve Lessons
+	                                <i class="fa fa-comments"></i> Forum
 	                            </li>
 	                        </ol>
 	                    </div>
 	                </div>
 	                <!-- /.row -->
 	                
-	                <div ng-show="error" class="alert alert-danger">{{error}}</div>
+	                <div ng-if="error" class="alert alert-danger">{{error}}</div>
 	                
-	                <div ng-show="exercises.length == 0" class="alert alert-info">You don't have any lesson to resolve.</div>
+	                <div ng-if="exercises.length == 0" class="alert alert-info">There aren't forums to participate.</div>
 	                
-	                <div ng-show="exercises.length > 0">
+	                <div ng-if="exercises.length > 0">
 						
 		               	<div class="row">
 		               	
 			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
 			               	
 		               		<div class="col-md-12" style="text-align: right;">
-								<input type="submit" ng-disabled="!exerciseSelected" ng-click="goToExerciseResolution()" class="btn btn-md btn-primary" value="Answer"/>
+								<input type="submit" ng-click="goToForum()" class="btn btn-md btn-primary" value="Test"/>
 			   				</div>
 		   				
-		               	</div>
-		               	
-		               	<div class="list-group">
-						  <a ng-repeat="exercise in exercises" 
-						  	 ng-click="$parent.exerciseSelected = exercise; selectExercise(exerciseSelected)" 
-						  	 class="list-group-item" 
-						  	 ng-class="{active:exerciseSelected==exercise}">
-						  	 {{exercise.exercicio.musica.nome}}
-					  	  </a>
+		               	</div><br>
+
+						<!-- POST -->
+						<div class="post" style="background-color: #d2eff6;" ng-repeat="exercise in exercises">
+							<div class="wrap-ut pull-left">
+								<div class="userinfo pull-left">
+									<div class="avatar">
+										<img src="img/avatar.png" height="37" width="37">
+									</div>
+								</div>
+								<div class="posttext pull-left">
+									<h2>
+										<a ng-click="goToForum(exercise)" href="#">
+						  	 				{{exercise.writingQuestao}}
+					  	  				</a>
+									</h2>
+									<p>Level {{exercise.nivel}} - {{exercise.musica.nome}}</p>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="postinfo pull-left">
+								<div class="comments">
+									<div class="commentbg">
+										560
+										<div class="mark"></div>
+									</div>
+
+								</div>
+							</div>
+							<div class="clearfix"></div>
 						</div>
-			               	
-		 			</div>
+						<!-- POST -->
+
+					</div>
 	                
 	            </div>
 	            <!-- /.container-fluid -->

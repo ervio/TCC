@@ -17,6 +17,7 @@ import webplatform.dao.ExercicioDao;
 import webplatform.model.AlunoModel;
 import webplatform.model.ExercicioAlunoModel;
 import webplatform.model.ExercicioModel;
+import webplatform.model.MusicaModel;
 import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.ExercicioAluno;
 
@@ -28,8 +29,8 @@ public class RankingController {
 	private ExercicioDao exercicioDao;
 
 	/**
-	 * Search all the resolved exercises to put in the ranking and calculates
-	 * the resolution time
+	 * Search all the resolved exercises to put in the ranking and calculates the
+	 * resolution time
 	 * 
 	 * @return
 	 */
@@ -42,17 +43,19 @@ public class RankingController {
 			ExercicioModel exerciseModel = new ExercicioModel();
 			exerciseModel.setNivel(exercicio.getNivel());
 			exerciseModel.setNome(exercicio.getNome());
+			exerciseModel.setMusica(new MusicaModel());
+			exerciseModel.getMusica().setNome(exercicio.getMusica().getNome());
 			exerciseModel.setExercicioAlunos(new ArrayList<ExercicioAlunoModel>());
 
 			for (ExercicioAluno exercicioAluno : exercicio.getExercicioAlunos()) {
-				if (exercicioAluno.getNota() != null) {
+				if (exercicioAluno.getQuestoesCorretas() != null) {
 					ExercicioAlunoModel exercicioAlunoModel = new ExercicioAlunoModel();
 					exercicioAlunoModel.setAluno(new AlunoModel());
 					exercicioAlunoModel.getAluno().setNome(exercicioAluno.getAluno().getNome());
 					exercicioAlunoModel.setChances(exercicioAluno.getChances());
-					exercicioAlunoModel.setNota(exercicioAluno.getNota());
 					exercicioAlunoModel.setDataInicio(exercicioAluno.getDataInicio());
 					exercicioAlunoModel.setDataFim(exercicioAluno.getDataFim());
+					exercicioAlunoModel.setQuestoesCorretas(exercicioAluno.getQuestoesCorretas());
 					exercicioAlunoModel.setTempoResolucaoMillis(
 							exercicioAlunoModel.getDataFim().getTime() - exercicioAlunoModel.getDataInicio().getTime());
 

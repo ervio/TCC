@@ -13,4 +13,6 @@ public interface ExercicioDao {
 	public void delete(Exercicio exercicio);
 
 	public List<Exercicio> findResolvedExercises();
+
+	public List<Exercicio> listAll();
 }

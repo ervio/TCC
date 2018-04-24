@@ -115,6 +115,16 @@ app.factory("LazyRoute", function ($log) {
 				templateUrl: 'modules/solveexercises/solveExercises_writing.html',
 				controller: "solveExercisesCtrl"
 			})
+			.state('forumMain', {
+				url: '/WebPlatform/',
+				templateUrl: 'modules/forum/forumMain.html',
+				controller: "forumCtrl"
+			})
+			.state('forumTopic', {
+				url: '/WebPlatform/',
+				templateUrl: 'modules/forum/forumTopic.html',
+				controller: "forumCtrl"
+			})
 	    	;
         
         $log.log("Sub View1 state configured.");

@@ -46,9 +46,17 @@ public class ExercicioDaoImpl extends BaseDao<Exercicio> implements ExercicioDao
 		DetachedCriteria criteria = getDetachedCriteria();
 		criteria.add(Restrictions.isNotEmpty("exercicioAlunos"));
 		criteria.createAlias("exercicioAlunos", "exercicioAlunos");
-		criteria.add(Restrictions.isNotNull("exercicioAlunos.nota"));
+		criteria.add(Restrictions.isNotNull("exercicioAlunos.questoesCorretas"));
+		criteria.add(Restrictions.isNotNull("exercicioAlunos.totalQuestoes"));
 		criteria.addOrder(Order.asc("idExercicio"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		return (List<Exercicio>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Exercicio> listAll() {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Exercicio.class);
 		return (List<Exercicio>) hibernateTemplate.findByCriteria(criteria);
 	}
 }
