@@ -91,9 +91,144 @@
 	                
 	                <div ng-if="error" class="alert alert-danger">{{error}}</div>
 	                
-	                {{exerciseTopic.musica.nome}}
-	                
-	            </div>
+	                <div ng-repeat="post in posts">
+
+						<!-- POST -->
+						<div class="post topic" ng-if="!post.postRespondido">
+							<div class="topwrap">
+								<div class="userinfo pull-left">
+									<div class="avatar">
+										<img src="img/avatar.png" height="37" width="37">
+									</div>
+								</div>
+								<div class="posttext pull-left">
+									<p>{{post.texto}}</p>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="postinfobot">
+
+								<div class="prev pull-left">
+									<a ng-click="replyAnotherPost(post)" href="#"><i class="fa fa-reply" title="Reply"></i></a>
+								</div>
+
+								<div class="posted pull-left">
+									<i class="fa fa-clock-o"></i> Posted on : {{post.dataPostagem | date:"dd MMM"}} @ {{post.dataPostagem | date:"h:mma"}}
+								</div>
+
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						<!-- POST -->
+
+						<!-- POST -->
+						<div class="post topic" ng-if="post.postRespondido">
+							<div class="topwrap">
+								<div class="userinfo pull-left">
+									<div class="avatar">
+										<img src="img/avatar.png" height="37" width="37">
+									</div>
+
+								</div>
+								<div class="posttext pull-left">
+
+									<blockquote>
+										<span class="original">Original Posted by - {{post.postRespondido.aluno ? post.postRespondido.aluno.nome : post.postRespondido.professor.nome}}</span>
+										{{post.postRespondido.texto}}
+									</blockquote>
+									<p>{{post.texto}}</p>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="postinfobot">
+
+								<div class="prev pull-left">
+									<a ng-click="replyAnotherPost(post)" href="#"><i class="fa fa-reply" title="Reply"></i></a>
+								</div>
+
+								<div class="posted pull-left">
+									<i class="fa fa-clock-o"></i> Posted on : {{post.dataPostagem | date:"dd MMM"}} @ {{post.dataPostagem | date:"h:mma"}}
+								</div>
+
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						<!-- POST -->
+
+					</div>
+
+					<!-- POST -->
+					<div class="post topic" ng-if="postTemp.postRespondido">
+						<div class="topwrap">
+							<div class="userinfo pull-left">
+								<div class="avatar">
+									<img src="img/avatar.png" height="37" width="37">
+								</div>
+							</div>
+							<div class="posttext pull-left">
+								<blockquote>
+									<span class="original">Original Posted by - theguy_21:</span>
+									{{postTemp.postRespondido.texto}}
+								</blockquote>
+
+								<div class="textwraper">
+									<div class="postreply">Post a Reply</div>
+									<textarea ng-model="postTemp.texto" name="reply" id="reply"
+										placeholder="Type your message here"></textarea>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="postinfobot">
+
+							<div class="pull-right postreply">
+								<div class="pull-left">
+									<button type="button" ng-click="replyPost()"
+										class="btn btn-primary">Post Reply</button>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+
+
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<!-- POST -->
+
+					<!-- POST -->
+					<div class="post topic" ng-if="!postTemp.postRespondido">
+						<div class="topwrap">
+							<div class="userinfo pull-left">
+								<div class="avatar">
+									<img src="img/avatar.png" height="37" width="37">
+								</div>
+							</div>
+							<div class="posttext pull-left">
+								<div class="textwraper">
+									<div class="postreply">Post a Reply</div>
+									<textarea ng-model="postTemp.texto" name="reply" id="reply"
+										placeholder="Type your message here"></textarea>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="postinfobot">
+
+							<div class="pull-right postreply">
+								<div class="pull-left">
+									<button type="button" ng-click="replyPost()"
+										class="btn btn-primary">Post Reply</button>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+
+
+							<div class="clearfix"></div>
+						</div>
+					</div>
+					<!-- POST -->
+
+				</div>
 	            <!-- /.container-fluid -->
 	            
             </form>
@@ -103,5 +238,7 @@
 
     </div>
     <!-- /#wrapper -->
+    
+    <div ng-init="initTopic()"></div>
     
 </body>

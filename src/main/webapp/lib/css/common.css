@@ -232,3 +232,48 @@
 .postinfobot .next a i {
     padding-right: 18px;
 }
+
+.post blockquote .original,
+.postreply {
+    font-size: 12px;
+    color: #bdc3c7;
+    display: block;
+    font-family: 'Open Sans Regular', sans-serif; 
+}
+
+.textwraper textarea {
+    border: none;
+    box-shadow: none;
+    background-color: #f1f1f1;
+    /*    width: 610px;*/
+    width: 100%;
+}
+
+.textwraper {
+    background-color: #f1f1f1;
+    border-radius: 2px;
+    padding:18px;
+}
+
+.notechbox {
+    width: 20px;
+}
+
+.notechbox input {
+    width: 12px;
+    box-shadow: none;
+    margin-top: 8px;
+    border-color: #bdc3c7;
+}
+
+.notechbox input:active,
+.notechbox input:focus,
+.notechbox input:hover {
+    box-shadow: none;
+}
+
+.postinfobot label {
+    color: #bdc3c7;
+    font-size: 12px;
+    font-family: 'Open Sans Regular', sans-serif; 
+}
