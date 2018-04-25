@@ -6,7 +6,7 @@ angular.module('app').controller("forumCtrl", function($scope, $rootScope, $stat
 		texto : ""
 	}; 
 	
-	$scope.searchForumTopics = function(){
+	$scope.searchForumTopics = function(){ 
 		forumService.getAllExercises().then( 
 			function successCallback(response) {
 				$(response.data).each(function(index, exercise) {

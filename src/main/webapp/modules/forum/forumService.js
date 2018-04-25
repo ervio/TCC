@@ -8,7 +8,7 @@ angular.module("app").service("forumService", function($http, constants){
 	// Call the getForumPosts service from ForumController class
 	this.getForumPosts = function(exerciseId){
 		return $http.get(constants.baseUrl + "/getForumPosts/" + exerciseId);
-	};
+	}; 
 	
 	// Call the replyPost service from ForumController class
 	this.replyPost = function(forumPost){

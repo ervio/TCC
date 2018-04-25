@@ -3,7 +3,7 @@ package webplatform.model;
 public class AlunoModel {
 
 	private String nome;
-	private Long id;
+	private Long id; 
 
 	public String getNome() {
 		return nome;

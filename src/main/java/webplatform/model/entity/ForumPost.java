@@ -1,4 +1,4 @@
-package webplatform.model.entity;
+package webplatform.model.entity; 
 // default package
 
 import java.util.Date;

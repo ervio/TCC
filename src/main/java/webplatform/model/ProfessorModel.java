@@ -1,4 +1,4 @@
-package webplatform.model;
+package webplatform.model; 
 
 public class ProfessorModel {
 
