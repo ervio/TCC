@@ -41,7 +41,7 @@
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
                     </li>
                     <li class="active" ng-if="loggedUser.tipoConta == 'Student'">
-                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Lesson Resolution</a>
                     </li>
                     <li>
                         <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
@@ -81,7 +81,7 @@
 	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
 	                            </li>
 	                            <li>
-	                                <i class="fa fa-edit"></i>  <a ui-sref="solveExercises">Solve Lessons</a>
+	                                <i class="fa fa-puzzle-piece"></i>  <a ui-sref="solveExercises">Lesson Resolution</a>
 	                            </li>
 	                            <li class="active">
 	                                <i class="fa fa-edit"></i> Writing Practice
@@ -109,7 +109,7 @@
 		               			<a ui-sref="resolveExerciseOralProduction" href="#">
 			   						<input class="btn btn-md btn-primary" type="button" value="Back"/>
 								</a>
-								<input type="submit" ng-click="submitExercise()" class="btn btn-md btn-primary" value="button" ng-if="!exerciseSubmitted"/>
+								<input type="submit" ng-click="submitExercise()" class="btn btn-md btn-primary" value="Submit" ng-if="!exerciseSubmitted"/>
 								<a ui-sref="solveExercises" ng-if="exerciseSubmitted">
 			   						<input class="btn btn-md btn-primary" type="submit" value="Back to Lessons Screen"/>
 								</a>

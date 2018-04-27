@@ -39,7 +39,7 @@
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
                     </li>
                     <li ng-if="loggedUser.tipoConta == 'Student'">
-                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Lesson Resolution</a>
                     </li>
                     <li>
                         <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
@@ -96,10 +96,6 @@
 		               	
 			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
 			               	
-		               		<div class="col-md-12" style="text-align: right;">
-								<input type="submit" ng-click="goToForum()" class="btn btn-md btn-primary" value="Test"/>
-			   				</div>
-		   				
 		               	</div><br>
 
 						<!-- POST -->
@@ -123,7 +119,7 @@
 							<div class="postinfo pull-left">
 								<div class="comments">
 									<div class="commentbg">
-										560
+										{{exercise.totalPosts}}
 										<div class="mark"></div>
 									</div>
 

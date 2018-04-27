@@ -1183,6 +1183,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  $scope.selectQuestion = function(question, index){
 		  $scope.questionSelected = question;
 		  $scope.questionSelectedIndex = index;
+		  $scope.grammarPractice.readingAlternativeInput = "";
+		  $scope.grammarPractice.readingAlternativeAnswer = "";
 		  $scope.readingAlternativeSelected = "";
 	  };
 	  

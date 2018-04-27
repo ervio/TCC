@@ -52,7 +52,7 @@
 
 /*--- Post --*/
 .post {
-    background-color: #ffffff;
+    background-color: #d2eff6;
 
     border-radius: 2px;
     box-shadow: 0 1px 2px #c9cccd;
@@ -74,7 +74,7 @@
     padding-top: 20px;
     padding-bottom: 15px;
 
-    color: #989c9e;
+    color: black;
     font-size: 14px;
     font-family: 'Open Sans Light', sans-serif;   
     line-height: 25px;
@@ -115,7 +115,7 @@
 
 
 .post .comments .commentbg {
-    background-color: #bdc3c7;
+    background-color: #5c7382;
     border-radius: 2px;
     display: inline-block;
     padding: 12px 17px;
@@ -128,7 +128,7 @@
 .post .comments .commentbg .mark {
     width: 11px;
     height: 11px;
-    background-color: #bdc3c7;
+    background-color: #5c7382;
     position: absolute;
     bottom: 0;
     left: 43%;
@@ -202,20 +202,20 @@
 
 .postinfobot .prev a {
     font-size: 18px;
-    color: #bdc3c7;
+    color: black;
 }
 
 .postinfobot .posted {
     width: 300px;
     margin-left: 18px;
     font-size: 12px;
-    color: #bdc3c7;
+    color: black;
     font-family: 'Open Sans Regular', sans-serif; 
 }
 
 .postinfobot .posted i {
     font-size: 18px;
-    color: #bdc3c7;
+    color: black;
     padding-right: 8px;
 }
 
@@ -236,7 +236,7 @@
 .post blockquote .original,
 .postreply {
     font-size: 12px;
-    color: #bdc3c7;
+    color: black;
     display: block;
     font-family: 'Open Sans Regular', sans-serif; 
 }

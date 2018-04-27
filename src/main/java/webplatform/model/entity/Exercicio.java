@@ -37,6 +37,7 @@ public class Exercicio implements java.io.Serializable {
 	private String writingQuestao;
 	private int valorNotaMaxima;
 	private Byte media;
+	private Integer totalPosts;
 	private Set<ExercicioAluno> exercicioAlunos = new HashSet<ExercicioAluno>();
 	private Set<Questao> questoes = new HashSet<Questao>();
 	private List<Imagem> imagens = new ArrayList<Imagem>();
@@ -134,6 +135,15 @@ public class Exercicio implements java.io.Serializable {
 
 	public void setValorNotaMaxima(int valorNotaMaxima) {
 		this.valorNotaMaxima = valorNotaMaxima;
+	}
+
+	@Column(name = "TOTAL_POSTS", precision = 5, scale = 0)
+	public Integer getTotalPosts() {
+		return totalPosts;
+	}
+
+	public void setTotalPosts(Integer totalPosts) {
+		this.totalPosts = totalPosts;
 	}
 
 	@Column(name = "MEDIA", precision = 2, scale = 0)

@@ -5,12 +5,16 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import webplatform.dao.ExercicioDao;
+import webplatform.model.entity.Aluno;
 import webplatform.model.entity.Exercicio;
+import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.Professor;
 
 @Transactional
@@ -57,6 +61,20 @@ public class ExercicioDaoImpl extends BaseDao<Exercicio> implements ExercicioDao
 	@Override
 	public List<Exercicio> listAll() {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Exercicio.class);
+		return (List<Exercicio>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Exercicio> findNotAssignedExercises(Long studentId) {
+		DetachedCriteria subqueryExercicioAluno = DetachedCriteria.forClass(ExercicioAluno.class);
+		subqueryExercicioAluno.createAlias("exercicio", "exercicio");
+		subqueryExercicioAluno.add(Restrictions.eq("aluno", new Aluno(studentId)));
+		subqueryExercicioAluno.setProjection(Projections.property("exercicio.idExercicio"));
+
+		DetachedCriteria criteria = DetachedCriteria.forClass(Exercicio.class);
+		criteria.add(Property.forName("idExercicio").notIn(subqueryExercicioAluno));
+
 		return (List<Exercicio>) hibernateTemplate.findByCriteria(criteria);
 	}
 }

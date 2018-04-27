@@ -1,6 +1,7 @@
-angular.module('app').controller("solveExercisesCtrl", function($scope, $rootScope, $state, Pubnub, LazyRoute, solveExercisesService, tts){
+angular.module('app').controller("solveExercisesCtrl", function($scope, $rootScope, $state, Pubnub, LazyRoute, solveExercisesService, exercisesManagementService, tts){
 	
-	$scope.exercises = [];
+	$scope.exercisesAssigned = [];
+	$scope.allExercises = [];
 	$scope.exercise;
 	$scope.splittedLyrics = [];
 	$scope.error;
@@ -39,7 +40,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		$rootScope.pronunciationQuestoes = [];
 	}
 	
-	// Method called when the main screen with exercises to be resolved is open. It calls the method searchExercises from solveExercisesService
+	// Method called when the main screen with exercises to be resolved is open. It calls the method searchAssignedExercises from solveExercisesService
 	$scope.init = function(){
 		
 		delete $rootScope.models;
@@ -52,13 +53,26 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		$rootScope.questionsSubmitted = false;
 		$rootScope.exerciseSubmitted = false;
 		
-		solveExercisesService.searchExercises($rootScope.loggedUser.id).then( 
+		solveExercisesService.searchAllNotAssignedExercises($rootScope.loggedUser.id).then(
 			function successCallback(response) {
 				
 				$(response.data).each(function(index, exercise) {
-					$scope.exercises.push(angular.copy(exercise));
+					$scope.allExercises.push(angular.copy(exercise));
 				});
 				
+				// SearchAssignedExercises
+				solveExercisesService.searchAssignedExercises($rootScope.loggedUser.id).then( 
+					function successCallback(response) {
+						
+						$(response.data).each(function(index, exercise) {
+							$scope.exercisesAssigned.push(angular.copy(exercise));
+						});
+						
+					}, 
+					function errorCallback(response) {
+						
+					}
+				);
 			}, 
 			function errorCallback(response) {
 				
@@ -268,7 +282,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		
 	};
 	
-	// The method gets the selected exercise
+	// The method gets the selected assigned exercise
 	$scope.selectExercise = function(iterationExercise){
 		 $scope.exercise =  angular.copy(iterationExercise);
 	};
@@ -278,6 +292,22 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		 $rootScope.exerciseToEdit = (angular.copy($scope.exercise));
 		 $state.go("resolveExerciseLyrics");
 	}; 
+	
+	// Call the method assignExercise from exercisesManagementService
+	$scope.answerUnassignedExercise = function(){
+		$scope.studentsIds = [];
+		$scope.studentsIds.push($rootScope.loggedUser.id);
+		
+		exercisesManagementService.assignExercise($scope.studentsIds, $scope.exercise.idExercicio).then( 
+			function successCallback(response) {
+				$scope.exercise =  angular.copy(response.data[0]);
+				$scope.goToExerciseResolution();
+			}, 
+			function errorCallback(response) {
+				
+			}
+		);
+	};
 	
 	// The method is called each time the video ends, when it stops and also when the user submits the lyrics in the incorrect order
 	$scope.incrementChances = function(){

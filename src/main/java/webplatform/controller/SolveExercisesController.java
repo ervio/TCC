@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import webplatform.dao.AlternativaDao;
 import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioAlunoRespostaDao;
+import webplatform.dao.ExercicioDao;
+import webplatform.dao.ForumPostDao;
 import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.GrammarRespostaDao;
 import webplatform.dao.ImagemDao;
@@ -38,8 +40,10 @@ import webplatform.model.QuestaoModel;
 import webplatform.model.ReadingAlternativaModel;
 import webplatform.model.ReadingQuestaoModel;
 import webplatform.model.entity.Alternativa;
+import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.ExercicioAlunoResposta;
+import webplatform.model.entity.ForumPost;
 import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.GrammarResposta;
@@ -99,17 +103,35 @@ public class SolveExercisesController {
 	@Autowired
 	private PronunciationRespostaDao pronunciationRespostaDao;
 
+	@Autowired
+	private ForumPostDao forumPostDao;
+
+	@Autowired
+	private ExercicioDao exercicioDao;
+
+	/**
+	 * Search all the assigned exercises to be resolved by the logged student
+	 * 
+	 * @param studentId
+	 * @return
+	 */
+	@RequestMapping(value = "/searchAssignedExercises/{studentId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchAssignedExercises(@PathVariable("studentId") String studentId) {
+		List<ExercicioAluno> exercisesToResolve = exercicioAlunoDao
+				.findNotResolvedByStudentId(Long.parseLong(studentId));
+		return new ResponseEntity(exercisesToResolve, HttpStatus.OK);
+	}
+
 	/**
 	 * Search all the exercises to be resolved by the logged student
 	 * 
 	 * @param studentId
 	 * @return
 	 */
-	@RequestMapping(value = "/searchExercisesNotResolved/{studentId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity searchExercises(@PathVariable("studentId") String studentId) {
-		List<ExercicioAluno> exercisesToResolve = exercicioAlunoDao
-				.findNotResolvedByStudentId(Long.parseLong(studentId));
-		return new ResponseEntity(exercisesToResolve, HttpStatus.OK);
+	@RequestMapping(value = "/searchAllNotAssignedExercises/{studentId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchAllNotAssignedExercises(@PathVariable("studentId") String studentId) {
+		List<Exercicio> exercises = exercicioDao.findNotAssignedExercises(Long.parseLong(studentId));
+		return new ResponseEntity(exercises, HttpStatus.OK);
 	}
 
 	/**
@@ -325,6 +347,14 @@ public class SolveExercisesController {
 		exercicioAluno.setQuestoesCorretas(questoesCorretas);
 		exercicioAlunoModel.setQuestoesCorretas(questoesCorretas);
 		exercicioAlunoDao.saveOrUpdate(exercicioAluno);
+
+		ForumPost post = new ForumPost(null, exercicioAluno.getAluno(), exercicioAluno.getExercicio(), null, null,
+				exercicioAluno.getWritingQuestaoResposta(), new Date());
+		forumPostDao.saveOrUpdate(post);
+
+		Exercicio exercicio = exercicioAluno.getExercicio();
+		exercicio.setTotalPosts(exercicio.getTotalPosts() + 1);
+		exercicioDao.saveOrUpdate(exercicio);
 
 		return new ResponseEntity(exercicioAlunoModel, HttpStatus.OK);
 

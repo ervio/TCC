@@ -1,6 +1,6 @@
 package webplatform.controller;
 
-import java.util.Date; 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +84,10 @@ public class ForumController {
 		forumPostDao.saveOrUpdate(post);
 
 		List<ForumPost> posts = forumPostDao.findByExercise(forumPostModel.getExercicio().getIdExercicio());
+
+		Exercicio exercicio = posts.get(0).getExercicio();
+		exercicio.setTotalPosts(exercicio.getTotalPosts() + 1);
+		exercicioDao.saveOrUpdate(exercicio);
 
 		return new ResponseEntity(posts, HttpStatus.OK);
 	}

@@ -47,7 +47,7 @@
                         <a ui-sref="invitation"><i class="fa fa-fw fa-users"></i> Invitation</a>
                     </li>
                     <li class="active" ng-if="loggedUser.tipoConta == 'Student'">
-                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Solve Lessons</a>
+                        <a ui-sref="solveExercises"><i class="fa fa-fw fa-puzzle-piece"></i> Lesson Resolution</a>
                     </li>
                     <li>
                         <a ui-sref="performance"><i class="fa fa-fw fa-line-chart"></i> Performance Report</a>
@@ -87,7 +87,7 @@
 	                                <i class="fa fa-home"></i>  <a ui-sref="main">Home</a>
 	                            </li>
 	                            <li class="active">
-	                                <i class="fa fa-edit"></i> Solve Lessons
+	                                <i class="fa fa-puzzle-piece"></i> Lesson Resolution
 	                            </li>
 	                        </ol>
 	                    </div>
@@ -96,30 +96,70 @@
 	                
 	                <div ng-show="error" class="alert alert-danger">{{error}}</div>
 	                
-	                <div ng-show="exercises.length == 0" class="alert alert-info">You don't have any lesson to resolve.</div>
+	                <uib-tabset active="activeForm">
 	                
-	                <div ng-show="exercises.length > 0">
-						
-		               	<div class="row">
-		               	
-			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	
-		               		<div class="col-md-12" style="text-align: right;">
-								<input type="submit" ng-disabled="!exerciseSelected" ng-click="goToExerciseResolution()" class="btn btn-md btn-primary" value="Answer"/>
-			   				</div>
-		   				
-		               	</div>
-		               	
-		               	<div class="list-group">
-						  <a ng-repeat="exercise in exercises" 
-						  	 ng-click="$parent.exerciseSelected = exercise; selectExercise(exerciseSelected)" 
-						  	 class="list-group-item" 
-						  	 ng-class="{active:exerciseSelected==exercise}">
-						  	 {{exercise.exercicio.musica.nome}}
-					  	  </a>
-						</div>
-			               	
-		 			</div>
+	                	<uib-tab index="0" heading="All lessons">
+	                	
+	                		<br ng-if="allExercises.length == 0">
+	                	
+	                		<div ng-show="allExercises.length == 0" class="alert alert-info">There aren't unassigned exercises to be resolved.</div>
+
+							<div ng-show="allExercises.length > 0">
+		
+								<div class="row">
+		
+									<br>
+		
+									<div class="col-md-12" style="text-align: right;">
+										<input type="submit" ng-disabled="!unassignedExerciseSelected"
+											ng-click="answerUnassignedExercise()"
+											class="btn btn-md btn-primary" value="Answer" />
+									</div>
+		
+								</div>
+		
+								<div class="list-group">
+									<a ng-repeat="exercise in allExercises"
+										ng-click="$parent.unassignedExerciseSelected = exercise; selectExercise(unassignedExerciseSelected)"
+										class="list-group-item"
+										ng-class="{active:unassignedExerciseSelected==exercise}">
+										{{exercise.musica.nome}} - Level {{exercise.nivel}}</a>
+								</div>
+		
+							</div>	
+	                	
+	                	</uib-tab>
+	                	<uib-tab index="1" heading="Lessons assigned to me">
+	                	
+	                		<div ng-show="exercisesAssigned.length == 0" class="alert alert-info">You don't have any lesson to resolve.</div>
+
+							<div ng-show="exercisesAssigned.length > 0">
+		
+								<div class="row">
+		
+									<br>
+		
+									<div class="col-md-12" style="text-align: right;">
+										<input type="submit" ng-disabled="!assignedExerciseSelected"
+											ng-click="goToExerciseResolution()"
+											class="btn btn-md btn-primary" value="Answer" />
+									</div>
+		
+								</div>
+		
+								<div class="list-group">
+									<a ng-repeat="exercise in exercisesAssigned"
+										ng-click="$parent.assignedExerciseSelected = exercise; selectExercise(assignedExerciseSelected)"
+										class="list-group-item"
+										ng-class="{active:assignedExerciseSelected==exercise}">
+										{{exercise.exercicio.musica.nome}} - Level {{exercise.exercicio.nivel}} </a>
+								</div>
+		
+							</div>
+
+					</uib-tab>
+	                
+	                </uib-tabset>
 	                
 	            </div>
 	            <!-- /.container-fluid -->

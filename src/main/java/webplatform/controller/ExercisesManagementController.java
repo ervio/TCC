@@ -492,13 +492,17 @@ public class ExercisesManagementController {
 	@RequestMapping(value = "/assignExercise/{studentsIds}/{idExercicio}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity assignExercise(@PathVariable String[] studentsIds,
 			@PathVariable String idExercicio) {
+
+		List<ExercicioAluno> assignedExercises = new ArrayList<>();
+
 		for (String studentId : studentsIds) {
 			ExercicioAluno exercicioAluno = new ExercicioAluno();
 			exercicioAluno.setAluno(new Aluno(Long.parseLong(studentId)));
 			exercicioAluno.setExercicio(new Exercicio(Long.parseLong(idExercicio)));
 			exercicioAlunoDao.saveOrUpdate(exercicioAluno);
+			assignedExercises.add(exercicioAlunoDao.findById(exercicioAluno.getIdExercicioAluno()));
 		}
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity(assignedExercises, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/saveFile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

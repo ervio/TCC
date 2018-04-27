@@ -1,4 +1,4 @@
-package webplatform.model.entity; 
+package webplatform.model.entity;
 // default package
 
 import java.util.Date;
@@ -40,13 +40,14 @@ public class ForumPost implements java.io.Serializable {
 	}
 
 	public ForumPost(Long id, Aluno aluno, Exercicio exercicio, Professor professor, ForumPost postRespondido,
-			String texto) {
+			String texto, Date dataPostagem) {
 		this.id = id;
 		this.aluno = aluno;
 		this.exercicio = exercicio;
 		this.professor = professor;
 		this.postRespondido = postRespondido;
 		this.texto = texto;
+		this.dataPostagem = dataPostagem;
 	}
 
 	@Id

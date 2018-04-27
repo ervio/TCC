@@ -14,5 +14,7 @@ public interface ExercicioDao {
 
 	public List<Exercicio> findResolvedExercises();
 
+	public List<Exercicio> findNotAssignedExercises(Long studentId);
+
 	public List<Exercicio> listAll();
 }

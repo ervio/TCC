@@ -1,8 +1,14 @@
 angular.module("app").service("solveExercisesService", function($http, constants){
 	
-	// Call the searchExercisesNotResolved service from SolveExercisesController class
-	this.searchExercises = function(studentId) {	
-		return $http.get(constants.baseUrl + "/searchExercisesNotResolved/" + studentId);
+	// Call the searchAssignedExercises service from SolveExercisesController class
+	this.searchAssignedExercises = function(studentId) {	
+		return $http.get(constants.baseUrl + "/searchAssignedExercises/" + studentId);
+	};
+	
+	
+	// Call the searchAllNotAssignedExercises service from SolveExercisesController class
+	this.searchAllNotAssignedExercises = function(studentId) {	
+		return $http.get(constants.baseUrl + "/searchAllNotAssignedExercises/" + studentId);
 	};
 	
 	// Call the updateExercise service from SolveExercisesController class
