@@ -2,6 +2,7 @@ package webplatform.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,8 @@ public class LoginController {
 	private AlunoDao alunoDao;
 
 	/**
-	 * Validates the user access in ALUNO and PROFESSOR tables using the
-	 * username and password informed by the user
+	 * Validates the user access in ALUNO and PROFESSOR tables using the username
+	 * and password informed by the user
 	 * 
 	 * @param email
 	 * @param password
@@ -44,7 +45,7 @@ public class LoginController {
 		// Search user in PROFESSOR table
 		if (!teacherList.isEmpty()) {
 			Professor teacher = teacherList.get(0);
-			String country = teacher.getPais() != null ? teacher.getPais().getid().toString() : null;
+			String country = !StringUtils.isEmpty(teacher.getPais()) ? teacher.getPais() : null;
 
 			UserModel userModel = new UserModel(teacher.getId(), teacher.getNome(), teacher.getEmail(),
 					AccountTypeEnum.TEACHER.getValue(), teacher.getPassword(), teacher.getSobrenome(),
@@ -58,7 +59,7 @@ public class LoginController {
 
 			if (!studentList.isEmpty()) {
 				Aluno student = studentList.get(0);
-				String country = student.getPais() != null ? student.getPais().getid().toString() : null;
+				String country = !StringUtils.isEmpty(student.getPais()) ? student.getPais() : null;
 
 				UserModel userModel = new UserModel(student.getId(), student.getNome(), student.getEmail(),
 						AccountTypeEnum.STUDENT.getValue(), student.getPassword(), student.getSobrenome(),

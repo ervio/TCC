@@ -77,7 +77,7 @@ public class PersonalDataController {
 			}
 
 			professor.setGenero(userModel.getGenero());
-			professor.setPais(new Pais(Long.parseLong(userModel.getPais())));
+			professor.setPais(userModel.getPais());
 			professor.setEspecialidade(userModel.getEspecialidade());
 			professor.setNomeInstituicao(userModel.getNomeInstituicao());
 
@@ -125,7 +125,7 @@ public class PersonalDataController {
 			}
 
 			aluno.setGenero(userModel.getGenero());
-			aluno.setPais(new Pais(Long.parseLong(userModel.getPais())));
+			aluno.setPais(userModel.getPais());
 
 			try {
 				alunoDao.saveOrUpdate(aluno);

@@ -31,7 +31,7 @@ public class Aluno implements java.io.Serializable {
 
 	private Long id;
 	private Professor professor;
-	private Pais pais;
+	private String pais;
 	private String nome;
 	private String sobrenome;
 	private String email;
@@ -48,7 +48,7 @@ public class Aluno implements java.io.Serializable {
 	}
 
 	public Aluno(Long id, Professor professor, String nome, String email, String password, Set<Convite> convites,
-			Set<ExercicioAluno> exercicioAlunos, String sobrenome, String genero, Pais pais) {
+			Set<ExercicioAluno> exercicioAlunos, String sobrenome, String genero, String pais) {
 		this.id = id;
 		this.professor = professor;
 		this.nome = nome;
@@ -85,13 +85,12 @@ public class Aluno implements java.io.Serializable {
 		this.professor = professor;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "PAIS")
-	public Pais getPais() {
-		return this.pais;
+	@Column(name = "PAIS", length = 100)
+	public String getPais() {
+		return pais;
 	}
 
-	public void setPais(Pais pais) {
+	public void setPais(String pais) {
 		this.pais = pais;
 	}
 
