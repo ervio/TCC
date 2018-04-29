@@ -1,10 +1,9 @@
-angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $timeout, $rootScope, $state, Upload, LazyRoute, exercisesManagementService, constants){
+angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce, $timeout, $rootScope, $state, Upload, LazyRoute, exercisesManagementService, constants){
 	
 	$scope.assignSuccess = false;
 	$scope.assignError = false;
 	$scope.allSelected = false;
 	$scope.basicExercisesList = [];
-	$scope.alternativesToDelete = [];
 	$scope.picturesToDelete = [];
 	$scope.grammarAlternativesToDelete = [];
 	$scope.grammarDefinitionsToDelete = [];
@@ -18,8 +17,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	$scope.alternatives = [];
 	$scope.readingQuestions = [];
 	$scope.pronunciationQuestions = [];
-	$scope.myText = $sce.trustAsHtml("1)	So you think you can tell <b style='color: #00008b'>heaven</b> from <b style='color: #00008b'>hell</b>.");
-	$scope.myText2 = $sce.trustAsHtml("2)	Can you tell a green field from a cold <b style='color: darkblue;'>steel rail?</b>");
 	
 	/* Temporary variables */
 	$scope.picturesTemp = [];
@@ -31,7 +28,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	$scope.readingQuestionsToDeleteTemp = [];
 	$scope.pronunciationQuestionPartToDeleteTemp = [];
 	$scope.pronunciationQuestionToDeleteTemp = [];
-	$scope.questionsToDelete = [];
 	$scope.exercicioToEdit;
 	$scope.exerciseSaved;
 	$scope.exerciseDeleted;
@@ -69,43 +65,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	$scope.pronunciationQuestionSelected = "";
 	$scope.pronunciationQuestionSelectedIndex = "";
 	$scope.allFieldsPopulated = false;
-	
-	$scope.questao = {
-		pergunta : "",
-		valorNota : "",
-		alternativas : []
-	};
-	
-	$scope.alternativa = {
-		resposta : "",
-		correta : ""
-	};
-	
-	// TODO: Remove
-	// Calls searchQuestionsByExercise from exercisesManagementService considering the selected exercise
-	$scope.searchQuestionsByExercise = function(idExercicio){
-		exercisesManagementService.searchQuestionsByExercise(idExercicio).then( 
-			function successCallback(response) {
-				$scope.exercicio.questoes = [];
-				
-				$(response.data).each(function(index, questao) {
-					$scope.exercicio.questoes.push(angular.copy(questao));
-					$scope.exercicio.questoes[index].alternativas = [];
-				 });
-				
-				// Clear the variables
-				$scope.musicName = $scope.exercicio.musica.nome;
-				$scope.musicSinger = $scope.exercicio.musica.cantor;
-				$scope.musicLink = $scope.exercicio.musica.link;
-				$scope.musicLyrics = $scope.exercicio.musica.letra;
-				
-				delete $rootScope.exercicioToEdit;
-			}, 
-			function errorCallback(response) {
-				console.log('Deu errado');
-			}
-		);
-	};
 	
 	// Calls searchGrammarAlternativesByExercise from exercisesManagementService considering the selected exercise
 	$scope.searchGrammarAlternativesByExercise = function(idExercicio){
@@ -272,7 +231,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 		$scope.exercicio = {
 			professorId : $rootScope.loggedUser.id,
 			nivel : "",
-			valorNotaMaxima : "",
 			musica : {
 				nome : "",
 				cantor : "",
@@ -281,7 +239,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 				link : ""
 	        },
 	        writingQuestao : "",
-	        questoes : [],
 	        pictures : [],
 	        grammarDefinicoes : [],
 	        readingQuestoes : [],
@@ -290,15 +247,21 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	}else{
 		$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
 		$scope.searchPicturesByExercise($scope.exercicio.idExercicio);
-		$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
 		$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
 		$scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio);
 		$scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio);
+		
+		// Populate music modal
+		$scope.musicName = $scope.exercicio.musica.nome;
+		$scope.musicSinger = $scope.exercicio.musica.cantor;
+		$scope.musicLyrics = $scope.exercicio.musica.letra;
+		$scope.musicLink = $scope.exercicio.musica.link;
 	}
 	
 	// Function called by "New" button
 	 $scope.goToExerciseCreation = function(){
 		 $rootScope.exercicioEditOrCreationMode = true;
+		 delete $rootScope.exercicioToEdit;
 		 $state.go("newExercise");
 	 };
 	 
@@ -317,41 +280,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 		$("#musicModal").modal("show");
 	 };
 	 
-	 // Function called by "Add question" button (when question list is empty)
-	 $scope.clearQuestionModal = function(){
-		 $scope.questionToEdit = "";
-		 $scope.modalError = "";
-		 $scope.questao = {
-			pergunta : "",
-			valorNota : "",
-			alternativas : []
-		};
-		$scope.alternativa = {
-				resposta : "",
-				correta : ""
-			};
-		$("#questionModal").modal("show");
-	 };
-	 
-	 // Function called by "Add question" button (when question list is not empty)
-	 $scope.addNewQuestion = function(){
-		 $scope.error = "";
-		 $scope.exerciseSaved = false;
-		 
-		 var sum = 0;
-		 
-		 $($scope.exercicio.questoes).each(function(index, question) {
-			sum = sum + question.valorNota;
-		 });
-		 
-		// If the sum of the questions scores already reached the max exercise score, it's not allowed to add a new one
-		 if(sum >= $scope.exercicio.valorNotaMaxima){
-			 $scope.error = "You cannot add more questions. The sum of the questions scores registered already reached " + $scope.exercicio.valorNotaMaxima + ".";
-		 }else{
-			 $scope.clearQuestionModal();
-		 }
-	 };
-	 
 	 // Populates the music values to temporary exercise json (it will be sent to the service posteriorly)
 	 $scope.saveMusicModal = function(){
 		 $scope.exercicio.musica.nome = $scope.musicName;
@@ -361,225 +289,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 		 $("#musicModal").modal("hide");
 	 };
 	 
-	 // Add a new question to the question list if all the requirements are fine
-	 $scope.saveQuestionModal = function(){
-		 $scope.modalError = null;
-		 var existentQuestion = false;
-		 var hasCorrectOption = false;
-		 var indexToEdit;
-		 
-		// Tem que ter 1 alternativa correta registrada
-		 $($scope.questao.alternativas).each(function(index, alternativa) {
-			if(alternativa.correta == true){
-				hasCorrectOption = true;
-				return false;
-			}
-		 });
-		 
-		 if(hasCorrectOption){
-			
-			// Verifica se tem outra questão com mesma pergunta
-			 $($scope.exercicio.questoes).each(function(index, questao) {
-				 if(questao.pergunta == $scope.questao.pergunta){
-					 
-					 // Se questão estiver sendo editada e houver outra questão com a mesma pergunta
-					 if($scope.questionToEdit){
-						 if($scope.questionToEdit != questao){
-						 	existentQuestion = true;
-						 }
-						 
-					 // Se questão não estiver sendo editada estamos criando uma com a pergunta igual à outra questão
-					 }else{
-						 existentQuestion = true;
-					 }
-				 }
-				 
-				 if($scope.questionToEdit == questao){
-					 indexToEdit = index;
-				 }
-			 });
-			 
-			 // Se houver outra questão com a mesma pergunta monstrará o erro
-			 if(existentQuestion){
-				 $scope.modalError = "The question is already registered for this exercise.";
-			 }else{
-				 
-				 // Se não houver outra questão com mesma pergunta e o registro está em edição
-				 if($scope.questionToEdit){
-					 $scope.exercicio.questoes[indexToEdit] = angular.copy($scope.questao);
-					 
-				 // Se não houver outra questão com mesma pergunta e estamos criando um registro novo
-				 }else{
-					 $scope.exercicio.questoes.push(angular.copy($scope.questao));
-				 }
-				 
-				 $($scope.alternativesToDeleteTemp).each(function(index, alternativeId) {
-					 $scope.alternativesToDelete.push(alternativeId);
-				 });
-				 
-				 $("#questionModal").modal("hide");
-			 }
-			 
-		 }else{
-			 $scope.modalError = "It's needed to register the correct alternative for the question.";
-		 }
-		 
-	 };
-	 
-	 // Function called by "Edit question" button. Calls searchOptionsByQuestion method from exercisesManagementService
-	 $scope.editQuestionModal = function(questionSelected){
-		 
-		 $scope.alternativesToDeleteTemp = [];
-		 $scope.modalError = "";
-		 $scope.alternativa = {
-			resposta : "",
-			correta : ""
-		};
-		 $scope.questao = angular.copy(questionSelected);
-		 
-		 if($scope.questao.idQuestao && $scope.questao.alternativas.length == 0){
-			 
-			 exercisesManagementService.searchOptionsByQuestion($scope.questao.idQuestao).then( 
-				function successCallback(response) {
-					
-					$(response.data).each(function(index, alternativa) {
-						$scope.questao.alternativas.push(angular.copy(alternativa));
-					 });
-					
-				}, 
-				function errorCallback(response) {
-				}
-			 );
-			 
-		 }
-		 
-		 $scope.questionToEdit = questionSelected;
-	 };
-	 
-	 // Add a new option to the question if all the requirements are fine
-	 $scope.addOptionToQuestion = function(e){
-		 $scope.modalError = null;
-		 var hasCorrectOption = false;
-		 var existentOption = false;
-		 
-		 if($scope.questao.alternativas.length > 0){
-			 $($scope.questao.alternativas).each(function(index, alternativa) {
-				if(alternativa.correta == true){
-					hasCorrectOption = true;
-				}
-				if(alternativa.resposta == $scope.alternativa.resposta){
-					existentOption = true;
-				}
-			 });
-		 }
-		 
-		 if(existentOption){
-			 $scope.modalError = "The option is already registered.";
-		 }else{
-			 if(!hasCorrectOption || (hasCorrectOption && $scope.alternativa.correta == false)){
-				 $scope.questao.alternativas.push(angular.copy($scope.alternativa));
-				 $scope.alternativa.resposta = "";
-				 $scope.alternativa.correta = "";
-				 $scope.alternativa.idAlternativa = "";
-			 }else{
-				 $scope.modalError = "The correct option is already registered.";
-			 }
-		 }
-		 
-		 return false;
-	 };
-	 
-	 // Delete the option from the question
-	 $scope.deleteOptionFromQuestion = function(optionToDelete){
-		 for (var i = 0; i < $scope.questao.alternativas.length; i++) {
-		    if ($scope.questao.alternativas[i] == optionToDelete) {
-		    	
-		    	if(optionToDelete.idAlternativa){
-		    		$scope.alternativesToDeleteTemp.push(optionToDelete.idAlternativa);
-		    	}
-		    	
-		    	$scope.questao.alternativas.splice(i, 1);
-		        break;
-		    }
-		 }
-		 $scope.alternativa.resposta = "";
-		 $scope.alternativa.correta = "";
-		 $scope.alternativa.idAlternativa = "";
-	 };
-	 
-	 // Function called by "Delete question" button
-	 $scope.deleteQuestion = function(questionToDelete){
-		 for (var i = 0; i < $scope.exercicio.questoes.length; i++) {
-		    if ($scope.exercicio.questoes[i] == questionToDelete) {
-		    		
-		    	if(questionToDelete.idQuestao){
-		    		$scope.questionsToDelete.push(questionToDelete.idQuestao);
-		    	}
-		    	
-		    	$scope.exercicio.questoes.splice(i, 1);
-		        break;
-		    }
-		 }
-	 };
-	 
-	 // Update the values from the option if all the requirements are fine
-	 $scope.editOptionFromQuestion = function(optionToEdit){
-		 $scope.modalError = null;
-		 var hasCorrectOption = false;
-		 var existentOption = false;
-		 $($scope.questao.alternativas).each(function(index, alternativa) {
-			if(optionToEdit != alternativa && alternativa.correta && $scope.alternativa.correta){
-				hasCorrectOption = true;
-			}
-			if(optionToEdit != alternativa && alternativa.resposta == $scope.alternativa.resposta){
-				existentOption = true;
-			}
-		 });
-		 
-		 if(existentOption){
-			 $scope.modalError = "The option is already registered.";
-		 }else if(hasCorrectOption){
-			 $scope.modalError = "The correct option is already registered.";
-		 }else{
-			 optionToEdit.resposta = $scope.alternativa.resposta;
-			 optionToEdit.correta = $scope.alternativa.correta;
-			 $scope.alternativa.resposta = "";
-			 $scope.alternativa.correta = "";
-			 $scope.alternativa.idAlternativa = "";
-		 }
-		 
-	 };
-	 
-	 // Method called to get the option selected in the screen
-	 $scope.selectOption = function(iterationAlternative){
-		 $scope.alternativa = angular.copy(iterationAlternative);
-	 };
-	 
 	 // Method called to get the exercise selected in the screen
 	 $scope.selectExercise = function(iterationExercise){
 		 $scope.exercicio =  angular.copy(iterationExercise);
-	 };
-	 
-	 // Call deleteAlternatives method from exercisesManagementService
-	 $scope.deleteAlternatives = function(){
-		 exercisesManagementService.deleteAlternatives($scope.alternativesToDelete).then( 
-					function successCallback(response) {
-						
-					}, 
-					function errorCallback(response) {
-					}
-			);
-	 };
-	 
-	 // Call deleteQuestions from exercisesManagementService
-	 $scope.deleteQuestions = function(){
-		 exercisesManagementService.deleteQuestions($scope.questionsToDelete).then( 
-					function successCallback(response) {
-						
-					}, 
-					function errorCallback(response) {
-					}
-			);
 	 };
 	 
 	 // Call deletePictures from exercisesManagementService
@@ -593,21 +305,11 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 			);
 	 };	 
 	 
-	 // Call deleteGrammarAlternatives from exercisesManagementService
-	 $scope.deleteGrammarAlternatives = function(){
-		 exercisesManagementService.deleteGrammarAlternatives($scope.grammarAlternativesToDelete).then( 
+	// Call deleteGrammarAlternativesAndQuestions from exercisesManagementService
+	 $scope.deleteGrammarAlternativesAndQuestions = function(){
+		 exercisesManagementService.deleteGrammarAlternativesAndQuestions($scope.grammarAlternativesToDelete, $scope.grammarDefinitionsToDelete).then( 
 					function successCallback(response) {
 						$scope.grammarAlternativesToDelete = [];
-					}, 
-					function errorCallback(response) {
-					}
-		 );		 
-	 };
-	 
-	// Call deleteGrammarDefinitions from exercisesManagementService
-	 $scope.deleteGrammarDefinitions = function(){
-		 exercisesManagementService.deleteGrammarDefinitions($scope.grammarDefinitionsToDelete).then( 
-					function successCallback(response) {
 						$scope.grammarDefinitionsToDelete = [];
 					}, 
 					function errorCallback(response) {
@@ -679,76 +381,105 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 			);
 	 };
 	 
+	 $scope.savePictures = function(idExercicio) {
+		    
+		  angular.forEach($scope.exercicio.pictures, function(file) {
+			  
+			  if(file.id){
+				  file.upload = Upload.upload({
+			      	url: constants.baseUrl + '/updateFile',
+			        data: {'idExercicio': idExercicio, 'nomeImagem' : file.nome, 'id' : file.id}
+			      });
+			  }else{
+				  file.upload = Upload.upload({
+			      	url: constants.baseUrl + '/saveFile',
+			        data: {file: file.file, 'idExercicio': idExercicio, 'nomeImagem' : file.nome}
+			      });
+			  }
+	
+		      file.upload.then(function (response) {
+		    	  file.id = response.data.id;
+		    	  file.base64 = response.data.base64;
+		    	  console.log("eeeee");
+		        $timeout(function () {
+		          //file.result = response.data;
+		        });
+		      }, function (response) {
+		        if (response.status > 0)
+		          $scope.errorMsg = response.status + ': ' + response.data;
+		      }, function (evt) {
+		        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+		      });
+		    });
+		  
+	  };
+	 
 	 // Call the method saveExercise from exercisesManagementService if all the requirements all fine
 	 $scope.saveExercise = function(){
 		 
-		 var sum = 0;
 		 $scope.exerciseSaved = false;
 		 $scope.error = "";
 		 
-		 // Validate if the sum of the question scores is higher than the exercise score
-		 $($scope.exercicio.questoes).each(function(index, question) {
-			sum = sum + parseInt(question.valorNota)
-		 });
+		 var promises = [];
 		 
-		 if(sum > $scope.exercicio.valorNotaMaxima){
-			 $scope.error = "The sum of the questions scores is higher than " + $scope.exercicio.valorNotaMaxima + ".";
-		 }else{
-			 
-			 if(!$scope.exercicio.professorId){
-				 $scope.exercicio.professorId = $scope.exercicio.professor.id; 
-			 }
-			 
-			 // TODO: Remover			 
-			 if($scope.alternativesToDelete.length > 0){
-				 $scope.deleteAlternatives();
-			 }
-			
-			 // TODO: Remover
-			 if($scope.questionsToDelete.length > 0){
-				 $scope.deleteQuestions();
-			 }
-			 
-			 if($scope.picturesToDelete.length > 0){
-				 $scope.deletePictures();
-			 }
-			 
-			 if($scope.grammarAlternativesToDelete.length > 0){
-				 $scope.deleteGrammarAlternatives();
-			 }
-			 
-			 if($scope.grammarDefinitionsToDelete.length > 0){
-				 $scope.deleteGrammarDefinitions();
-			 }
-			 
-			 if($scope.readingAlternativesToDelete.length > 0 || $scope.readingQuestionsToDelete.length > 0){
-				 $scope.deleteReadingAlternativesAndQuestions();
-			 }
-			 
-			 if($scope.pronunciationQuestionPartToDelete.length > 0 || $scope.pronunciationQuestionToDelete.length > 0){
-				 $scope.deletePronunciationPartsAndQuestions();
-			 }
+		 if(!$scope.exercicio.professorId){
+			 $scope.exercicio.professorId = $scope.exercicio.professor.id; 
+		 }
+		 
+		 if($scope.picturesToDelete.length > 0){
+			 promises.push($scope.deletePictures());
+		 }
+		 
+		 if($scope.grammarAlternativesToDelete.length > 0 || $scope.grammarDefinitionsToDelete.length > 0){
+			 promises.push($scope.deleteGrammarAlternativesAndQuestions());
+		 }
+		 
+		 if($scope.readingAlternativesToDelete.length > 0 || $scope.readingQuestionsToDelete.length > 0){
+			 promises.push($scope.deleteReadingAlternativesAndQuestions());
+		 }
+		 
+		 if($scope.pronunciationQuestionPartToDelete.length > 0 || $scope.pronunciationQuestionToDelete.length > 0){
+			 promises.push($scope.deletePronunciationPartsAndQuestions());
+		 }
+		 
+		 // Execute the operations above, if needed
+		 $q.all(promises).then(function() {
 			 
 			 exercisesManagementService.saveExercise($scope.exercicio).then( 
 				function successCallback(response) {
 					angular.forEach($scope.exercicio.pictures, function(file) {
 						$scope.picturesTemp.push(file);
 					 });
-					$scope.savePictures(response.data.idExercicio);
-					$scope.exercicio = angular.copy(response.data);
-					$scope.searchQuestionsByExercise($scope.exercicio.idExercicio);
-					$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
-					$scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio);
-					$scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio);
-					$scope.exerciseSaved = true;
-					$scope.alternativesToDelete = [];
-					$scope.questionsToDelete = [];
+					
+					var promises2 = [];
+					promises2.push($scope.savePictures(response.data.idExercicio));
+					
+					// Save the pictures
+					$q.all(promises2).then(function() {
+						
+						$scope.exercicio = angular.copy(response.data);
+						
+						var promises3 = [];
+						
+						promises3.push($scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio));
+						promises3.push($scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio));
+						promises3.push($scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio));
+						
+						// Search the records
+						$q.all(promises3).then(function() {
+							$scope.exerciseSaved = true;
+						});
+						
+					});
+					
 				}, 
 				function errorCallback(response) {
 					$scope.error = response.data.status;
 				}
 			); 
-		 }
+			 
+         });
+		 
 	 };
 	 
 	 // Method called when the main screen from exercises management opens
@@ -965,6 +696,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	};
 	 
 	$scope.saveActivitiesModal = function(){
+		$scope.modalError = "";
 		$scope.exercicio.pictures = [];
 		$scope.exercicio.writingQuestao = angular.copy($scope.writingQuestao.writingQuestao);
 		
@@ -1036,39 +768,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 		}
 	};
 	
-	  $scope.savePictures = function(idExercicio) {
-	    
-		  angular.forEach($scope.exercicio.pictures, function(file) {
-			  
-			  if(file.id){
-				  file.upload = Upload.upload({
-			      	url: constants.baseUrl + '/updateFile',
-			        data: {'idExercicio': idExercicio, 'nomeImagem' : file.nome, 'id' : file.id}
-			      });
-			  }else{
-				  file.upload = Upload.upload({
-			      	url: constants.baseUrl + '/saveFile',
-			        data: {file: file.file, 'idExercicio': idExercicio, 'nomeImagem' : file.nome}
-			      });
-			  }
-	
-		      file.upload.then(function (response) {
-		    	  file.id = response.data.id;
-		    	  file.base64 = response.data.base64;
-		    	  console.log("eeeee");
-		        $timeout(function () {
-		          //file.result = response.data;
-		        });
-		      }, function (response) {
-		        if (response.status > 0)
-		          $scope.errorMsg = response.status + ': ' + response.data;
-		      }, function (evt) {
-		        file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-		      });
-		    });
-		  
-	  };
-	  
 	  $scope.selectDefinition = function(definition, index){
 		  $scope.definitionSelected = definition;
 		  $scope.definitionSelectedIndex = index;
@@ -1120,18 +819,24 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  };
 	  
 	  $scope.deleteDefinition = function(){
+		  var alternativesToKeep = [];
+		  
 		  if($scope.definitionSelected.id){
 			  $scope.grammarDefinitionsToDeleteTemp.push($scope.definitionSelected.id);
 		  }
 		  
 		  for (var i = 0; i < $scope.alternatives.length; i++) {
 			  if($scope.alternatives[i].definition == $scope.definitionSelectedIndex + ""){
-				  $scope.alternativeSelected = $scope.alternatives[i];
-				  $scope.alternativeSelectedIndex = i;
-				  $scope.deleteAlternative();
+				  if($scope.alternatives[i].id){
+					  $scope.grammarAlternativesToDeleteTemp.push($scope.alternatives[i].id);
+				  }
+			  }else{
+				  alternativesToKeep.push($scope.alternatives[i]);
 			  }
 		  }
-			  
+			
+		  $scope.alternatives = alternativesToKeep;
+		  
 		  $scope.definitions.splice($scope.definitionSelectedIndex, 1);
 		  
 		  $($scope.definitions).each(function(indexDefinition, definition) {
@@ -1155,6 +860,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 		  var alternative = {
 				  questao : $scope.grammarPractice.alternativeInput,
 				  definition : $scope.grammarPractice.alternativeAnswer,
+				  sequencia : $scope.alternatives.length + 1,
 				  definicaoResposta : $scope.definitions[Number($scope.grammarPractice.alternativeAnswer)]
 	  	  };
 		  $scope.alternatives.push(alternative);
@@ -1248,23 +954,48 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $sce, $ti
 	  };
 	  
 	  $scope.addReadingAlternative = function(){
-		  var alternative = {
-				  descricao : $scope.grammarPractice.readingAlternativeInput,
-				  correta : $scope.grammarPractice.readingAlternativeAnswer,
-				  sequencia : $scope.questionSelected.readingAlternativas.length + 1
-	  	  };
-		  $scope.questionSelected.readingAlternativas.push(alternative);
-		  $scope.grammarPractice.readingAlternativeInput = "";
-		  $scope.grammarPractice.readingAlternativeAnswer = "";
-		  $scope.readingAlternativeSelected = "";
+		  $scope.modalError = "";
+		  
+		  if($scope.grammarPractice.readingAlternativeAnswer == "true"){
+			  angular.forEach($scope.questionSelected.readingAlternativas, function(alternative) {
+				  if(alternative.correta == "true"){
+					  $scope.modalError = "The question can't have more than one answer.";
+				  }
+			  });
+		  }
+		  
+		  if(!$scope.modalError){
+			  var alternative = {
+					  descricao : $scope.grammarPractice.readingAlternativeInput,
+					  correta : $scope.grammarPractice.readingAlternativeAnswer,
+					  sequencia : $scope.questionSelected.readingAlternativas.length + 1
+		  	  };
+			  $scope.questionSelected.readingAlternativas.push(alternative);
+			  $scope.grammarPractice.readingAlternativeInput = "";
+			  $scope.grammarPractice.readingAlternativeAnswer = "";
+			  $scope.readingAlternativeSelected = "";
+		  }
+		  
 	  };
 	  
 	  $scope.editReadingAlternative = function(){
-		  $scope.questionSelected.readingAlternativas[$scope.readingAlternativeSelectedIndex].descricao = angular.copy($scope.grammarPractice.readingAlternativeInput);
-		  $scope.questionSelected.readingAlternativas[$scope.readingAlternativeSelectedIndex].correta = angular.copy($scope.grammarPractice.readingAlternativeAnswer);
-		  $scope.grammarPractice.readingAlternativeInput = "";
-		  $scope.grammarPractice.readingAlternativeAnswer = "";
-		  $scope.readingAlternativeSelected = "";
+		  $scope.modalError = "";
+		  
+		  if($scope.grammarPractice.readingAlternativeAnswer == "true"){
+			  $($scope.questionSelected.readingAlternativas).each(function(index, alternative) {
+				  if(index != $scope.readingAlternativeSelectedIndex && alternative.correta == "true"){
+					  $scope.modalError = "The question can't have more than one answer.";
+				  }
+			  });
+		  }
+		  
+		  if(!$scope.modalError){
+			  $scope.questionSelected.readingAlternativas[$scope.readingAlternativeSelectedIndex].descricao = angular.copy($scope.grammarPractice.readingAlternativeInput);
+			  $scope.questionSelected.readingAlternativas[$scope.readingAlternativeSelectedIndex].correta = angular.copy($scope.grammarPractice.readingAlternativeAnswer);
+			  $scope.grammarPractice.readingAlternativeInput = "";
+			  $scope.grammarPractice.readingAlternativeAnswer = "";
+			  $scope.readingAlternativeSelected = "";
+		  }
 	  };
 	  
 	  $scope.deleteReadingAlternative = function(){

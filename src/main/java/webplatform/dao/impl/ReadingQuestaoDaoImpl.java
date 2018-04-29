@@ -43,4 +43,9 @@ public class ReadingQuestaoDaoImpl extends BaseDao<ReadingQuestao> implements Re
 	public void delete(ReadingQuestao readingQuestao) {
 		hibernateTemplate.delete(readingQuestao);
 	}
+
+	@Override
+	public void deleteAll(List<ReadingQuestao> readingQuestoes) {
+		hibernateTemplate.deleteAll(readingQuestoes);
+	}
 }

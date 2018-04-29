@@ -41,4 +41,9 @@ public class PronunciationQuestaoDaoImpl extends BaseDao<PronunciationQuestao> i
 	public void delete(PronunciationQuestao pronunciationQuestao) {
 		hibernateTemplate.delete(pronunciationQuestao);
 	}
+
+	@Override
+	public void deleteAll(List<PronunciationQuestao> pronunciationQuestoes) {
+		hibernateTemplate.deleteAll(pronunciationQuestoes);
+	}
 }

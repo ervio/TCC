@@ -43,4 +43,9 @@ public class GrammarDefinicaoDaoImpl extends BaseDao<GrammarDefinicao> implement
 	public void delete(GrammarDefinicao grammarDefinicao) {
 		hibernateTemplate.delete(grammarDefinicao);
 	}
+
+	@Override
+	public void deleteAll(List<GrammarDefinicao> grammarDefinicoes) {
+		hibernateTemplate.deleteAll(grammarDefinicoes);
+	}
 }

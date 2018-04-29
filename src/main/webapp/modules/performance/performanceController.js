@@ -2,7 +2,7 @@ angular.module('app').controller("performanceCtrl", function($scope, $rootScope,
 	
 	$scope.studentName = "";
 	$scope.studentEmail = "";
-	$scope.exerciseName = "";
+	$scope.songName = "";
 	$scope.exerciseLevel = "";
 	$scope.basicList = [];
 	$scope.intermediateList = [];
@@ -24,7 +24,7 @@ angular.module('app').controller("performanceCtrl", function($scope, $rootScope,
 			teacherId = $rootScope.loggedUser.id;
 		}
 		
-		performanceService.searchResolvedExercises($scope.studentName, $scope.studentEmail, $scope.exerciseName, $scope.exerciseLevel, studentId, teacherId).then( 
+		performanceService.searchResolvedExercises($scope.studentName, $scope.studentEmail, $scope.songName, $scope.exerciseLevel, studentId, teacherId).then( 
 			function successCallback(response) {
 				$(response.data).each(function(index, exercise) {
 					

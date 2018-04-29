@@ -25,6 +25,7 @@ public class GrammarDefinicaoConverter {
 			for (GrammarQuestaoModel grammarQuestaoModel : grammarDefinicaoModel.getQuestoes()) {
 				GrammarQuestao grammarQuestao = new GrammarQuestao(grammarQuestaoModel.getId(),
 						grammarQuestaoModel.getQuestao(), null);
+				grammarQuestao.setSequencia(grammarQuestaoModel.getSequencia());
 				grammarDefinicao.getQuestoes().add(grammarQuestao);
 			}
 

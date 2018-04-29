@@ -110,7 +110,7 @@
 							<div class="row">
 								<div class="col-xs-6 form-group">
 									<label>Lesson</label>
-									<input ng-model="exerciseName" class="form-control" type="text" maxlength="30"/>
+									<input ng-model="songName" class="form-control" type="text" maxlength="30"/>
 								</div>
 								<div class="col-xs-3 form-group">
 									<label>Level *</label>
@@ -143,8 +143,8 @@
 						                <th style="text-align: center;">Id</th>
 						                <th style="text-align: center;">Lesson Name</th>
 						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
-						                <th style="text-align: center;">Score</th>
-						                <th style="text-align: center;">Max Score</th>
+						                <th style="text-align: center;">Correct questions</th>
+						                <th style="text-align: center;">Total questions</th>
 						            </tr>
 						        </thead>
 						        <tbody>
@@ -152,8 +152,8 @@
 										<td>{{result.idExercicioAluno}}</td>
 										<td>{{result.exercicio.musica.nome}}</td>
 										<td ng-if="loggedUser.tipoConta == 'Teacher'">{{result.aluno.nome}}</td>
-										<td>{{result.nota}}</td>
-										<td>{{result.exercicio.valorNotaMaxima}}</td>
+										<td>{{result.questoesCorretas}}</td>
+										<td>{{result.totalQuestoes}}</td>
 									</tr>
 									<tr ng-if="basicList.length == 0 && loggedUser.tipoConta != 'Teacher'">
 										<td colspan="4">
@@ -182,8 +182,8 @@
 						                <th style="text-align: center;">Id</th>
 						                <th style="text-align: center;">Lesson Name</th>
 						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
-						                <th style="text-align: center;">Score</th>
-						                <th style="text-align: center;">Max Score</th>
+						                <th style="text-align: center;">Correct questions</th>
+						                <th style="text-align: center;">Total questions</th>
 						            </tr>
 						        </thead>
 						        <tbody>
@@ -191,8 +191,8 @@
 										<td>{{result.idExercicioAluno}}</td>
 										<td>{{result.exercicio.musica.nome}}</td>
 										<td ng-if="loggedUser.tipoConta == 'Teacher'">{{result.aluno.nome}}</td>
-										<td>{{result.nota}}</td>
-										<td>{{result.exercicio.valorNotaMaxima}}</td>
+										<td>{{result.questoesCorretas}}</td>
+										<td>{{result.totalQuestoes}}</td>
 									</tr>
 									<tr ng-if="intermediateList.length == 0 && loggedUser.tipoConta != 'Teacher'">
 										<td colspan="4">
@@ -221,8 +221,8 @@
 						                <th style="text-align: center;">Id</th>
 						                <th style="text-align: center;">Lesson Name</th>
 						                <th ng-if="loggedUser.tipoConta == 'Teacher'" style="text-align: center;">Student</th>
-						                <th style="text-align: center;">Score</th>
-						                <th style="text-align: center;">Max Score</th>
+						                <th style="text-align: center;">Correct questions</th>
+						                <th style="text-align: center;">Total questions</th>
 						            </tr>
 						        </thead>
 						        <tbody>
@@ -230,8 +230,8 @@
 										<td>{{result.idExercicioAluno}}</td>
 										<td>{{result.exercicio.nome}}</td>
 										<td ng-if="loggedUser.tipoConta == 'Teacher'">{{result.aluno.nome}}</td>
-										<td>{{result.nota}}</td>
-										<td>{{result.exercicio.valorNotaMaxima}}</td>
+										<td>{{result.questoesCorretas}}</td>
+										<td>{{result.totalQuestoes}}</td>
 									</tr>
 									<tr ng-if="advancedList.length == 0 && loggedUser.tipoConta != 'Teacher'">
 										<td colspan="4">

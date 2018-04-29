@@ -1,9 +1,14 @@
 package webplatform.dao.impl;
 
+import java.util.List;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import webplatform.dao.PronunciationRespostaDao;
+import webplatform.model.entity.PronunciationQuestaoParte;
 import webplatform.model.entity.PronunciationResposta;
 
 @Transactional
@@ -22,6 +27,20 @@ public class PronunciationRespostaDaoImpl extends BaseDao<PronunciationResposta>
 			hibernateTemplate.save(entity);
 		}
 		return entity;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PronunciationResposta> findByPronunciationQuestaoParteList(
+			List<PronunciationQuestaoParte> pronunciationQuestaoPartes) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.in("pronunciationQuestaoParte", pronunciationQuestaoPartes));
+		return (List<PronunciationResposta>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@Override
+	public void deleteAll(List<PronunciationResposta> pronunciationRespostas) {
+		hibernateTemplate.deleteAll(pronunciationRespostas);
 	}
 
 }

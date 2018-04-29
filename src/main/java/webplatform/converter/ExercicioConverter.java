@@ -23,20 +23,7 @@ public class ExercicioConverter {
 			exercicio.setTotalPosts(0);
 		}
 		exercicio.setNivel(exercicioModel.getNivel());
-		exercicio.setValorNotaMaxima(Integer.parseInt(exercicioModel.getValorNotaMaxima()));
 		exercicio.setWritingQuestao(exercicioModel.getWritingQuestao());
-
-		// TODO: Remover parte de questoes
-		// if (!CollectionUtils.isEmpty(exercicioModel.getQuestoes())) {
-		//
-		// exercicio.setQuestoes(new HashSet<Questao>());
-		//
-		// for (QuestaoModel questaoModel : exercicioModel.getQuestoes()) {
-		// Questao questao = QuestaoConverter.convert(questaoModel);
-		// exercicio.getQuestoes().add(questao);
-		// }
-		//
-		// }
 
 		if (!CollectionUtils.isEmpty(exercicioModel.getGrammarDefinicoes())) {
 

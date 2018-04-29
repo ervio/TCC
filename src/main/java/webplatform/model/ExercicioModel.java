@@ -7,8 +7,6 @@ public class ExercicioModel {
 
 	private long idExercicio;
 	private long professorId;
-	// TODO: remover atributo nome
-	private String nome;
 	private String nivel;
 	private String valorNotaMaxima;
 	private String writingQuestao;
@@ -33,14 +31,6 @@ public class ExercicioModel {
 
 	public void setProfessorId(long professorId) {
 		this.professorId = professorId;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public String getNivel() {

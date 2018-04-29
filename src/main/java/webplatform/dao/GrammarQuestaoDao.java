@@ -11,4 +11,6 @@ public interface GrammarQuestaoDao {
 	public List<GrammarQuestao> findByExercise(Long exerciseId);
 
 	public void delete(GrammarQuestao grammarQuestao);
+
+	public void deleteAll(List<GrammarQuestao> grammarQuestoes);
 }

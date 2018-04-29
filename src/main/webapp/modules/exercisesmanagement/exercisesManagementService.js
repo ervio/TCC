@@ -10,12 +10,6 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		return $http.get(constants.baseUrl + "/searchAllExercises/" + professorId);
 	}
 	
-	// TODO: Remove
-	// Calls the searchQuestionsByExercise service from ExercisesManagementController class
-	this.searchQuestionsByExercise = function(exercicioId){
-		return $http.get(constants.baseUrl + "/searchQuestionsByExercise/" + exercicioId);
-	}
-	
 	// Calls the searchGrammarDefinitionsByExercise service from ExercisesManagementController class
 	this.searchGrammarDefinitionsByExercise = function(exercicioId){
 		return $http.get(constants.baseUrl + "/searchGrammarDefinitionsByExercise/" + exercicioId);
@@ -51,34 +45,23 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		return $http.get(constants.baseUrl + "/searchPicturesByExercise/" + exercicioId);
 	}
 	
-	// Calls the searchOptionsByQuestion service from ExercisesManagementController class
-	this.searchOptionsByQuestion = function(questionId){
-		return $http.get(constants.baseUrl + "/searchOptionsByQuestion/" + questionId);
-	}
-	
-	// Calls the deleteAlternatives service from ExercisesManagementController class
-	this.deleteAlternatives = function(alternativesToDelete){
-		return $http.get(constants.baseUrl + "/deleteAlternatives/" + alternativesToDelete);
-	}
-	
-	// Calls the deleteQuestions service from ExercisesManagementController class
-	this.deleteQuestions = function(questionsToDelete){
-		return $http.get(constants.baseUrl + "/deleteQuestions/" + questionsToDelete);
-	}
-	
 	// Calls the deletePictures service from ExercisesManagementController class
 	this.deletePictures = function(picturesToDelete){
 		return $http.get(constants.baseUrl + "/deletePictures/" + picturesToDelete);
 	}
-	
-	// Calls the deleteGrammarAlternatives service from ExercisesManagementController class
-	this.deleteGrammarAlternatives = function(grammarAlternativesToDelete){
-		return $http.get(constants.baseUrl + "/deleteGrammarAlternatives/" + grammarAlternativesToDelete);
-	}	
-	
-	// Calls the deleteGrammarDefinitions service from ExercisesManagementController class
-	this.deleteGrammarDefinitions = function(grammarDefinitionsToDelete){
-		return $http.get(constants.baseUrl + "/deleteGrammarDefinitions/" + grammarDefinitionsToDelete);
+
+	// Calls the deleteGrammarAlternativesAndQuestions service from ExercisesManagementController class
+	this.deleteGrammarAlternativesAndQuestions = function(grammarAlternativesToDelete, grammarDefinitionsToDelete){
+		
+		if(grammarAlternativesToDelete.length > 0 && grammarDefinitionsToDelete.length > 0){
+			return $http.get(constants.baseUrl + "/deleteGrammarAlternativesAndQuestions/" + grammarAlternativesToDelete + "/" + grammarDefinitionsToDelete);
+		}
+		else if(grammarAlternativesToDelete.length > 0 && grammarDefinitionsToDelete.length == 0){
+			return $http.get(constants.baseUrl + "/deleteGrammarAlternatives/" + grammarAlternativesToDelete);
+		}
+		else{
+			return $http.get(constants.baseUrl + "/deleteGrammarDefinitions/" + grammarDefinitionsToDelete);
+		}
 	}
 	
 	// Calls the deleteReadingAlternativesAndQuestions service from ExercisesManagementController class

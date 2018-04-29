@@ -34,13 +34,6 @@ public class ExercisesManagementBo {
 	@Autowired
 	private ExercicioDao exercicioDao;
 
-	// TODO: Remover parte referente à questão
-	// @Autowired
-	// private QuestaoDao questaoDao;
-	//
-	// @Autowired
-	// private AlternativaDao alternativaDao;
-
 	@Autowired
 	private GrammarDefinicaoDao grammarDefinicaoDao;
 
@@ -66,17 +59,6 @@ public class ExercisesManagementBo {
 		exercicio.setProfessor(new Professor(exercicioModel.getProfessorId()));
 		exercicio.setMusica(musicaDao.saveOrUpdate(musica));
 		exercicioDao.saveOrUpdate(exercicio);
-
-		// TODO: Remover a parte de questões
-		// for (Questao questao : exercicio.getQuestoes()) {
-		// questao.setExercicio(exercicio);
-		// questaoDao.saveOrUpdate(questao);
-		//
-		// for (Alternativa alternativa : questao.getAlternativas()) {
-		// alternativa.setQuestao(questao);
-		// alternativaDao.saveOrUpdate(alternativa);
-		// }
-		// }
 
 		for (GrammarDefinicao definicao : exercicio.getGrammarDefinicoes()) {
 			definicao.setExercicio(exercicio);

@@ -3,6 +3,7 @@ package webplatform.dao.impl;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +36,18 @@ public class GrammarQuestaoDaoImpl extends BaseDao<GrammarQuestao> implements Gr
 		criteria.createAlias("definicaoResposta", "definicaoResposta");
 		criteria.createAlias("definicaoResposta.exercicio", "exercicio");
 		criteria.add(Restrictions.eq("exercicio.idExercicio", exerciseId));
+		criteria.addOrder(Order.asc("sequencia"));
 		return (List<GrammarQuestao>) hibernateTemplate.findByCriteria(criteria);
 	}
 
 	@Override
 	public void delete(GrammarQuestao grammarQuestao) {
 		hibernateTemplate.delete(grammarQuestao);
+	}
+
+	@Override
+	public void deleteAll(List<GrammarQuestao> grammarQuestoes) {
+		hibernateTemplate.deleteAll(grammarQuestoes);
 	}
 
 }

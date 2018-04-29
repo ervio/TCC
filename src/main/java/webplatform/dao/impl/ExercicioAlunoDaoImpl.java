@@ -43,12 +43,14 @@ public class ExercicioAlunoDaoImpl extends BaseDao<ExercicioAluno> implements Ex
 		return this.hibernateTemplate.get(ExercicioAluno.class, exercicioAlunoId);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<ExercicioAluno> findResolved(String studentName, String studentEmail, String exerciseName, String level,
+	public List<ExercicioAluno> findResolved(String studentName, String studentEmail, String songName, String level,
 			String studentId, String teacherId) {
 		DetachedCriteria criteria = getDetachedCriteria();
 		criteria.createAlias("aluno", "aluno");
 		criteria.createAlias("exercicio", "exercicio");
+		criteria.createAlias("exercicio.musica", "musica");
 
 		if (StringUtils.stripToNull(studentName) != null) {
 			criteria.add(Restrictions.like("aluno.nome", studentName, MatchMode.ANYWHERE));
@@ -56,8 +58,8 @@ public class ExercicioAlunoDaoImpl extends BaseDao<ExercicioAluno> implements Ex
 		if (StringUtils.stripToNull(studentEmail) != null) {
 			criteria.add(Restrictions.eq("aluno.email", studentEmail));
 		}
-		if (StringUtils.stripToNull(exerciseName) != null) {
-			criteria.add(Restrictions.like("exercicio.nome", exerciseName, MatchMode.ANYWHERE));
+		if (StringUtils.stripToNull(songName) != null) {
+			criteria.add(Restrictions.like("musica.nome", songName, MatchMode.ANYWHERE));
 		}
 		if (StringUtils.stripToNull(level) != null) {
 			criteria.add(Restrictions.eq("exercicio.nivel", level));
@@ -69,17 +71,18 @@ public class ExercicioAlunoDaoImpl extends BaseDao<ExercicioAluno> implements Ex
 			criteria.createAlias("exercicio.professor", "professor");
 			criteria.add(Restrictions.eq("professor.id", Long.parseLong(teacherId)));
 		}
-		criteria.add(Restrictions.isNotNull("nota"));
-		criteria.addOrder(Order.asc("exercicio.nome"));
+		criteria.add(Restrictions.isNotNull("totalQuestoes"));
+		criteria.add(Restrictions.isNotNull("questoesCorretas"));
+		criteria.addOrder(Order.asc("musica.nome"));
 		return (List<ExercicioAluno>) hibernateTemplate.findByCriteria(criteria);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ExercicioAluno> findResolvedByExerciseId(Long exerciseId) {
 		DetachedCriteria criteria = getDetachedCriteria();
 		criteria.add(Restrictions.eq("exercicio", new Exercicio(exerciseId)));
 		criteria.add(Restrictions.isNotNull("nota"));
-		// criteria.addOrder(Order.asc("columnA")).addOrder(Order.desc("columnB"));
 		return (List<ExercicioAluno>) hibernateTemplate.findByCriteria(criteria);
 	}
 

@@ -22,24 +22,24 @@ public class PerformanceController {
 	private ExercicioAlunoDao exercicioAlunoDao;
 
 	/**
-	 * If the logged user is a student, all the exercises resolved by him will
-	 * be searched otherwise all the exercises resolved by the students
-	 * associated to the logged teacher will be searched
+	 * If the logged user is a student, all the exercises resolved by him will be
+	 * searched otherwise all the exercises resolved by the students associated to
+	 * the logged teacher will be searched
 	 * 
 	 * @param studentName
 	 * @param studentEmail
-	 * @param exerciseName
+	 * @param songName
 	 * @param level
 	 * @param studentId
 	 * @param teacherId
 	 * @return
 	 */
-	@RequestMapping(value = "/searchResolvedExercises/{studentName}/{studentEmail}/{exerciseName}/{level}/{studentId}/{teacherId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchResolvedExercises/{studentName}/{studentEmail}/{songName}/{level}/{studentId}/{teacherId}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity searchResolvedExercises(@PathVariable("studentName") String studentName,
-			@PathVariable("studentEmail") String studentEmail, @PathVariable("exerciseName") String exerciseName,
+			@PathVariable("studentEmail") String studentEmail, @PathVariable("songName") String songName,
 			@PathVariable("level") String level, @PathVariable("studentId") String studentId,
 			@PathVariable("teacherId") String teacherId) {
-		List<ExercicioAluno> exercises = exercicioAlunoDao.findResolved(studentName, studentEmail, exerciseName, level,
+		List<ExercicioAluno> exercises = exercicioAlunoDao.findResolved(studentName, studentEmail, songName, level,
 				studentId, teacherId);
 		return new ResponseEntity(exercises, HttpStatus.OK);
 	}

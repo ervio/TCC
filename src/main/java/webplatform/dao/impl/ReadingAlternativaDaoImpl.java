@@ -37,6 +37,7 @@ public class ReadingAlternativaDaoImpl extends BaseDao<ReadingAlternativa> imple
 		criteria.createAlias("questao", "questao");
 		criteria.createAlias("questao.exercicio", "exercicio");
 		criteria.add(Restrictions.eq("exercicio.idExercicio", exerciseId));
+		criteria.addOrder(Order.asc("sequencia"));
 		return (List<ReadingAlternativa>) hibernateTemplate.findByCriteria(criteria);
 	}
 
@@ -52,5 +53,10 @@ public class ReadingAlternativaDaoImpl extends BaseDao<ReadingAlternativa> imple
 	@Override
 	public void delete(ReadingAlternativa readingAlternativa) {
 		hibernateTemplate.delete(readingAlternativa);
+	}
+
+	@Override
+	public void deleteAll(List<ReadingAlternativa> readingAlternativas) {
+		hibernateTemplate.deleteAll(readingAlternativas);
 	}
 }

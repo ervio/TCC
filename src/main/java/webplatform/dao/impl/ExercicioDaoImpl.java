@@ -70,11 +70,18 @@ public class ExercicioDaoImpl extends BaseDao<Exercicio> implements ExercicioDao
 		DetachedCriteria subqueryExercicioAluno = DetachedCriteria.forClass(ExercicioAluno.class);
 		subqueryExercicioAluno.createAlias("exercicio", "exercicio");
 		subqueryExercicioAluno.add(Restrictions.eq("aluno", new Aluno(studentId)));
+		subqueryExercicioAluno.add(Restrictions.isNull("totalQuestoes"));
+		subqueryExercicioAluno.add(Restrictions.isNull("questoesCorretas"));
 		subqueryExercicioAluno.setProjection(Projections.property("exercicio.idExercicio"));
 
 		DetachedCriteria criteria = DetachedCriteria.forClass(Exercicio.class);
 		criteria.add(Property.forName("idExercicio").notIn(subqueryExercicioAluno));
 
 		return (List<Exercicio>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@Override
+	public Exercicio findById(Long id) {
+		return this.hibernateTemplate.get(Exercicio.class, id);
 	}
 }

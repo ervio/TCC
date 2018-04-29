@@ -11,4 +11,6 @@ public interface ReadingQuestaoDao {
 	public List<ReadingQuestao> findByExercise(Long exerciseId);
 
 	public void delete(ReadingQuestao readingQuestao);
+
+	public void deleteAll(List<ReadingQuestao> readingQuestoes);
 }

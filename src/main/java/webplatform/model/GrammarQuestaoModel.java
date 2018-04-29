@@ -6,6 +6,7 @@ public class GrammarQuestaoModel {
 	private String questao;
 	private GrammarDefinicaoModel definicaoResposta;
 	private Integer resposta;
+	private Integer sequencia;
 
 	public Long getId() {
 		return id;
@@ -37,6 +38,14 @@ public class GrammarQuestaoModel {
 
 	public void setDefinicaoResposta(GrammarDefinicaoModel definicaoResposta) {
 		this.definicaoResposta = definicaoResposta;
+	}
+
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void setSequencia(Integer sequencia) {
+		this.sequencia = sequencia;
 	}
 
 }

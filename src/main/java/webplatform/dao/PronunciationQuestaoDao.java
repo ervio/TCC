@@ -11,4 +11,6 @@ public interface PronunciationQuestaoDao {
 	public List<PronunciationQuestao> findByExercise(Long exerciseId);
 
 	public void delete(PronunciationQuestao PronunciationQuestao);
+
+	public void deleteAll(List<PronunciationQuestao> pronunciationQuestoes);
 }

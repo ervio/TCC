@@ -22,33 +22,37 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import webplatform.bo.ExercisesManagementBo;
-import webplatform.dao.AlternativaDao;
 import webplatform.dao.AlunoDao;
 import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioDao;
 import webplatform.dao.GrammarDefinicaoDao;
 import webplatform.dao.GrammarQuestaoDao;
+import webplatform.dao.GrammarRespostaDao;
 import webplatform.dao.ImagemDao;
 import webplatform.dao.MusicaDao;
 import webplatform.dao.PronunciationQuestaoDao;
 import webplatform.dao.PronunciationQuestaoParteDao;
-import webplatform.dao.QuestaoDao;
+import webplatform.dao.PronunciationRespostaDao;
 import webplatform.dao.ReadingAlternativaDao;
 import webplatform.dao.ReadingQuestaoDao;
+import webplatform.dao.ReadingRespostaDao;
+import webplatform.dao.VocabularyRespostaDao;
 import webplatform.model.ExercicioModel;
 import webplatform.model.ImagemModel;
-import webplatform.model.entity.Alternativa;
 import webplatform.model.entity.Aluno;
 import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
+import webplatform.model.entity.GrammarResposta;
 import webplatform.model.entity.Imagem;
 import webplatform.model.entity.PronunciationQuestao;
 import webplatform.model.entity.PronunciationQuestaoParte;
-import webplatform.model.entity.Questao;
+import webplatform.model.entity.PronunciationResposta;
 import webplatform.model.entity.ReadingAlternativa;
 import webplatform.model.entity.ReadingQuestao;
+import webplatform.model.entity.ReadingResposta;
+import webplatform.model.entity.VocabularyResposta;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @RestController
@@ -59,14 +63,6 @@ public class ExercisesManagementController {
 
 	@Autowired
 	private ExercicioDao exercicioDao;
-
-	// TODO: Remover
-	@Autowired
-	private QuestaoDao questaoDao;
-
-	// TODO: Remover
-	@Autowired
-	private AlternativaDao alternativaDao;
 
 	@Autowired
 	private AlunoDao alunoDao;
@@ -97,6 +93,18 @@ public class ExercisesManagementController {
 
 	@Autowired
 	private PronunciationQuestaoParteDao pronunciationQuestaoParteDao;
+
+	@Autowired
+	private VocabularyRespostaDao vocabularyRespostaDao;
+
+	@Autowired
+	private GrammarRespostaDao grammarRespostaDao;
+
+	@Autowired
+	private ReadingRespostaDao readingRespostaDao;
+
+	@Autowired
+	private PronunciationRespostaDao pronunciationRespostaDao;
 
 	/**
 	 * The method saves the exercises including the music of it, the questions and
@@ -220,11 +228,6 @@ public class ExercisesManagementController {
 		List<ImagemModel> lista = new ArrayList<ImagemModel>();
 
 		for (Imagem imagem : listaImagens) {
-			// File file = new File(System.getProperty("java.io.tmpdir") + "/" +
-			// imagem.getNome());
-			// FileOutputStream fOut = new FileOutputStream(file);
-			// fOut.write(imagem.getBytes());
-			// fOut.close();
 			ImagemModel imagemModel = new ImagemModel();
 			imagemModel.setId(imagem.getId());
 			imagemModel.setBase64(DatatypeConverter.printBase64Binary(imagem.getBytes()));
@@ -236,68 +239,6 @@ public class ExercisesManagementController {
 		return new ResponseEntity(lista, HttpStatus.OK);
 	}
 
-	// TODO: Remover
-	/**
-	 * Search all the definitions related to the exercise selected
-	 * 
-	 * @param exerciseId
-	 * @return
-	 */
-	@RequestMapping(value = "/searchQuestionsByExercise/{exerciseId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity searchQuestionsByExercise(@PathVariable("exerciseId") String exerciseId) {
-		List<Questao> exercicios = questaoDao.findByExercise(Long.parseLong(exerciseId));
-		return new ResponseEntity(exercicios, HttpStatus.OK);
-	}
-
-	// TODO: Remover
-	/**
-	 * Search all the options related to the question selected
-	 * 
-	 * @param questionId
-	 * @return
-	 */
-	@RequestMapping(value = "/searchOptionsByQuestion/{questionId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity searchOptionsByQuestion(@PathVariable("questionId") String questionId) {
-		List<Alternativa> alternativas = alternativaDao.findByQuestao(Long.parseLong(questionId));
-		return new ResponseEntity(alternativas, HttpStatus.OK);
-	}
-
-	// TODO: Remover
-	/**
-	 * Delete all the selected alternatives from the question
-	 * 
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping(value = "/deleteAlternatives/{ids}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity deleteAlternatives(@PathVariable String[] ids) {
-		for (String alternativeId : ids) {
-			alternativaDao.delete(new Alternativa(Long.parseLong(alternativeId)));
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	// TODO: Remover
-	/**
-	 * Delete the questions and all the alternatives related to them
-	 * 
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping(value = "/deleteQuestions/{ids}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity deleteQuestions(@PathVariable String[] ids) {
-		for (String questionId : ids) {
-			List<Alternativa> alternativas = alternativaDao.findByQuestao(Long.parseLong(questionId));
-
-			for (Alternativa alternativa : alternativas) {
-				alternativaDao.delete(alternativa);
-			}
-
-			questaoDao.delete(new Questao(Long.parseLong(questionId)));
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
 	/**
 	 * Delete the pictures related to the exercise selected
 	 * 
@@ -306,9 +247,52 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deletePictures/{ids}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deletePictures(@PathVariable String[] ids) {
+		List<Imagem> pictures = new ArrayList<>();
 		for (String pictureId : ids) {
-			imagemDao.delete(new Imagem(Long.parseLong(pictureId)));
+			pictures.add(new Imagem(Long.parseLong(pictureId)));
 		}
+		List<VocabularyResposta> vocabularyRespostas = vocabularyRespostaDao.findByImageList(pictures);
+		if (!vocabularyRespostas.isEmpty()) {
+			vocabularyRespostaDao.deleteAll(vocabularyRespostas);
+		}
+		imagemDao.deleteAll(pictures);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Delete the grammar alternatives and definitions related to the exercise
+	 * selected
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteGrammarAlternativesAndQuestions/{grammarAlternativesToDelete}/{grammarDefinitionsToDelete}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity deleteGrammarAlternativesAndQuestions(
+			@PathVariable("grammarAlternativesToDelete") String[] grammarAlternativesToDelete,
+			@PathVariable("grammarDefinitionsToDelete") String[] grammarDefinitionsToDelete) {
+
+		// Alternatives
+		List<GrammarQuestao> grammarQuestoes = new ArrayList<>();
+		for (String grammarQuestaoId : grammarAlternativesToDelete) {
+			grammarQuestoes.add(new GrammarQuestao(Long.parseLong(grammarQuestaoId)));
+		}
+		List<GrammarResposta> grammarRespostas = grammarRespostaDao.findByGrammarQuestaoList(grammarQuestoes);
+		if (!grammarRespostas.isEmpty()) {
+			grammarRespostaDao.deleteAll(grammarRespostas);
+		}
+		grammarQuestaoDao.deleteAll(grammarQuestoes);
+
+		// Definitions
+		List<GrammarDefinicao> grammarDefinicoes = new ArrayList<>();
+		for (String definicaoId : grammarDefinitionsToDelete) {
+			grammarDefinicoes.add(new GrammarDefinicao(Long.parseLong(definicaoId)));
+		}
+		grammarRespostas = grammarRespostaDao.findByGrammarDefinicaoList(grammarDefinicoes);
+		if (!grammarRespostas.isEmpty()) {
+			grammarRespostaDao.deleteAll(grammarRespostas);
+		}
+		grammarDefinicaoDao.deleteAll(grammarDefinicoes);
+
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -320,9 +304,15 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deleteGrammarAlternatives/{ids}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deleteGrammarAlternatives(@PathVariable String[] ids) {
-		for (String alternativeId : ids) {
-			grammarQuestaoDao.delete(new GrammarQuestao(Long.parseLong(alternativeId)));
+		List<GrammarQuestao> grammarQuestoes = new ArrayList<>();
+		for (String grammarQuestaoId : ids) {
+			grammarQuestoes.add(new GrammarQuestao(Long.parseLong(grammarQuestaoId)));
 		}
+		List<GrammarResposta> grammarRespostas = grammarRespostaDao.findByGrammarQuestaoList(grammarQuestoes);
+		if (!grammarRespostas.isEmpty()) {
+			grammarRespostaDao.deleteAll(grammarRespostas);
+		}
+		grammarQuestaoDao.deleteAll(grammarQuestoes);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -334,9 +324,15 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deleteGrammarDefinitions/{ids}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deleteGrammarDefinitions(@PathVariable String[] ids) {
-		for (String definitionId : ids) {
-			grammarDefinicaoDao.delete(new GrammarDefinicao(Long.parseLong(definitionId)));
+		List<GrammarDefinicao> grammarDefinicoes = new ArrayList<>();
+		for (String definicaoId : ids) {
+			grammarDefinicoes.add(new GrammarDefinicao(Long.parseLong(definicaoId)));
 		}
+		List<GrammarResposta> grammarRespostas = grammarRespostaDao.findByGrammarDefinicaoList(grammarDefinicoes);
+		if (!grammarRespostas.isEmpty()) {
+			grammarRespostaDao.deleteAll(grammarRespostas);
+		}
+		grammarDefinicaoDao.deleteAll(grammarDefinicoes);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -351,13 +347,28 @@ public class ExercisesManagementController {
 	public @ResponseBody ResponseEntity deleteReadingAlternativesAndQuestions(
 			@PathVariable("readingAlternativesToDelete") String[] readingAlternativesToDelete,
 			@PathVariable("readingQuestionsToDelete") String[] readingQuestionsToDelete) {
-		for (String alternativeId : readingAlternativesToDelete) {
-			readingAlternativaDao.delete(new ReadingAlternativa(Long.parseLong(alternativeId)));
+		// Alternatives
+		List<ReadingAlternativa> readingAlternativas = new ArrayList<>();
+		for (String alternativaId : readingAlternativesToDelete) {
+			readingAlternativas.add(new ReadingAlternativa(Long.parseLong(alternativaId)));
+		}
+		List<ReadingResposta> readingRespostas = readingRespostaDao.findByReadingAlternativas(readingAlternativas);
+		if (!readingRespostas.isEmpty()) {
+			readingRespostaDao.deleteAll(readingRespostas);
+		}
+		readingAlternativaDao.deleteAll(readingAlternativas);
+
+		// Questions
+		List<ReadingQuestao> readingQuestoes = new ArrayList<>();
+		for (String readingQuestaoId : readingQuestionsToDelete) {
+			readingQuestoes.add(new ReadingQuestao(Long.parseLong(readingQuestaoId)));
+		}
+		readingRespostas = readingRespostaDao.findByReadingQuestoes(readingQuestoes);
+		if (!readingRespostas.isEmpty()) {
+			readingRespostaDao.deleteAll(readingRespostas);
 		}
 
-		for (String questionId : readingQuestionsToDelete) {
-			readingQuestaoDao.delete(new ReadingQuestao(Long.parseLong(questionId)));
-		}
+		readingQuestaoDao.deleteAll(readingQuestoes);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -370,9 +381,15 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deleteReadingAlternatives/{ids}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deleteReadingAlternatives(@PathVariable String[] ids) {
-		for (String readingAlternativaId : ids) {
-			readingAlternativaDao.delete(new ReadingAlternativa(Long.parseLong(readingAlternativaId)));
+		List<ReadingAlternativa> readingAlternativas = new ArrayList<>();
+		for (String alternativaId : ids) {
+			readingAlternativas.add(new ReadingAlternativa(Long.parseLong(alternativaId)));
 		}
+		List<ReadingResposta> readingRespostas = readingRespostaDao.findByReadingAlternativas(readingAlternativas);
+		if (!readingRespostas.isEmpty()) {
+			readingRespostaDao.deleteAll(readingRespostas);
+		}
+		readingAlternativaDao.deleteAll(readingAlternativas);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -384,9 +401,16 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deleteReadingQuestions/{ids}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deleteReadingQuestions(@PathVariable String[] ids) {
-		for (String readingQuestionId : ids) {
-			readingQuestaoDao.delete(new ReadingQuestao(Long.parseLong(readingQuestionId)));
+		List<ReadingQuestao> readingQuestoes = new ArrayList<>();
+		for (String readingQuestaoId : ids) {
+			readingQuestoes.add(new ReadingQuestao(Long.parseLong(readingQuestaoId)));
 		}
+		List<ReadingResposta> readingRespostas = readingRespostaDao.findByReadingQuestoes(readingQuestoes);
+		if (!readingRespostas.isEmpty()) {
+			readingRespostaDao.deleteAll(readingRespostas);
+		}
+
+		readingQuestaoDao.deleteAll(readingQuestoes);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -400,14 +424,36 @@ public class ExercisesManagementController {
 	public @ResponseBody ResponseEntity deletePronunciationPartsAndQuestions(
 			@PathVariable("pronunciationQuestionPartsToDelete") String[] pronunciationQuestionPartsToDelete,
 			@PathVariable("pronunciationQuestionsToDelete") String[] pronunciationQuestionsToDelete) {
-		for (String questionPartId : pronunciationQuestionPartsToDelete) {
-			pronunciationQuestaoParteDao.delete(new PronunciationQuestaoParte(Long.parseLong(questionPartId)));
+		// Parts
+		List<PronunciationQuestaoParte> partes = new ArrayList<>();
+		for (String parteId : pronunciationQuestionPartsToDelete) {
+			partes.add(new PronunciationQuestaoParte(Long.parseLong(parteId)));
 		}
+		List<PronunciationResposta> pronunciationRespostas = pronunciationRespostaDao
+				.findByPronunciationQuestaoParteList(partes);
 
+		if (!pronunciationRespostas.isEmpty()) {
+			pronunciationRespostaDao.deleteAll(pronunciationRespostas);
+		}
+		pronunciationQuestaoParteDao.deleteAll(partes);
+
+		// Questions
+		List<PronunciationQuestao> pronunciationQuestoes = new ArrayList<>();
 		for (String questionId : pronunciationQuestionsToDelete) {
-			pronunciationQuestaoDao.delete(new PronunciationQuestao(Long.parseLong(questionId)));
+			pronunciationQuestoes.add(new PronunciationQuestao(Long.parseLong(questionId)));
 		}
 
+		partes = pronunciationQuestaoParteDao.findByPronunciationQuestaoList(pronunciationQuestoes);
+		if (!partes.isEmpty()) {
+			pronunciationRespostas = pronunciationRespostaDao.findByPronunciationQuestaoParteList(partes);
+		}
+		if (!pronunciationRespostas.isEmpty()) {
+			pronunciationRespostaDao.deleteAll(pronunciationRespostas);
+		}
+		if (!partes.isEmpty()) {
+			pronunciationQuestaoParteDao.deleteAll(partes);
+		}
+		pronunciationQuestaoDao.deleteAll(pronunciationQuestoes);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -419,9 +465,16 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deletePronunciationQuestionParts/{ids}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deletePronunciationQuestionParts(@PathVariable String[] ids) {
-		for (String questionPartId : ids) {
-			pronunciationQuestaoParteDao.delete(new PronunciationQuestaoParte(Long.parseLong(questionPartId)));
+		List<PronunciationQuestaoParte> partes = new ArrayList<>();
+		for (String parteId : ids) {
+			partes.add(new PronunciationQuestaoParte(Long.parseLong(parteId)));
 		}
+		List<PronunciationResposta> pronunciationRespostas = pronunciationRespostaDao
+				.findByPronunciationQuestaoParteList(partes);
+		if (!pronunciationRespostas.isEmpty()) {
+			pronunciationRespostaDao.deleteAll(pronunciationRespostas);
+		}
+		pronunciationQuestaoParteDao.deleteAll(partes);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -433,9 +486,23 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deletePronunciationQuestions/{ids}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deletePronunciationQuestions(@PathVariable String[] ids) {
+		List<PronunciationQuestao> pronunciationQuestoes = new ArrayList<>();
 		for (String questionId : ids) {
-			pronunciationQuestaoDao.delete(new PronunciationQuestao(Long.parseLong(questionId)));
+			pronunciationQuestoes.add(new PronunciationQuestao(Long.parseLong(questionId)));
 		}
+
+		List<PronunciationQuestaoParte> partes = pronunciationQuestaoParteDao
+				.findByPronunciationQuestaoList(pronunciationQuestoes);
+		List<PronunciationResposta> pronunciationRespostas = pronunciationRespostaDao
+				.findByPronunciationQuestaoParteList(partes);
+
+		if (!pronunciationRespostas.isEmpty()) {
+			pronunciationRespostaDao.deleteAll(pronunciationRespostas);
+		}
+		if (!partes.isEmpty()) {
+			pronunciationQuestaoParteDao.deleteAll(partes);
+		}
+		pronunciationQuestaoDao.deleteAll(pronunciationQuestoes);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
@@ -448,22 +515,10 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deleteExercise/{exerciseId}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deleteExercise(@PathVariable("exerciseId") String exerciseId) {
-		List<Questao> questoes = questaoDao.findByExercise(Long.parseLong(exerciseId));
-
-		for (Questao questao : questoes) {
-
-			List<Alternativa> alternativas = alternativaDao.findByQuestao(questao.getIdQuestao());
-
-			for (Alternativa alternativa : alternativas) {
-				alternativaDao.delete(alternativa);
-			}
-
-			questaoDao.delete(questao);
-		}
-
+		Exercicio exercicio = exercicioDao.findById(Long.parseLong(exerciseId));
 		imagemDao.deleteAll(imagemDao.findByExercise(Long.parseLong(exerciseId)));
-		exercicioDao.delete(new Exercicio(Long.parseLong(exerciseId)));
-		musicaDao.delete(questoes.get(0).getExercicio().getMusica());
+		exercicioDao.delete(exercicio);
+		musicaDao.delete(exercicio.getMusica());
 		return new ResponseEntity(HttpStatus.OK);
 	}
 

@@ -31,15 +31,11 @@ public class Exercicio implements java.io.Serializable {
 	private Long idExercicio;
 	private Professor professor;
 	private Musica musica;
-	// TODO: remover atributo nome
-	private String nome;
 	private String nivel;
 	private String writingQuestao;
-	private int valorNotaMaxima;
 	private Byte media;
 	private Integer totalPosts;
 	private Set<ExercicioAluno> exercicioAlunos = new HashSet<ExercicioAluno>();
-	private Set<Questao> questoes = new HashSet<Questao>();
 	private List<Imagem> imagens = new ArrayList<Imagem>();
 	private List<GrammarDefinicao> grammarDefinicoes = new ArrayList<GrammarDefinicao>();
 	private List<ReadingQuestao> readingQuestoes = new ArrayList<ReadingQuestao>();
@@ -52,18 +48,14 @@ public class Exercicio implements java.io.Serializable {
 		this.idExercicio = idExercicio;
 	}
 
-	public Exercicio(Long idExercicio, Professor professor, Musica musica, String nome, String nivel,
-			int valorNotaMaxima, Byte media, Set<ExercicioAluno> exercicioAlunos, Set<Questao> questoes,
-			ArrayList<Imagem> imagens) {
+	public Exercicio(Long idExercicio, Professor professor, Musica musica, String nivel, Byte media,
+			Set<ExercicioAluno> exercicioAlunos, ArrayList<Imagem> imagens) {
 		this.idExercicio = idExercicio;
 		this.professor = professor;
 		this.musica = musica;
-		this.nome = nome;
 		this.nivel = nivel;
-		this.valorNotaMaxima = valorNotaMaxima;
 		this.media = media;
 		this.exercicioAlunos = exercicioAlunos;
-		this.questoes = questoes;
 		this.imagens = imagens;
 	}
 
@@ -101,15 +93,6 @@ public class Exercicio implements java.io.Serializable {
 		this.musica = musica;
 	}
 
-	@Column(name = "NOME", length = 30)
-	public String getNome() {
-		return this.nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	@Column(name = "NIVEL", length = 15)
 	public String getNivel() {
 		return this.nivel;
@@ -126,15 +109,6 @@ public class Exercicio implements java.io.Serializable {
 
 	public void setWritingQuestao(String writingQuestao) {
 		this.writingQuestao = writingQuestao;
-	}
-
-	@Column(name = "VALOR_NOTA_MAXIMA", precision = 2, scale = 0)
-	public int getValorNotaMaxima() {
-		return this.valorNotaMaxima;
-	}
-
-	public void setValorNotaMaxima(int valorNotaMaxima) {
-		this.valorNotaMaxima = valorNotaMaxima;
 	}
 
 	@Column(name = "TOTAL_POSTS", precision = 5, scale = 0)
@@ -163,16 +137,6 @@ public class Exercicio implements java.io.Serializable {
 
 	public void setExercicioAlunos(Set<ExercicioAluno> exercicioAlunos) {
 		this.exercicioAlunos = exercicioAlunos;
-	}
-
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "exercicio")
-	public Set<Questao> getQuestoes() {
-		return this.questoes;
-	}
-
-	public void setQuestoes(Set<Questao> questaos) {
-		this.questoes = questaos;
 	}
 
 	@JsonIgnore

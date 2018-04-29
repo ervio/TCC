@@ -55,4 +55,18 @@ public class PronunciationQuestaoParteDaoImpl extends BaseDao<PronunciationQuest
 	public void delete(PronunciationQuestaoParte pronunciationQuestaoParte) {
 		hibernateTemplate.delete(pronunciationQuestaoParte);
 	}
+
+	@Override
+	public void deleteAll(List<PronunciationQuestaoParte> pronunciationQuestaoPartes) {
+		hibernateTemplate.deleteAll(pronunciationQuestaoPartes);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PronunciationQuestaoParte> findByPronunciationQuestaoList(
+			List<PronunciationQuestao> pronunciationQuestoes) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.in("pronunciationQuestao", pronunciationQuestoes));
+		return (List<PronunciationQuestaoParte>) hibernateTemplate.findByCriteria(criteria);
+	}
 }

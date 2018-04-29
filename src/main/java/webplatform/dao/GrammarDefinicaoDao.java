@@ -11,4 +11,6 @@ public interface GrammarDefinicaoDao {
 	public List<GrammarDefinicao> findByExercise(Long exerciseId);
 
 	public void delete(GrammarDefinicao grammarDefinicao);
+
+	public void deleteAll(List<GrammarDefinicao> grammarDefinicoes);
 }

@@ -42,7 +42,6 @@ public class RankingController {
 		for (Exercicio exercicio : exercises) {
 			ExercicioModel exerciseModel = new ExercicioModel();
 			exerciseModel.setNivel(exercicio.getNivel());
-			exerciseModel.setNome(exercicio.getNome());
 			exerciseModel.setMusica(new MusicaModel());
 			exerciseModel.getMusica().setNome(exercicio.getMusica().getNome());
 			exerciseModel.setExercicioAlunos(new ArrayList<ExercicioAlunoModel>());

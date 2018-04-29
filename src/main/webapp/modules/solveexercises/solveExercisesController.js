@@ -5,13 +5,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	$scope.exercise;
 	$scope.splittedLyrics = [];
 	$scope.error;
-	$rootScope.questionsSubmitted = false;
 	$scope.speaking = false;
-	
-	// TODO: Remover verificação de questões
-	if(!$rootScope.questions){
-		$rootScope.questions = [];
-	}
 	
 	if(!$rootScope.models){
 		$rootScope.models = {
@@ -44,13 +38,11 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	$scope.init = function(){
 		
 		delete $rootScope.models;
-		delete $rootScope.questions;
 		delete $rootScope.vocabularyPictures;
 		delete $rootScope.grammarQuestions;
 		delete $rootScope.grammarDefinitions;
 		delete $rootScope.readingQuestions;
 		delete $rootScope.pronunciationQuestoes;
-		$rootScope.questionsSubmitted = false;
 		$rootScope.exerciseSubmitted = false;
 		
 		solveExercisesService.searchAllNotAssignedExercises($rootScope.loggedUser.id).then(
@@ -100,41 +92,6 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 				$rootScope.exerciseToEdit.chances = 0;
 				$scope.updateExercise();
 			}
-		}
-	};
-	
-	// TODO: Remover este método
-	// Method called when the questions screen is open. It calls the method searchAlternatives from solveExercisesService
-	$scope.initQuestions = function(){
-		if($rootScope.questions.length == 0){
-			solveExercisesService.searchQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
-				function successCallback(response) {
-					
-					$(response.data).each(function(index, question) {
-						
-						$rootScope.questions.push(angular.copy(question));
-						$rootScope.questions[index].alternativas = [];
-						$rootScope.questions[index].resposta = "";
-						
-						solveExercisesService.searchAlternatives($rootScope.questions[index].idQuestao).then( 
-								function successCallback(response) {
-									
-									$(response.data).each(function(indexAlternative, alternative) {
-										$rootScope.questions[index].alternativas.push(angular.copy(alternative));
-									});
-									
-								}, 
-								function errorCallback(response) {
-									
-								}
-							);
-					});
-					
-				}, 
-				function errorCallback(response) {
-					
-				}
-			);
 		}
 	};
 	
@@ -337,38 +294,6 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		);
 	};
 	
-	// TODO: Remover
-	// Method called by "Go to questions" button
-	$scope.goToQuestionsResolution = function(){
-		
-		$scope.error = "";
-		$scope.isLyricsCorrect = true;
-		
-		// Compares the lyrics length with the ordered list
-		if($rootScope.models.lists.B.length == $scope.splittedLyrics.length){
-			
-			// Validates if it's in the correct order, if it's not error out
-			$($scope.splittedLyrics).each(function(index, lyrics) {
-				if(lyrics != $rootScope.models.lists.B[index].label){
-					$scope.isLyricsCorrect = false;
-					return false;
-				}
-			});
-			
-			if(!$scope.isLyricsCorrect){
-				$scope.incrementChances();
-				$scope.error = "The lyrics are not in the correct order.";
-			}else{
-				$state.go("resolveExerciseQuestions");
-			}
-			
-		}else{
-			$scope.incrementChances();
-			$scope.error = "The lyrics are not in the correct order.";
-		}
-		
-	};
-	
 	$scope.goToVocabulary = function(){
 		
 		$scope.error = "";
@@ -473,39 +398,6 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
 		}
 		
-	};
-	
-	// TODO: Remover
-	// Method to submit the questions resolved by the student. It calls the method submitQuestions from solveExercisesService
-	$scope.submitQuestions = function(){
-		
-		$scope.error = "";
-		var questionWithNoAnswer = false;
-		
-		$($rootScope.questions).each(function(index, question) {
-			if(question.resposta == ""){
-				questionWithNoAnswer = true;
-				return false;
-			}
-		});
-		
-		if(questionWithNoAnswer){
-			$scope.error = "It's needed to answer all questions.";
-		}else{
-			
-			$rootScope.exerciseToEdit.questions = [];
-			$rootScope.exerciseToEdit.questions = angular.copy($rootScope.questions);
-			
-			solveExercisesService.submitQuestions($rootScope.exerciseToEdit).then( 
-				function successCallback(response) {
-					$rootScope.exerciseToEdit.nota = response.data.nota;
-					$scope.questionsSubmitted = true;
-				}, 
-				function errorCallback(response) {
-					
-				}
-			);
-		}
 	};
 	
 	$scope.submitExercise = function(){

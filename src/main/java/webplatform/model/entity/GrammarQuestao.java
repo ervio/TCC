@@ -23,6 +23,7 @@ public class GrammarQuestao implements java.io.Serializable {
 	private Long id;
 	private String questao;
 	private GrammarDefinicao definicaoResposta;
+	private Integer sequencia;
 
 	public GrammarQuestao() {
 	}
@@ -70,4 +71,12 @@ public class GrammarQuestao implements java.io.Serializable {
 		this.definicaoResposta = definicaoResposta;
 	}
 
+	@Column(name = "SEQUENCIA", precision = 2, scale = 0)
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void setSequencia(Integer sequencia) {
+		this.sequencia = sequencia;
+	}
 }
