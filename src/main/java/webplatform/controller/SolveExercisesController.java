@@ -248,8 +248,8 @@ public class SolveExercisesController {
 					exercicioAlunoModel.getGrammarDefinitions().get(grammarQuestaoModel.getResposta()).getId()));
 			grammarRespostaDao.saveOrUpdate(grammarResposta);
 
-			if (grammarQuestaoModel.getDefinicaoResposta().getId() == grammarResposta.getGrammarQuestaoResposta()
-					.getId()) {
+			if (grammarQuestaoModel.getDefinicaoResposta().getId().longValue() == grammarResposta
+					.getGrammarQuestaoResposta().getId().longValue()) {
 				questoesCorretas++;
 			}
 		}
@@ -262,8 +262,8 @@ public class SolveExercisesController {
 			readingResposta.setReadingQuestaoResposta(new ReadingAlternativa(readingQuestaoModel.getResposta()));
 			readingRespostaDao.saveOrUpdate(readingResposta);
 			for (ReadingAlternativaModel readingAlternativaModel : readingQuestaoModel.getReadingAlternativas()) {
-				if (readingAlternativaModel.getCorreta()
-						&& readingAlternativaModel.getId() == readingResposta.getReadingQuestaoResposta().getId()) {
+				if (readingAlternativaModel.getCorreta() && readingAlternativaModel.getId()
+						.longValue() == readingResposta.getReadingQuestaoResposta().getId().longValue()) {
 					questoesCorretas++;
 					break;
 				}
@@ -308,7 +308,12 @@ public class SolveExercisesController {
 		forumPostDao.saveOrUpdate(post);
 
 		Exercicio exercicio = exercicioAluno.getExercicio();
-		exercicio.setTotalPosts(exercicio.getTotalPosts() + 1);
+		if (exercicio.getTotalPosts() == null) {
+			exercicio.setTotalPosts(1);
+		} else {
+			exercicio.setTotalPosts(exercicio.getTotalPosts() + 1);
+		}
+
 		exercicioDao.saveOrUpdate(exercicio);
 
 		return new ResponseEntity(exercicioAlunoModel, HttpStatus.OK);

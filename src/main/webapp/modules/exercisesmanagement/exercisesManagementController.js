@@ -1028,6 +1028,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		  var descricao = ($scope.pronunciationQuestions.length + 1) + ") ";
 		  var question = {
 				  descricao : "",
+				  sequencia : $scope.pronunciationQuestions.length + 1,
 				  pronunciationQuestaoPartes : []
 		  };
 		  

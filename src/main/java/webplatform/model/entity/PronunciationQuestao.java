@@ -28,6 +28,7 @@ public class PronunciationQuestao implements java.io.Serializable {
 
 	private Long id;
 	private Exercicio exercicio;
+	private Integer sequencia;
 	private List<PronunciationQuestaoParte> pronunciationQuestaoPartes = new ArrayList<PronunciationQuestaoParte>();
 
 	public PronunciationQuestao() {
@@ -78,4 +79,12 @@ public class PronunciationQuestao implements java.io.Serializable {
 		this.pronunciationQuestaoPartes = pronunciationQuestaoPartes;
 	}
 
+	@Column(name = "SEQUENCIA", precision = 2, scale = 0)
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void setSequencia(Integer sequencia) {
+		this.sequencia = sequencia;
+	}
 }

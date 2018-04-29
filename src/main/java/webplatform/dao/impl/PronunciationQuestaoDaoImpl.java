@@ -3,6 +3,7 @@ package webplatform.dao.impl;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class PronunciationQuestaoDaoImpl extends BaseDao<PronunciationQuestao> i
 		DetachedCriteria criteria = getDetachedCriteria();
 		criteria.createAlias("exercicio", "exercicio");
 		criteria.add(Restrictions.eq("exercicio.idExercicio", exerciseId));
+		criteria.addOrder(Order.asc("sequencia"));
 		return (List<PronunciationQuestao>) hibernateTemplate.findByCriteria(criteria);
 	}
 

@@ -108,7 +108,7 @@
 												 ng-click="$parent.basicSelected = basic" 
 												 class="list-group-item" 
 												 ng-class="{active:basicSelected==basic}">
-												 {{$index + 1}} - {{basic.aluno.nome}} | Hits: {{basic.chances}} | Resolution time: {{basic.tempoResolucaoString}}
+												 {{$index + 1}} - {{basic.aluno.nome}} | Hits: {{basic.chances}} | Resolution time: {{basic.tempoResolucaoString}} | Correct questions: {{basic.questoesCorretas}}
 											</a>
 										</div>
 								      
@@ -126,7 +126,7 @@
 												 ng-click="$parent.intermediateSelected = intermediate" 
 												 class="list-group-item" 
 												 ng-class="{active:intermediateSelected==intermediate}">
-												 {{$index + 1}} - {{intermediate.aluno.nome}} | Hits: {{intermediate.chances}} | Resolution time: {{intermediate.tempoResolucaoString}}
+												 {{$index + 1}} - {{intermediate.aluno.nome}} | Hits: {{intermediate.chances}} | Resolution time: {{intermediate.tempoResolucaoString}} | Correct questions: {{intermediate.questoesCorretas}}
 											</a>
 										</div>
 								    
@@ -144,7 +144,7 @@
 												 ng-click="$parent.advancedSelected = advanced" 
 												 class="list-group-item" 
 												 ng-class="{active:advancedSelected==advanced}">
-												 {{$index + 1}} - {{advanced.aluno.nome}} | Hits: {{advanced.chances}} | Resolution time: {{advanced.tempoResolucaoString}}
+												 {{$index + 1}} - {{advanced.aluno.nome}} | Hits: {{advanced.chances}} | Resolution time: {{advanced.tempoResolucaoString}} | Correct questions: {{advanced.questoesCorretas}}
 											</a>
 										</div>
 								    

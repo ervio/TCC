@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -72,8 +71,8 @@ public class Musica implements java.io.Serializable {
 		this.cantor = cantor;
 	}
 
-	@Lob
-	@Column(name = "LETRA")
+	//@Lob
+	@Column(name = "LETRA", columnDefinition = "text")
 	public String getLetra() {
 		return this.letra;
 	}
@@ -82,8 +81,8 @@ public class Musica implements java.io.Serializable {
 		this.letra = letra;
 	}
 
-	@Lob
-	@Column(name = "LETRA_ORDENAR")
+	//@Lob
+	@Column(name = "LETRA_ORDENAR", columnDefinition = "text")
 	public String getLetraOrdenar() {
 		return letraOrdenar;
 	}

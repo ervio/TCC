@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -56,8 +55,8 @@ public class Imagem implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Lob
-	@Column(name = "BYTES")
+	//@Lob
+	@Column(name = "BYTES", columnDefinition = "text")
 	public byte[] getBytes() {
 		return this.bytes;
 	}

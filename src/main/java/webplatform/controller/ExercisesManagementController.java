@@ -493,8 +493,12 @@ public class ExercisesManagementController {
 
 		List<PronunciationQuestaoParte> partes = pronunciationQuestaoParteDao
 				.findByPronunciationQuestaoList(pronunciationQuestoes);
-		List<PronunciationResposta> pronunciationRespostas = pronunciationRespostaDao
-				.findByPronunciationQuestaoParteList(partes);
+
+		List<PronunciationResposta> pronunciationRespostas = new ArrayList<>();
+
+		if (!partes.isEmpty()) {
+			pronunciationRespostas = pronunciationRespostaDao.findByPronunciationQuestaoParteList(partes);
+		}
 
 		if (!pronunciationRespostas.isEmpty()) {
 			pronunciationRespostaDao.deleteAll(pronunciationRespostas);
