@@ -14,7 +14,11 @@ public interface AlunoDao {
 
 	public List<Aluno> findByEmailAndPassword(String email, String password);
 
+	public List<Aluno> findByEmail(String email);
+
 	public List<Aluno> findByNameAndEmailWithoutTeacher(String name, String email);
 
 	public List<Aluno> findByNameAndEmailAndTeacher(String name, String email, Long teacherId);
+
+	public List<Aluno> findDifferentWithSameEmail(String email, Long studentId);
 }

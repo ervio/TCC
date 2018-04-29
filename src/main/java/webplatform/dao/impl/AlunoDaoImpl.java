@@ -78,4 +78,21 @@ public class AlunoDaoImpl extends BaseDao<Aluno> implements AlunoDao {
 		return (List<Aluno>) this.hibernateTemplate.findByCriteria(criteria);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Aluno> findByEmail(String email) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.eq("email", email));
+		return (List<Aluno>) this.hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Aluno> findDifferentWithSameEmail(String email, Long studentId) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.eq("email", email));
+		criteria.add(Restrictions.ne("id", studentId));
+		return (List<Aluno>) this.hibernateTemplate.findByCriteria(criteria);
+	}
+
 }

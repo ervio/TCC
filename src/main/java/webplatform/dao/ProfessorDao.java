@@ -13,4 +13,8 @@ public interface ProfessorDao {
 	public void delete(Professor entity);
 
 	public List<Professor> findByEmailAndPassword(String email, String password);
+
+	public List<Professor> findByEmail(String email);
+
+	public List<Professor> findDifferentWithSameEmail(String email, Long teacherId);
 }

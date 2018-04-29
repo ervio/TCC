@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import webplatform.dao.AlunoDao;
 import webplatform.dao.PaisDao;
 import webplatform.dao.ProfessorDao;
-import webplatform.enums.DataBaseErrorsEnum;
 import webplatform.model.UserModel;
 import webplatform.model.entity.Aluno;
 import webplatform.model.entity.Pais;
@@ -72,6 +70,7 @@ public class PersonalDataController {
 			if (!userModel.getEmail().equals(userModel.getNovoEmail())) {
 				professor.setEmail(userModel.getNovoEmail());
 			}
+
 			if (StringUtils.stripToNull(userModel.getNovoPassword()) != null) {
 				professor.setPassword(userModel.getNovoPassword());
 			}
@@ -81,19 +80,14 @@ public class PersonalDataController {
 			professor.setEspecialidade(userModel.getEspecialidade());
 			professor.setNomeInstituicao(userModel.getNomeInstituicao());
 
-			try {
-				professorDao.saveOrUpdate(professor);
-			} catch (Exception e) {
+			List<Professor> existent = professorDao.findDifferentWithSameEmail(professor.getEmail(), professor.getId());
 
-				// There is a constraint in the database to avoid the same email
-				// to be used by more than 1 person
-				if (e instanceof DataIntegrityViolationException || e.getCause().getCause().getMessage()
-						.contains(DataBaseErrorsEnum.EMAIL_PROFESSOR_TRIGGER.getValue())) {
-					userModel.setStatus("The email '" + userModel.getNovoEmail()
-							+ "' is already registered, please choose another one.");
-				}
-
+			if (!existent.isEmpty()) {
+				userModel.setStatus("The email '" + userModel.getNovoEmail()
+						+ "' is already registered, please choose another one.");
 				return new ResponseEntity(userModel, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
+				professorDao.saveOrUpdate(professor);
 			}
 			return new ResponseEntity(userModel, HttpStatus.OK);
 		} else {
@@ -127,19 +121,14 @@ public class PersonalDataController {
 			aluno.setGenero(userModel.getGenero());
 			aluno.setPais(userModel.getPais());
 
-			try {
-				alunoDao.saveOrUpdate(aluno);
-			} catch (Exception e) {
+			List<Aluno> existent = alunoDao.findDifferentWithSameEmail(aluno.getEmail(), aluno.getId());
 
-				// There is a constraint in the database to avoid the same email
-				// to be used by more than 1 person
-				if (e instanceof DataIntegrityViolationException || e.getCause().getCause().getMessage()
-						.contains(DataBaseErrorsEnum.EMAIL_ALUNO_TRIGGER.getValue())) {
-					userModel.setStatus("The email '" + userModel.getNovoEmail()
-							+ "' is already registered, please choose another one.");
-				}
-
+			if (!existent.isEmpty()) {
+				userModel.setStatus("The email '" + userModel.getNovoEmail()
+						+ "' is already registered, please choose another one.");
 				return new ResponseEntity(userModel, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
+				alunoDao.saveOrUpdate(aluno);
 			}
 			return new ResponseEntity(userModel, HttpStatus.OK);
 

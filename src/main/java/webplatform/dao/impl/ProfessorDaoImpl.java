@@ -43,4 +43,21 @@ public class ProfessorDaoImpl extends BaseDao<Professor> implements ProfessorDao
 		return (List<Professor>) hibernateTemplate.findByCriteria(criteria);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Professor> findByEmail(String email) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.eqOrIsNull("email", email));
+		return (List<Professor>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Professor> findDifferentWithSameEmail(String email, Long teacherId) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.eq("email", email));
+		criteria.add(Restrictions.ne("id", teacherId));
+		return (List<Professor>) hibernateTemplate.findByCriteria(criteria);
+	}
+
 }

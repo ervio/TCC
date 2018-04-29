@@ -2,7 +2,6 @@ package webplatform.controller;
 
 import java.util.List;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,10 +49,13 @@ public class SignupController {
 
 			Aluno aluno = new Aluno(null, null, userModel.getNome(), userModel.getEmail(), userModel.getPassword(),
 					null, null, userModel.getSobrenome(), userModel.getGenero(), userModel.getPais());
-			try {
-				alunoDao.saveOrUpdate(aluno);
-			} catch (ConstraintViolationException e) {
+
+			List<Aluno> existent = alunoDao.findByEmail(aluno.getEmail());
+
+			if (!existent.isEmpty()) {
 				return new ResponseEntity(aluno, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
+				alunoDao.saveOrUpdate(aluno);
 			}
 
 		} else {
@@ -61,10 +63,13 @@ public class SignupController {
 			Professor professor = new Professor(null, userModel.getNome(), userModel.getEmail(),
 					userModel.getPassword(), null, null, null, userModel.getSobrenome(), userModel.getGenero(),
 					userModel.getEspecialidade(), userModel.getNomeInstituicao(), userModel.getPais());
-			try {
-				professorDao.saveOrUpdate(professor);
-			} catch (ConstraintViolationException e) {
+
+			List<Professor> existent = professorDao.findByEmail(professor.getEmail());
+
+			if (!existent.isEmpty()) {
 				return new ResponseEntity(professor, HttpStatus.INTERNAL_SERVER_ERROR);
+			} else {
+				professorDao.saveOrUpdate(professor);
 			}
 		}
 
