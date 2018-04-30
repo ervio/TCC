@@ -9,6 +9,7 @@ angular.module('app').controller("personalDataCtrl", function($scope, $rootScope
 	// Call the method update from personalDataService
 	$scope.update = function(newrecord, confirmeNovoPassword){
 		
+		$scope.dataLoading = true;
 		$scope.error = false;
 		$scope.registered = false;
 		
@@ -24,13 +25,13 @@ angular.module('app').controller("personalDataCtrl", function($scope, $rootScope
 						$scope.registered = true;
 						$scope.newrecord.novoPassword = "";
 						$scope.confirmeNovoPassword = "";
-						
+						$scope.dataLoading = false;
 					}, 
 					function errorCallback(response) {
 						$scope.error = response.data.status;
+						$scope.dataLoading = false;
 					}
 			);
-			$scope.dataLoading = false;
 			
 		}
 		
@@ -40,9 +41,12 @@ angular.module('app').controller("personalDataCtrl", function($scope, $rootScope
 	// Method called when the screen opens
 	$scope.init = function(){
 		
+		$scope.dataLoading = true;
+		
 		personalDataService.getAllCountries().then( 
 			function successCallback(response) {
 				$scope.paises = angular.copy(response.data);
+				$scope.dataLoading = false;
 			}
 		);
 		

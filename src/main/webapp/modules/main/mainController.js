@@ -1,5 +1,6 @@
 angular.module('app').controller("mainCtrl", function($scope, $rootScope, mainService){
 	
+	$scope.dataLoading = false;
 	$scope.newInvitations = "";
 	$scope.acceptanceSuccess = "";
 	$scope.invitations = [];
@@ -20,6 +21,8 @@ angular.module('app').controller("mainCtrl", function($scope, $rootScope, mainSe
 				if($scope.invitations.length > 0){
 					$scope.newInvitations = true;
 				}
+				
+				$scope.dataLoading = false;
 			}, 
 			function errorCallback(response) {
 				
@@ -30,11 +33,15 @@ angular.module('app').controller("mainCtrl", function($scope, $rootScope, mainSe
 	
 	// Calls acceptInvitation method from mainService for the invitation accept
 	$scope.acceptInvitation = function(teacherId, studentId){
+		
+		$scope.dataLoading = true;
+		
 		mainService.acceptInvitation(teacherId, studentId).then( 
 			function successCallback(response) {
 				$scope.newInvitations = "";
 				$scope.acceptanceSuccess = true;
 				$scope.invitations = [];
+				$scope.dataLoading = false;
 			}, 
 			function errorCallback(response) {
 				
@@ -44,6 +51,9 @@ angular.module('app').controller("mainCtrl", function($scope, $rootScope, mainSe
 	
 	// Initial method called when the main screen opens for a student
 	$scope.init = function(){
+		
+		$scope.dataLoading = true;
+		
 		if($rootScope.loggedUser.tipoConta == 'Student'){
 			$scope.searchInvites();
 		}

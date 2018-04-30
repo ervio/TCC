@@ -127,7 +127,7 @@ public class ExercisesManagementController {
 	 */
 	@Transactional
 	@RequestMapping(value = "/searchAllExercises/{professorId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity searchExercisesByTeacher(@PathVariable("professorId") String professorId) {
+	public @ResponseBody ResponseEntity searchAllExercises(@PathVariable("professorId") String professorId) {
 		List<Exercicio> exercicios = exercicioDao.findByTeacher(Long.parseLong(professorId));
 		return new ResponseEntity(exercicios, HttpStatus.OK);
 	}

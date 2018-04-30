@@ -12,6 +12,8 @@
 
 <body ng-controller="solveExercisesCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -109,8 +111,6 @@
 						
 		               	<div class="row">
 		               	
-			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	
 			               	<div class="col-md-12">
 								<b>Say aloud the correct word to complete the lines of the lyrics.</b> <img ng-if="!speaking" src="img/mic.gif"><img ng-if="speaking" src="img/mic-animate.gif"><br>
 			   				</div>

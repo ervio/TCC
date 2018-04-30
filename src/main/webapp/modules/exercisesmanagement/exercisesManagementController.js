@@ -1,5 +1,6 @@
 angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce, $timeout, $rootScope, $state, Upload, LazyRoute, exercisesManagementService, constants){
 	
+	$scope.dataLoading = false;
 	$scope.assignSuccess = false;
 	$scope.assignError = false;
 	$scope.allSelected = false;
@@ -484,6 +485,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	 
 	 // Method called when the main screen from exercises management opens
 	 $scope.init = function(){
+		
+		 $scope.dataLoading = true;
+		
 		exercisesManagementService.searchAll($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
 				
@@ -504,8 +508,11 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 					}
 				});
 				
+				$scope.dataLoading = false;
+				
 			}, 
 			function errorCallback(response) {
+				$scope.dataLoading = false;
 			}
 		);
 	 };

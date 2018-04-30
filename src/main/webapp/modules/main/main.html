@@ -19,6 +19,8 @@
 
 <body ng-controller="mainCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -94,10 +96,6 @@
 	                <div>
 						<form name="mainForm" role="form">
 						
-			               	<div class="row">
-				               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	</div>
-			               	
 			               	<div ng-if="invitations.length > 0" class="col-md-12" style="border: 2px groove">
 		               			<fieldset class="scheduler-border">
 									<legend class="scheduler-border">Invites</legend>
