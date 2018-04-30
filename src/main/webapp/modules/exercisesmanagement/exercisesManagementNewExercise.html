@@ -23,6 +23,8 @@
 
 <body ng-controller="exercisesMgmtCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -116,14 +118,12 @@
 					
 		               	<div class="row">
 		               	
-			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	
 		               		<div class="col-md-12" style="text-align: right;">
 		               			<input type="button" ng-if="exercicio.musica.nome" class="btn btn-md btn-primary" data-toggle="modal" data-target="#musicModal" value="Edit song"/>
 		               			<a ui-sref="exercisesManagement" href="#">
 			   						<input class="btn btn-md btn-primary" type="submit" value="Cancel"/>
 								</a>
-								<input type="submit" ng-disabled="mainForm.$invalid || formMusic.$invalid" ng-click="saveExercise()" class="btn btn-md btn-primary" value="Save"/>
+								<input type="button" ng-disabled="mainForm.$invalid || formMusic.$invalid" ng-click="saveExercise()" class="btn btn-md btn-primary" value="Save"/>
 			   				</div>
 			   				
 			   				<div class="col-md-12">

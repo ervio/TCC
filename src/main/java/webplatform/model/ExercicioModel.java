@@ -11,6 +11,7 @@ public class ExercicioModel {
 	private String valorNotaMaxima;
 	private String writingQuestao;
 	private MusicaModel musica;
+	private Integer totalPosts;
 	private List<QuestaoModel> questoes;
 	private List<ExercicioAlunoModel> exercicioAlunos;
 	private List<GrammarDefinicaoModel> grammarDefinicoes;
@@ -103,6 +104,14 @@ public class ExercicioModel {
 
 	public void setPronunciationQuestions(Set<PronunciationQuestaoModel> pronunciationQuestions) {
 		this.pronunciationQuestions = pronunciationQuestions;
+	}
+
+	public Integer getTotalPosts() {
+		return totalPosts;
+	}
+
+	public void setTotalPosts(Integer totalPosts) {
+		this.totalPosts = totalPosts;
 	}
 
 }

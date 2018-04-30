@@ -56,6 +56,8 @@ angular.module('app').controller("mainCtrl", function($scope, $rootScope, mainSe
 		
 		if($rootScope.loggedUser.tipoConta == 'Student'){
 			$scope.searchInvites();
+		}else{
+			$scope.dataLoading = false;
 		}
 	};
 	

@@ -12,6 +12,7 @@ angular.module('app').controller("performanceCtrl", function($scope, $rootScope,
 	// Call the method searchResolvedExercises from performanceService
 	$scope.searchResolvedExercises = function(){
 		
+		$scope.dataLoading = true;
 		$scope.basicList = [];
 		$scope.intermediateList = [];
 		$scope.advancedList = [];

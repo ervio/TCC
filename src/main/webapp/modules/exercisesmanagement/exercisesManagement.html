@@ -23,10 +23,10 @@
 
 <body ng-controller="exercisesMgmtCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 	
-	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div> 
-
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -110,10 +110,10 @@
 		               	<div class="row">
 		               	
 		               		<div class="col-md-12" style="text-align: right;">
-								<input type="submit" ng-click="goToExerciseCreation()" class="btn btn-md btn-primary" value="New"/>
-			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="goToExerciseEdition()" class="btn btn-md btn-primary" value="Edit"/>
-			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="deleteExercise()" class="btn btn-md btn-primary" value="Delete"/>
-			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="clearAssignModal()" class="btn btn-md btn-primary" data-toggle="modal" data-target="#assignModal" value="Assign"/>
+								<input type="button" ng-click="goToExerciseCreation()" class="btn btn-md btn-primary" value="New"/>
+			    				<input type="button" ng-if="exercicio.musica.nome" ng-click="goToExerciseEdition()" class="btn btn-md btn-primary" value="Edit"/>
+			    				<input type="button" ng-if="exercicio.musica.nome" ng-click="deleteExercise()" class="btn btn-md btn-primary" value="Delete"/>
+			    				<input type="button" ng-if="exercicio.musica.nome" ng-click="clearAssignModal()" class="btn btn-md btn-primary" data-toggle="modal" data-target="#assignModal" value="Assign"/>
 			   				</div>
 		   				
 		               	</div>

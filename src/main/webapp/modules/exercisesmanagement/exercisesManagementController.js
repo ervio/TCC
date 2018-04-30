@@ -261,14 +261,18 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	
 	// Function called by "New" button
 	 $scope.goToExerciseCreation = function(){
+		 $scope.dataLoading = true;
 		 $rootScope.exercicioEditOrCreationMode = true;
 		 delete $rootScope.exercicioToEdit;
+		 $scope.dataLoading = false;
 		 $state.go("newExercise");
 	 };
 	 
 	// Function called by "Edit" button
 	 $scope.goToExerciseEdition = function(){
+		 $scope.dataLoading = true;
 		 $rootScope.exercicioToEdit = (angular.copy($scope.exercicio));
+		 $scope.dataLoading = false;
 		 $state.go("newExercise");
 	 };
 	 
@@ -302,6 +306,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 			);
 	 };	 
@@ -314,6 +319,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						$scope.grammarDefinitionsToDelete = [];
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 		 );		 
 	 };
@@ -326,6 +332,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						$scope.readingQuestionsToDelete = [];
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 		 );		 
 	 };
@@ -338,12 +345,16 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						$scope.pronunciationQuestionToDelete = [];
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 		 );	
 	 };
 	 
 	 // Call the method deleteExercise from exercisesManagementService
 	 $scope.deleteExercise = function(){
+		 
+		 $scope.dataLoading = true;
+		 
 		 exercisesManagementService.deleteExercise($scope.exercicio.idExercicio).then( 
 					function successCallback(response) {
 						
@@ -376,8 +387,10 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						
 						$scope.exercicio = "";
 						$scope.exerciseDeleted = true;
+						$scope.dataLoading = false;
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 			);
 	 };
@@ -418,6 +431,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	 // Call the method saveExercise from exercisesManagementService if all the requirements all fine
 	 $scope.saveExercise = function(){
 		 
+		 $scope.dataLoading = true;
 		 $scope.exerciseSaved = false;
 		 $scope.error = "";
 		 
@@ -469,6 +483,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						// Search the records
 						$q.all(promises3).then(function() {
 							$scope.exerciseSaved = true;
+							$scope.dataLoading = false;
 						});
 						
 					});
@@ -476,6 +491,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 				}, 
 				function errorCallback(response) {
 					$scope.error = response.data.status;
+					$scope.dataLoading = false;
 				}
 			); 
 			 
@@ -519,7 +535,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	 
 	 // Method used to search the students when the exercise is being assigned. It calls searchStudents method from exercisesManagementService
 	 $scope.searchStudents = function(){
-			
+		 
+		$scope.dataLoading = true;
 		$scope.students = [];
 		
 		exercisesManagementService.searchStudents($scope.name, $scope.email, $rootScope.loggedUser.id).then( 
@@ -528,9 +545,11 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						student.selected;
 						$scope.students.push(angular.copy(student));
 					 });
+					
+					$scope.dataLoading = false;
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 		);
 		
@@ -567,6 +586,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	
 	// Call the method assignExercise from exercisesManagementService when the exercise is being assigned
 	$scope.assignExercise = function(){
+		$scope.dataLoading = true;
 		var selected = false;
 		$scope.assignError = "";
 		$scope.assignSuccess = "";
@@ -586,9 +606,10 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 			exercisesManagementService.assignExercise($scope.studentsIds, $scope.exercicio.idExercicio).then( 
 				function successCallback(response) {
 					$scope.assignSuccess = true;
+					$scope.dataLoading = false;
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 			);
 			
@@ -597,14 +618,19 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	
 	// Method called by "Assign" button
 	$scope.clearAssignModal = function(){
+		$scope.dataLoading = true;
 		$scope.name = "";
 		$scope.email = "";
 		$scope.assignError = "";
 		$scope.assignSuccess = "";
 		$scope.students = [];
+		$scope.dataLoading = false;
 	};
 	
 	 $scope.activitiesModal = function(){
+		 
+		 $scope.dataLoading = true;
+		 
 		 if(!$scope.exercicio.pictures && $scope.picturesTemp){
 			 $scope.exercicio.pictures = [];
 			 
@@ -660,6 +686,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 			}
 		});
 		
+		$scope.dataLoading = false;
+		
 		$("#activitiesModal").modal("show");
 	 };
 	
@@ -703,6 +731,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	};
 	 
 	$scope.saveActivitiesModal = function(){
+		
+		$scope.dataLoading = true;
+		
 		$scope.modalError = "";
 		$scope.exercicio.pictures = [];
 		$scope.exercicio.writingQuestao = angular.copy($scope.writingQuestao.writingQuestao);
@@ -752,6 +783,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		
 		$scope.exercicio.pronunciationQuestions = angular.copy($scope.pronunciationQuestions);
 		$scope.clearActivitiesModal();
+		
+		$scope.dataLoading = false;
+		
 		$("#activitiesModal").modal("hide");
 	};
 	
