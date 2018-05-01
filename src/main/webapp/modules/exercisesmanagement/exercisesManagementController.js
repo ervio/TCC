@@ -207,26 +207,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		);
 	};
 	
-	// Calls searchPicturesByExercise from exercisesManagementService considering the selected exercise
-	$scope.searchPicturesByExercise = function(idExercicio){
-		exercisesManagementService.searchPicturesByExercise(idExercicio).then( 
-			function successCallback(response) {
-				
-				$scope.exercicio.pictures = [];
-				
-				$(response.data).each(function(index, file) {
-					$scope.exercicio.pictures.push(file);
-				 });
-				
-				console.log("asdasdasd");
-				
-			}, 
-			function errorCallback(response) {
-				console.log('Deu errado');
-			}
-		);
-	};
-	
 	// Function called by "New" button
 	 $scope.goToExerciseCreation = function(){
 		 $scope.dataLoading = true;
@@ -494,18 +474,34 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 			$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
 			
 			var promises = [];
-			promises.push($scope.searchPicturesByExercise($scope.exercicio.idExercicio));
 			promises.push($scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio));
 			promises.push($scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio));
 			promises.push($scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio));
 			
 			$q.all(promises).then(function() {
-				// Populate music modal
-				$scope.musicName = $scope.exercicio.musica.nome;
-				$scope.musicSinger = $scope.exercicio.musica.cantor;
-				$scope.musicLyrics = $scope.exercicio.musica.letra;
-				$scope.musicLink = $scope.exercicio.musica.link;
-				$scope.dataLoading = false;
+				
+				exercisesManagementService.searchPicturesByExercise($scope.exercicio.idExercicio).then( 
+					function successCallback(response) {
+						
+						$scope.exercicio.pictures = [];
+						
+						$(response.data).each(function(index, file) {
+							$scope.exercicio.pictures.push(file);
+						 });
+						
+						// Populate music modal
+						$scope.musicName = $scope.exercicio.musica.nome;
+						$scope.musicSinger = $scope.exercicio.musica.cantor;
+						$scope.musicLyrics = $scope.exercicio.musica.letra;
+						$scope.musicLink = $scope.exercicio.musica.link;
+						$scope.dataLoading = false;
+						
+					}, 
+					function errorCallback(response) {
+						$scope.dataLoading = false;
+					}
+				);
+				
 			});
 			
 		}
