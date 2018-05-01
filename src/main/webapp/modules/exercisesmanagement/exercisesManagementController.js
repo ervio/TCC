@@ -227,38 +227,6 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		);
 	};
 	
-	// Populates the temporary json with the values from the selected exercise, if it's being edited, or empty values, if it's a new one
-	if(!$rootScope.exercicioToEdit){
-		$scope.exercicio = {
-			professorId : $rootScope.loggedUser.id,
-			nivel : "",
-			musica : {
-				nome : "",
-				cantor : "",
-				letra : "",
-				letraOrdenar : "",
-				link : ""
-	        },
-	        writingQuestao : "",
-	        pictures : [],
-	        grammarDefinicoes : [],
-	        readingQuestoes : [],
-	        pronunciationQuestions : []
-		};
-	}else{
-		$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
-		$scope.searchPicturesByExercise($scope.exercicio.idExercicio);
-		$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
-		$scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio);
-		$scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio);
-		
-		// Populate music modal
-		$scope.musicName = $scope.exercicio.musica.nome;
-		$scope.musicSinger = $scope.exercicio.musica.cantor;
-		$scope.musicLyrics = $scope.exercicio.musica.letra;
-		$scope.musicLink = $scope.exercicio.musica.link;
-	}
-	
 	// Function called by "New" button
 	 $scope.goToExerciseCreation = function(){
 		 $scope.dataLoading = true;
@@ -270,9 +238,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	 
 	// Function called by "Edit" button
 	 $scope.goToExerciseEdition = function(){
-		 $scope.dataLoading = true;
 		 $rootScope.exercicioToEdit = (angular.copy($scope.exercicio));
-		 $scope.dataLoading = false;
 		 $state.go("newExercise");
 	 };
 	 
@@ -499,10 +465,57 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		 
 	 };
 	 
+	 $scope.initLessonAddOrEdit = function(){
+		 
+		$scope.dataLoading = true;
+		 
+		// Populates the temporary json with the values from the selected exercise, if it's being edited, or empty values, if it's a new one
+		if(!$rootScope.exercicioToEdit){
+			$scope.exercicio = {
+				professorId : $rootScope.loggedUser.id,
+				nivel : "",
+				musica : {
+					nome : "",
+					cantor : "",
+					letra : "",
+					letraOrdenar : "",
+					link : ""
+		        },
+		        writingQuestao : "",
+		        pictures : [],
+		        grammarDefinicoes : [],
+		        readingQuestoes : [],
+		        pronunciationQuestions : []
+			};
+			
+			$scope.dataLoading = false;
+			
+		}else{
+			$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
+			
+			var promises = [];
+			promises.push($scope.searchPicturesByExercise($scope.exercicio.idExercicio));
+			promises.push($scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio));
+			promises.push($scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio));
+			promises.push($scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio));
+			
+			$q.all(promises).then(function() {
+				// Populate music modal
+				$scope.musicName = $scope.exercicio.musica.nome;
+				$scope.musicSinger = $scope.exercicio.musica.cantor;
+				$scope.musicLyrics = $scope.exercicio.musica.letra;
+				$scope.musicLink = $scope.exercicio.musica.link;
+				$scope.dataLoading = false;
+			});
+			
+		}
+		 
+	 };
+	 
 	 // Method called when the main screen from exercises management opens
 	 $scope.init = function(){
 		
-		 $scope.dataLoading = true;
+		$scope.dataLoading = true;
 		
 		exercisesManagementService.searchAll($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
