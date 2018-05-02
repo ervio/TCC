@@ -93,12 +93,6 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 				         : b.label > a.label ? -1 // if b should come later, push a to begin
 				         : 0;                   // a and b are equal
 			});
-			
-			if(!$rootScope.exerciseToEdit.dataInicio){
-				$rootScope.exerciseToEdit.dataInicio = new Date();
-				$rootScope.exerciseToEdit.chances = 0;
-				$scope.updateExercise();
-			}
 		}
 		
 		$scope.dataLoading = false;
@@ -114,13 +108,17 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 				function successCallback(response) {
 					
 					$(response.data).each(function(index, picture) {
-						
 						picture.resposta = "";
 						$rootScope.vocabularyPictures.push(angular.copy(picture));
-						$scope.dataLoading = false;
-						
 					});
 					
+					if(!$rootScope.exerciseToEdit.dataInicio){
+						$rootScope.exerciseToEdit.dataInicio = new Date();
+						$rootScope.exerciseToEdit.chances = 0;
+						$scope.updateExercise();
+					}
+					
+					$scope.dataLoading = false;
 				}, 
 				function errorCallback(response) {
 					$scope.dataLoading = false;
@@ -285,12 +283,6 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		 $scope.exercise =  angular.copy(iterationExercise);
 	};
 	
-	// Method called by "Answer" button
-	$scope.goToExerciseResolution = function(){
-		 $rootScope.exerciseToEdit = (angular.copy($scope.exercise));
-		 $state.go("resolveExerciseLyrics");
-	}; 
-	
 	// Call the method assignExercise from exercisesManagementService
 	$scope.answerUnassignedExercise = function(){
 		$scope.studentsIds = [];
@@ -335,8 +327,33 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		);
 	};
 	
-	$scope.goToVocabulary = function(){
+	// Method called by "Answer" button
+	$scope.goToExerciseResolution = function(){
+		 $rootScope.exerciseToEdit = (angular.copy($scope.exercise));
+		 $state.go("resolveExerciseVocabulary");
+	}; 
+	
+	$scope.goToListening = function(){
 		
+		var questionsResolved = true
+		$scope.error = "";
+			
+		for(var i = 0; i < $rootScope.vocabularyPictures.length; i++){
+			if(!$rootScope.vocabularyPictures[i].resposta){
+				questionsResolved = false;
+				break;
+			}
+		}
+		
+		if(questionsResolved){
+			$state.go("resolveExerciseLyrics");
+		}else{
+			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+		}
+		
+	};
+	
+	$scope.goToLanguage = function(){
 		$scope.error = "";
 		$scope.isLyricsCorrect = true;
 		
@@ -355,31 +372,12 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 				$scope.incrementChances();
 				$scope.error = "The lyrics are not in the correct order.";
 			}else{
-				$state.go("resolveExerciseVocabulary");
+				$state.go("resolveExerciseLanguage");
 			}
 			
 		}else{
 			$scope.incrementChances();
 			$scope.error = "The lyrics are not in the correct order.";
-		}
-		
-	};
-	
-	$scope.goToLanguage = function(){
-		var questionsResolved = true
-		$scope.error = "";
-			
-		for(var i = 0; i < $rootScope.vocabularyPictures.length; i++){
-			if(!$rootScope.vocabularyPictures[i].resposta){
-				questionsResolved = false;
-				break;
-			}
-		}
-		
-		if(questionsResolved){
-			$state.go("resolveExerciseLanguage");
-		}else{
-			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
 		}
 	};
 	

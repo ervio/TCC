@@ -98,7 +98,7 @@ app.factory("LazyRoute", function ($log) {
 				controller: "solveExercisesCtrl"
 			})
 			.state('resolveExerciseLanguage', {
-				url: '/solveExercises_language',
+				url: '/solveExercises_grammar',
 				templateUrl: 'modules/solveexercises/solveExercises_language.html',
 				controller: "solveExercisesCtrl"
 			})
