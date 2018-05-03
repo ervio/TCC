@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,16 +60,40 @@ public class RankingController {
 					exercicioAlunoModel.setTempoResolucaoMillis(
 							exercicioAlunoModel.getDataFim().getTime() - exercicioAlunoModel.getDataInicio().getTime());
 
-					// Calculate the spent hours, minutes and seconds
-					int timeInSeconds = (int) exercicioAlunoModel.getTempoResolucaoMillis() / 1000;
-					int hours, minutes, seconds;
-					hours = timeInSeconds / 3600;
-					timeInSeconds = timeInSeconds - (hours * 3600);
-					minutes = timeInSeconds / 60;
-					timeInSeconds = timeInSeconds - (minutes * 60);
-					seconds = timeInSeconds;
+					long difference = exercicioAlunoModel.getDataFim().getTime()
+							- exercicioAlunoModel.getDataInicio().getTime();
+					String[] durationArray = StringUtils
+							.stripStart(DurationFormatUtils.formatDuration(difference, "HHH:mm:ss.SSS"), "0")
+							.split(":");
 
-					exercicioAlunoModel.setTempoResolucaoString(hours + ":" + minutes + ":" + seconds);
+					exercicioAlunoModel.setTempoResolucaoString("");
+
+					for (int i = 0; i < durationArray.length; i++) {
+						if (i + 1 != durationArray.length) {
+							if (!StringUtils.isEmpty(durationArray[i])) {
+								exercicioAlunoModel.setTempoResolucaoString(
+										exercicioAlunoModel.getTempoResolucaoString() + durationArray[i] + ":");
+							}
+						} else {
+							if (!StringUtils.isEmpty(durationArray[i])) {
+								exercicioAlunoModel.setTempoResolucaoString(
+										exercicioAlunoModel.getTempoResolucaoString() + durationArray[i]);
+							}
+						}
+					}
+
+					// Calculate the spent hours, minutes and seconds
+					// int timeInSeconds = (int) exercicioAlunoModel.getTempoResolucaoMillis() /
+					// 1000;
+					// int hours, minutes, seconds;
+					// hours = timeInSeconds / 3600;
+					// timeInSeconds = timeInSeconds - (hours * 3600);
+					// minutes = timeInSeconds / 60;
+					// timeInSeconds = timeInSeconds - (minutes * 60);
+					// seconds = timeInSeconds;
+
+					// exercicioAlunoModel.setTempoResolucaoString(hours + ":" + minutes + ":" +
+					// seconds);
 
 					exerciseModel.getExercicioAlunos().add(exercicioAlunoModel);
 				}
