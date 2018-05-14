@@ -38,6 +38,16 @@ public class ExercicioAlunoDaoImpl extends BaseDao<ExercicioAluno> implements Ex
 		return (List<ExercicioAluno>) hibernateTemplate.findByCriteria(criteria);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ExercicioAluno> findNotResolvedByExerciseId(Long exerciseId) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.eq("exercicio", new Exercicio(exerciseId)));
+		criteria.add(Restrictions.isNull("totalQuestoes"));
+		criteria.add(Restrictions.isNull("questoesCorretas"));
+		return (List<ExercicioAluno>) hibernateTemplate.findByCriteria(criteria);
+	}
+
 	@Override
 	public ExercicioAluno findById(Long exercicioAlunoId) {
 		return this.hibernateTemplate.get(ExercicioAluno.class, exercicioAlunoId);
@@ -84,6 +94,19 @@ public class ExercicioAlunoDaoImpl extends BaseDao<ExercicioAluno> implements Ex
 		criteria.add(Restrictions.eq("exercicio", new Exercicio(exerciseId)));
 		criteria.add(Restrictions.isNotNull("nota"));
 		return (List<ExercicioAluno>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ExercicioAluno> findByExerciseId(Long exerciseId) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.eq("exercicio", new Exercicio(exerciseId)));
+		return (List<ExercicioAluno>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@Override
+	public void deleteAll(List<ExercicioAluno> exercicioAlunoList) {
+		hibernateTemplate.deleteAll(exercicioAlunoList);
 	}
 
 }

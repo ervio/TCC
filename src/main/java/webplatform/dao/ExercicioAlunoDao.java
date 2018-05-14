@@ -10,10 +10,16 @@ public interface ExercicioAlunoDao {
 
 	public List<ExercicioAluno> findNotResolvedByStudentId(Long studentId);
 
+	public List<ExercicioAluno> findNotResolvedByExerciseId(Long exerciseId);
+
 	public List<ExercicioAluno> findResolved(String studentName, String studentEmail, String exerciseName, String level,
 			String studentId, String teacherId);
 
 	public List<ExercicioAluno> findResolvedByExerciseId(Long exerciseId);
 
 	public ExercicioAluno findById(Long exercicioAlunoId);
+
+	public List<ExercicioAluno> findByExerciseId(Long exerciseId);
+
+	public void deleteAll(List<ExercicioAluno> exercicioAlunoList);
 }

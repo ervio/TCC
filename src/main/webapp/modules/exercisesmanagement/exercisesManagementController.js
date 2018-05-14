@@ -300,45 +300,64 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	 $scope.deleteExercise = function(){
 		 
 		 $scope.dataLoading = true;
+		 $scope.exerciseDeleted = false;
+		 $scope.error = "";
 		 
-		 exercisesManagementService.deleteExercise($scope.exercicio.idExercicio).then( 
-					function successCallback(response) {
-						
-						if($scope.exercicio.nivel == 'Basic'){
-							for (var i = 0; i < $scope.basicExercisesList.length; i++) {
-							    if ($scope.basicExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
-							    	$scope.basicExercisesList.splice(i, 1);
-							        break;
-							    }
-							}
-						}
-						
-						if($scope.exercicio.nivel == 'Intermediate'){
-							for (var i = 0; i < $scope.intermediateExercisesList.length; i++) {
-							    if ($scope.intermediateExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
-							    	$scope.intermediateExercisesList.splice(i, 1);
-							        break;
-							    }
-							}
-						}
-						
-						if($scope.exercicio.nivel == 'Advanced'){
-							for (var i = 0; i < $scope.advancedExercisesList.length; i++) {
-							    if ($scope.advancedExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
-							    	$scope.advancedExercisesList.splice(i, 1);
-							        break;
-							    }
-							}
-						}
-						
-						$scope.exercicio = "";
-						$scope.exerciseDeleted = true;
-						$scope.dataLoading = false;
-					}, 
-					function errorCallback(response) {
-						$scope.dataLoading = false;
-					}
-			);
+		 exercisesManagementService.searchUnresolvedExercises($scope.exercicio.idExercicio).then( 
+				 function successCallback(response) {
+					 if(response.data.length > 0){
+						 
+						 $scope.error = "The lesson is being resolved by a student and cannot be deleted.";
+						 $scope.dataLoading = false;
+						 
+					 }else{
+						 
+						 exercisesManagementService.deleteExercise($scope.exercicio.idExercicio).then( 
+								 function successCallback(response) {
+										
+									 if($scope.exercicio.nivel == 'Basic'){
+										 for (var i = 0; i < $scope.basicExercisesList.length; i++) {
+											 if ($scope.basicExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
+												 $scope.basicExercisesList.splice(i, 1);
+												 break;
+											 }
+										 }
+									 }
+										
+									 if($scope.exercicio.nivel == 'Intermediate'){
+										 for (var i = 0; i < $scope.intermediateExercisesList.length; i++) {
+											 if ($scope.intermediateExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
+												 $scope.intermediateExercisesList.splice(i, 1);
+												 break;
+											 }
+										 }
+									 }
+										
+									 if($scope.exercicio.nivel == 'Advanced'){
+										 for (var i = 0; i < $scope.advancedExercisesList.length; i++) {
+											 if ($scope.advancedExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
+												 $scope.advancedExercisesList.splice(i, 1);
+												 break;
+											 }
+										 }
+									 }
+										
+									 $scope.exercicio = "";
+									 $scope.exerciseDeleted = true;
+									 $scope.dataLoading = false;
+								 }, 
+								 function errorCallback(response) {
+									 $scope.dataLoading = false;
+								 }
+						 );
+						 
+					 }
+				 }, 
+				 function errorCallback(response) {
+					 $scope.dataLoading = false;
+				 }
+		 );
+		 
 	 };
 	 
 	 $scope.savePictures = function(idExercicio) {

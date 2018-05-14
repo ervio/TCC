@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import webplatform.dao.GrammarRespostaDao;
+import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.GrammarResposta;
@@ -48,6 +49,14 @@ public class GrammarRespostaDaoImpl extends BaseDao<GrammarResposta> implements 
 	public List<GrammarResposta> findByGrammarDefinicaoList(List<GrammarDefinicao> grammarDefinicoes) {
 		DetachedCriteria criteria = getDetachedCriteria();
 		criteria.add(Restrictions.in("grammarQuestaoResposta", grammarDefinicoes));
+		return (List<GrammarResposta>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<GrammarResposta> findByExercicioAlunoList(List<ExercicioAluno> exercicioAlunoList) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.in("exercicioAluno", exercicioAlunoList));
 		return (List<GrammarResposta>) hibernateTemplate.findByCriteria(criteria);
 	}
 

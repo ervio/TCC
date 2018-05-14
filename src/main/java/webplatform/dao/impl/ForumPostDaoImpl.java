@@ -1,4 +1,4 @@
-package webplatform.dao.impl; 
+package webplatform.dao.impl;
 
 import java.util.List;
 
@@ -37,6 +37,11 @@ public class ForumPostDaoImpl extends BaseDao<ForumPost> implements ForumPostDao
 			hibernateTemplate.save(entity);
 		}
 		return entity;
+	}
+
+	@Override
+	public void deleteAll(List<ForumPost> forumPostList) {
+		hibernateTemplate.deleteAll(forumPostList);
 	}
 
 }
