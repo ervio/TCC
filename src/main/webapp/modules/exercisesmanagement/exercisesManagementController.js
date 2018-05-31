@@ -938,7 +938,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	  };
 	  
 	  $scope.editAlternative = function(){
-		  $scope.alternatives[$scope.alternativeSelectedIndex].alternative = angular.copy($scope.grammarPractice.alternativeInput);
+		  $scope.alternatives[$scope.alternativeSelectedIndex].questao = angular.copy($scope.grammarPractice.alternativeInput);
 		  $scope.alternatives[$scope.alternativeSelectedIndex].definition = angular.copy($scope.grammarPractice.alternativeAnswer);
 		  $scope.grammarPractice.alternativeInput = "";
 		  $scope.grammarPractice.alternativeAnswer = "";
