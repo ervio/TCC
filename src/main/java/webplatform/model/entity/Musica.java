@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -54,7 +53,7 @@ public class Musica implements java.io.Serializable {
 		this.idMusica = idMusica;
 	}
 
-	@Column(name = "NOME", length = 30)
+	@Column(name = "NOME", length = 100)
 	public String getNome() {
 		return this.nome;
 	}
@@ -63,7 +62,7 @@ public class Musica implements java.io.Serializable {
 		this.nome = nome;
 	}
 
-	@Column(name = "CANTOR", length = 20)
+	@Column(name = "CANTOR", length = 100)
 	public String getCantor() {
 		return this.cantor;
 	}
@@ -72,8 +71,8 @@ public class Musica implements java.io.Serializable {
 		this.cantor = cantor;
 	}
 
-	@Lob
-	@Column(name = "LETRA")
+	// @Lob
+	@Column(name = "LETRA", columnDefinition = "text")
 	public String getLetra() {
 		return this.letra;
 	}
@@ -82,8 +81,8 @@ public class Musica implements java.io.Serializable {
 		this.letra = letra;
 	}
 
-	@Lob
-	@Column(name = "LETRA_ORDENAR")
+	// @Lob
+	@Column(name = "LETRA_ORDENAR", columnDefinition = "text")
 	public String getLetraOrdenar() {
 		return letraOrdenar;
 	}
@@ -92,7 +91,7 @@ public class Musica implements java.io.Serializable {
 		this.letraOrdenar = letraOrdenar;
 	}
 
-	@Column(name = "LINK", length = 50)
+	@Column(name = "LINK", length = 100)
 	public String getLink() {
 		return this.link;
 	}

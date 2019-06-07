@@ -17,6 +17,8 @@ public class PronunciationQuestaoConverter {
 			questao.setId(pronunciationQuestaoModel.getId());
 		}
 
+		questao.setSequencia(pronunciationQuestaoModel.getSequencia());
+
 		if (!CollectionUtils.isEmpty(pronunciationQuestaoModel.getPronunciationQuestaoPartes())) {
 
 			questao.setPronunciationQuestaoPartes(new ArrayList<PronunciationQuestaoParte>());

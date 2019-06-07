@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import webplatform.dao.VocabularyRespostaDao;
+import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.Imagem;
 import webplatform.model.entity.VocabularyResposta;
 
@@ -40,6 +41,14 @@ public class VocabularyRespostaDaoImpl extends BaseDao<VocabularyResposta> imple
 	@Override
 	public void deleteAll(List<VocabularyResposta> vocabularyRespostas) {
 		hibernateTemplate.deleteAll(vocabularyRespostas);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<VocabularyResposta> findByExercicioAlunoList(List<ExercicioAluno> exercicioAlunoList) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.in("exercicioAluno", exercicioAlunoList));
+		return (List<VocabularyResposta>) hibernateTemplate.findByCriteria(criteria);
 	}
 
 }

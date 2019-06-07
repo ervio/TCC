@@ -1,5 +1,6 @@
 angular.module('app').controller("performanceCtrl", function($scope, $rootScope, performanceService){
 	
+	$scope.dataLoading = false;
 	$scope.studentName = "";
 	$scope.studentEmail = "";
 	$scope.songName = "";
@@ -11,6 +12,7 @@ angular.module('app').controller("performanceCtrl", function($scope, $rootScope,
 	// Call the method searchResolvedExercises from performanceService
 	$scope.searchResolvedExercises = function(){
 		
+		$scope.dataLoading = true;
 		$scope.basicList = [];
 		$scope.intermediateList = [];
 		$scope.advancedList = [];
@@ -42,9 +44,11 @@ angular.module('app').controller("performanceCtrl", function($scope, $rootScope,
 					}
 					
 				 });
+				
+				$scope.dataLoading = false;
 			}, 
 			function errorCallback(response) {
-				
+				$scope.dataLoading = false;
 			}
 		);
 		
@@ -52,6 +56,7 @@ angular.module('app').controller("performanceCtrl", function($scope, $rootScope,
 	
 	// Method called when the screen opens
 	$scope.init = function(){
+		$scope.dataLoading = true;
 		$scope.searchResolvedExercises();
 	};
 	

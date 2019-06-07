@@ -23,8 +23,10 @@
 
 <body ng-controller="exercisesMgmtCtrl">
 
-	<div class="row"></div>
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
 
+	<div class="row"></div>
+	
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -34,7 +36,7 @@
                 <a class="navbar-brand">Menu</a> 
             </div>
             <div>
-                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for Learning English with Songs</a> 
             </div>
             
             <!-- Top Menu Items -->
@@ -105,16 +107,13 @@
 	                
 	                <div>
 						
-						
 		               	<div class="row">
 		               	
-			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	
 		               		<div class="col-md-12" style="text-align: right;">
-								<input type="submit" ng-click="goToExerciseCreation()" class="btn btn-md btn-primary" value="New"/>
-			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="goToExerciseEdition()" class="btn btn-md btn-primary" value="Edit"/>
-			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="deleteExercise()" class="btn btn-md btn-primary" value="Delete"/>
-			    				<input type="submit" ng-if="exercicio.musica.nome" ng-click="clearAssignModal()" class="btn btn-md btn-primary" data-toggle="modal" data-target="#assignModal" value="Assign"/>
+								<input type="button" ng-click="goToExerciseCreation()" class="btn btn-md btn-primary" value="New"/>
+			    				<input type="button" ng-if="exercicio.musica.nome" ng-click="goToExerciseEdition()" class="btn btn-md btn-primary" value="Edit"/>
+			    				<input type="button" ng-if="exercicio.musica.nome" ng-click="deleteExercise()" class="btn btn-md btn-primary" value="Delete"/>
+			    				<input type="button" ng-if="exercicio.musica.nome" ng-click="clearAssignModal()" class="btn btn-md btn-primary" data-toggle="modal" data-target="#assignModal" value="Assign"/>
 			   				</div>
 		   				
 		               	</div>

@@ -23,6 +23,8 @@
 
 <body ng-controller="invitationCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -34,7 +36,7 @@
                 <a class="navbar-brand">Menu</a> 
             </div>
             <div>
-                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for Learning English with Songs</a> 
             </div>
             
             <!-- Top Menu Items -->
@@ -108,10 +110,8 @@
 						
 			               	<div class="row">
 			               	
-				               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-				               	
 			               		<div class="col-md-12" style="text-align: right; margin-bottom: 10px;">
-				   					<input ng-click="sendInvite()" type="submit" class="btn btn-md btn-primary" value="Send Invite"/>
+				   					<input ng-click="sendInvite()" type="submit" class="btn btn-md btn-primary" value="Send Invitation"/>
 				   				</div>
 			   				
 			               	</div>

@@ -18,6 +18,8 @@
 
 <body ng-controller="solveExercisesCtrl">
 
+<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div> 
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -29,7 +31,7 @@
                 <a class="navbar-brand">Menu</a> 
             </div>
             <div>
-                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for Learning English with Songs</a> 
             </div>
             
             <!-- Top Menu Items -->
@@ -80,7 +82,7 @@
 	                <div class="row">
 	                    <div class="col-lg-12">
 	                        <h1 class="page-header">
-	                            Lessons Resolution
+	                            Lesson Resolution
 	                        </h1>
 	                        <ol class="breadcrumb">
 	                            <li>

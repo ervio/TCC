@@ -15,6 +15,7 @@ angular.module('app').controller("invitationCtrl", function($scope, $rootScope, 
 	// Call the method searchStudents from invitationService
 	$scope.searchStudents = function(){
 		
+		$scope.dataLoading = true;
 		$scope.error = "";
 		$scope.invitationSuccess = "";
 		
@@ -26,9 +27,11 @@ angular.module('app').controller("invitationCtrl", function($scope, $rootScope, 
 						student.selected;
 						$scope.students.push(angular.copy(student));
 					 });
+					
+					$scope.dataLoading = false;
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 		);
 		
@@ -65,6 +68,7 @@ angular.module('app').controller("invitationCtrl", function($scope, $rootScope, 
 	
 	// Call the method sendInvites from invitationService
 	$scope.sendInvite = function(){
+		$scope.dataLoading = true;
 		var selected = false;
 		$scope.error = "";
 		$scope.invitationSuccess = "";
@@ -79,14 +83,16 @@ angular.module('app').controller("invitationCtrl", function($scope, $rootScope, 
 		
 		if(!selected){
 			$scope.error = "There isn't any student selected.";
+			$scope.dataLoading = false;
 		}else{
 			
 			invitationService.sendInvites($scope.studentsIds, $rootScope.loggedUser.id).then( 
 					function successCallback(response) {
 						$scope.invitationSuccess = true;
+						$scope.dataLoading = false;
 					}, 
 					function errorCallback(response) {
-						
+						$scope.dataLoading = false;
 					}
 			);
 			

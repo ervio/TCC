@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import webplatform.dao.GrammarQuestaoDao;
+import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
 
 @Transactional
@@ -48,6 +49,14 @@ public class GrammarQuestaoDaoImpl extends BaseDao<GrammarQuestao> implements Gr
 	@Override
 	public void deleteAll(List<GrammarQuestao> grammarQuestoes) {
 		hibernateTemplate.deleteAll(grammarQuestoes);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<GrammarQuestao> findByGrammarDefinicaoList(List<GrammarDefinicao> grammarDefinicaoList) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.in("definicaoResposta", grammarDefinicaoList));
+		return (List<GrammarQuestao>) hibernateTemplate.findByCriteria(criteria);
 	}
 
 }

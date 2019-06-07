@@ -1,4 +1,4 @@
-package webplatform.dao; 
+package webplatform.dao;
 
 import java.util.List;
 
@@ -9,4 +9,6 @@ public interface ForumPostDao {
 	public List<ForumPost> findByExercise(Long exerciseId);
 
 	public ForumPost saveOrUpdate(ForumPost entity);
+
+	public void deleteAll(List<ForumPost> forumPostList);
 }

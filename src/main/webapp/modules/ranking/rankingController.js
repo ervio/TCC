@@ -1,5 +1,6 @@
 angular.module('app').controller("rankingCtrl", function($scope, $rootScope, rankingService){
 	
+	$scope.dataLoading = false;
 	$scope.basicList = [];
 	$scope.intermediateList = [];
 	$scope.advancedList = [];
@@ -31,9 +32,11 @@ angular.module('app').controller("rankingCtrl", function($scope, $rootScope, ran
 					
 				});
 				
+				$scope.dataLoading = false;
+				
 			}, 
 			function errorCallback(response) {
-				
+				$scope.dataLoading = false;
 			}
 		);
 		
@@ -41,6 +44,7 @@ angular.module('app').controller("rankingCtrl", function($scope, $rootScope, ran
 	
 	// Method called when the screen opens
 	$scope.init = function(){
+		$scope.dataLoading = true;
 		$scope.searchResolvedExercises();
 	};
 	

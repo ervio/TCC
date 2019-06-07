@@ -10,6 +10,8 @@
 
 <body ng-controller="personalDataCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -21,7 +23,7 @@
                 <a class="navbar-brand">Menu</a> 
             </div>
             <div>
-                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for Learning English with Songs</a> 
             </div>
             
             <!-- Top Menu Items -->
@@ -94,8 +96,6 @@
 					
 						<fieldset class="scheduler-border">
 						
-							<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	
 		               		<div class="col-md-12" style="text-align: right;">
 								<a ui-sref="main" href="#">
 			   						<input class="btn btn-md btn-primary" type="submit" value="Cancel"/>

@@ -25,6 +25,7 @@ import webplatform.bo.ExercisesManagementBo;
 import webplatform.dao.AlunoDao;
 import webplatform.dao.ExercicioAlunoDao;
 import webplatform.dao.ExercicioDao;
+import webplatform.dao.ForumPostDao;
 import webplatform.dao.GrammarDefinicaoDao;
 import webplatform.dao.GrammarQuestaoDao;
 import webplatform.dao.GrammarRespostaDao;
@@ -42,6 +43,7 @@ import webplatform.model.ImagemModel;
 import webplatform.model.entity.Aluno;
 import webplatform.model.entity.Exercicio;
 import webplatform.model.entity.ExercicioAluno;
+import webplatform.model.entity.ForumPost;
 import webplatform.model.entity.GrammarDefinicao;
 import webplatform.model.entity.GrammarQuestao;
 import webplatform.model.entity.GrammarResposta;
@@ -106,6 +108,9 @@ public class ExercisesManagementController {
 	@Autowired
 	private PronunciationRespostaDao pronunciationRespostaDao;
 
+	@Autowired
+	private ForumPostDao forumPostDao;
+
 	/**
 	 * The method saves the exercises including the music of it, the questions and
 	 * their alternatives
@@ -127,7 +132,7 @@ public class ExercisesManagementController {
 	 */
 	@Transactional
 	@RequestMapping(value = "/searchAllExercises/{professorId}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity searchExercisesByTeacher(@PathVariable("professorId") String professorId) {
+	public @ResponseBody ResponseEntity searchAllExercises(@PathVariable("professorId") String professorId) {
 		List<Exercicio> exercicios = exercicioDao.findByTeacher(Long.parseLong(professorId));
 		return new ResponseEntity(exercicios, HttpStatus.OK);
 	}
@@ -493,8 +498,12 @@ public class ExercisesManagementController {
 
 		List<PronunciationQuestaoParte> partes = pronunciationQuestaoParteDao
 				.findByPronunciationQuestaoList(pronunciationQuestoes);
-		List<PronunciationResposta> pronunciationRespostas = pronunciationRespostaDao
-				.findByPronunciationQuestaoParteList(partes);
+
+		List<PronunciationResposta> pronunciationRespostas = new ArrayList<>();
+
+		if (!partes.isEmpty()) {
+			pronunciationRespostas = pronunciationRespostaDao.findByPronunciationQuestaoParteList(partes);
+		}
 
 		if (!pronunciationRespostas.isEmpty()) {
 			pronunciationRespostaDao.deleteAll(pronunciationRespostas);
@@ -506,6 +515,13 @@ public class ExercisesManagementController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/searchUnresolvedExercises/{exerciseId}", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity searchUnresolvedExercises(@PathVariable("exerciseId") String exerciseId) {
+		List<ExercicioAluno> exercisesToResolve = exercicioAlunoDao
+				.findNotResolvedByExerciseId(Long.parseLong(exerciseId));
+		return new ResponseEntity(exercisesToResolve, HttpStatus.OK);
+	}
+
 	/**
 	 * Delete the exercise, the questions of it and also all the alternatives
 	 * related to the questions
@@ -515,8 +531,95 @@ public class ExercisesManagementController {
 	 */
 	@RequestMapping(value = "/deleteExercise/{exerciseId}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity deleteExercise(@PathVariable("exerciseId") String exerciseId) {
+		List<ExercicioAluno> exercicioAlunoList = exercicioAlunoDao.findByExerciseId(Long.parseLong(exerciseId));
+
+		if (!exercicioAlunoList.isEmpty()) {
+
+			List<ReadingResposta> readingRespostaList = readingRespostaDao.findByExercicioAlunoList(exercicioAlunoList);
+
+			if (!readingRespostaList.isEmpty()) {
+				readingRespostaDao.deleteAll(readingRespostaList);
+			}
+
+			List<GrammarResposta> grammarRespostaList = grammarRespostaDao.findByExercicioAlunoList(exercicioAlunoList);
+
+			if (!grammarRespostaList.isEmpty()) {
+				grammarRespostaDao.deleteAll(grammarRespostaList);
+			}
+
+			List<VocabularyResposta> vocabularyRespostaList = vocabularyRespostaDao
+					.findByExercicioAlunoList(exercicioAlunoList);
+
+			if (!vocabularyRespostaList.isEmpty()) {
+				vocabularyRespostaDao.deleteAll(vocabularyRespostaList);
+			}
+
+			List<PronunciationResposta> pronunciationRespostaList = pronunciationRespostaDao
+					.findByExercicioAlunoList(exercicioAlunoList);
+
+			if (!pronunciationRespostaList.isEmpty()) {
+				pronunciationRespostaDao.deleteAll(pronunciationRespostaList);
+			}
+
+			exercicioAlunoDao.deleteAll(exercicioAlunoList);
+		}
+
+		List<ForumPost> forumPostList = forumPostDao.findByExercise(Long.parseLong(exerciseId));
+
+		if (!forumPostList.isEmpty()) {
+			forumPostDao.deleteAll(forumPostList);
+		}
+
+		List<GrammarDefinicao> grammarDefinicaoList = grammarDefinicaoDao.findByExercise(Long.parseLong(exerciseId));
+
+		if (!grammarDefinicaoList.isEmpty()) {
+
+			List<GrammarQuestao> grammarQuestaoList = grammarQuestaoDao
+					.findByGrammarDefinicaoList(grammarDefinicaoList);
+
+			if (!grammarQuestaoList.isEmpty()) {
+				grammarQuestaoDao.deleteAll(grammarQuestaoList);
+			}
+
+			grammarDefinicaoDao.deleteAll(grammarDefinicaoList);
+		}
+
+		List<Imagem> imagens = imagemDao.findByExercise(Long.parseLong(exerciseId));
+
+		if (!imagens.isEmpty()) {
+			imagemDao.deleteAll(imagens);
+		}
+
+		List<PronunciationQuestao> pronunciationQuestaoList = pronunciationQuestaoDao
+				.findByExercise(Long.parseLong(exerciseId));
+
+		if (!pronunciationQuestaoList.isEmpty()) {
+
+			List<PronunciationQuestaoParte> pronunciationQuestaoPartes = pronunciationQuestaoParteDao
+					.findByPronunciationQuestaoList(pronunciationQuestaoList);
+
+			if (!pronunciationQuestaoPartes.isEmpty()) {
+				pronunciationQuestaoParteDao.deleteAll(pronunciationQuestaoPartes);
+			}
+
+			pronunciationQuestaoDao.deleteAll(pronunciationQuestaoList);
+		}
+
+		List<ReadingQuestao> readingQuestaoList = readingQuestaoDao.findByExercise(Long.parseLong(exerciseId));
+
+		if (!readingQuestaoList.isEmpty()) {
+
+			List<ReadingAlternativa> readingAlternativaList = readingAlternativaDao
+					.findByQuestionList(readingQuestaoList);
+
+			if (!readingAlternativaList.isEmpty()) {
+				readingAlternativaDao.deleteAll(readingAlternativaList);
+			}
+
+			readingQuestaoDao.deleteAll(readingQuestaoList);
+		}
+
 		Exercicio exercicio = exercicioDao.findById(Long.parseLong(exerciseId));
-		imagemDao.deleteAll(imagemDao.findByExercise(Long.parseLong(exerciseId)));
 		exercicioDao.delete(exercicio);
 		musicaDao.delete(exercicio.getMusica());
 		return new ResponseEntity(HttpStatus.OK);

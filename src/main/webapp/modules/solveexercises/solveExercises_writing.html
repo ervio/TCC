@@ -12,6 +12,8 @@
 
 <body ng-controller="solveExercisesCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -23,7 +25,7 @@
                 <a class="navbar-brand">Menu</a> 
             </div>
             <div>
-                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for Learning English with Songs</a> 
             </div>
             
             <!-- Top Menu Items -->
@@ -84,10 +86,10 @@
 	                                <i class="fa fa-puzzle-piece"></i>  <a ui-sref="solveExercises">Lesson Resolution</a>
 	                            </li>
 	                            <li>
-	                                <i class="fa fa-headphones"></i> <a ui-sref="resolveExerciseLyrics">Listening Practice</a>
+	                                <i class="fa fa-comments"></i> <a ui-sref="resolveExerciseVocabulary">Vocabulary Practice</a>
 	                            </li>
 	                            <li>
-	                                <i class="fa fa-comments"></i> <a ui-sref="resolveExerciseVocabulary">Vocabulary Practice</a>
+	                                <i class="fa fa-headphones"></i> <a ui-sref="resolveExerciseLyrics">Listening Practice</a>
 	                            </li>
 	                            <li>
 	                                <i class="fa fa-language"></i> <a ui-sref="resolveExerciseLanguage">Grammar Practice</a>
@@ -114,8 +116,6 @@
 						
 		               	<div class="row">
 		               	
-			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	
 			               	<div class="col-md-12">
 								<b>Leave your opinion in the forum for discussion:</b>
 			   				</div>

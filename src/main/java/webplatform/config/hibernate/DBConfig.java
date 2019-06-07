@@ -32,10 +32,15 @@ public class DBConfig {
 	@Bean
 	public DataSource getDataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
-		dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:xe");
+		dataSource.setDriverClassName("org.postgresql.Driver");
+		// dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres?autoReconnect=true");
+		// dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
+		// dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:xe");
+		dataSource.setUrl(
+				"jdbc:postgresql://aa5ozxvnxdt9v2.ceuenp5ikxcr.us-east-2.rds.amazonaws.com:5432/postgres?autoReconnect=true");
 		dataSource.setUsername("PORTAL");
-		dataSource.setPassword("PORTAL");
+		// dataSource.setPassword("PORTAL");
+		dataSource.setPassword("PORTAL12");
 		return dataSource;
 	}
 

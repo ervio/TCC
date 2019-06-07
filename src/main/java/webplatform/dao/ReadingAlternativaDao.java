@@ -3,6 +3,7 @@ package webplatform.dao;
 import java.util.List;
 
 import webplatform.model.entity.ReadingAlternativa;
+import webplatform.model.entity.ReadingQuestao;
 
 public interface ReadingAlternativaDao {
 
@@ -11,6 +12,8 @@ public interface ReadingAlternativaDao {
 	public List<ReadingAlternativa> findByExercise(Long exerciseId);
 
 	public List<ReadingAlternativa> findByQuestion(Long questaoId);
+
+	public List<ReadingAlternativa> findByQuestionList(List<ReadingQuestao> questoes);
 
 	public void delete(ReadingAlternativa readingAlternativa);
 

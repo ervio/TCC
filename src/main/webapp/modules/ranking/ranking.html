@@ -19,6 +19,8 @@
 
 <body ng-controller="rankingCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -30,7 +32,7 @@
                 <a class="navbar-brand">Menu</a> 
             </div>
             <div>
-                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for Learning English with Songs</a> 
             </div>
             
             <!-- Top Menu Items -->
@@ -104,11 +106,11 @@
 								    <div uib-accordion-group ng-repeat="exercise in basicList" class="panel-default" heading="{{exercise.musica.nome}}">
 								      
 										<div>
-											<a ng-repeat="basic in exercise.exercicioAlunos | orderBy:['basic.tempoResolucaoMillis', '-basic.questoesCorretas', 'basic.chances'] : true" 
+											<a ng-repeat="basic in exercise.exercicioAlunos | orderBy:['-questoesCorretas', 'chances', 'tempoResolucaoMillis']" 
 												 ng-click="$parent.basicSelected = basic" 
 												 class="list-group-item" 
 												 ng-class="{active:basicSelected==basic}">
-												 {{$index + 1}} - {{basic.aluno.nome}} | Hits: {{basic.chances}} | Resolution time: {{basic.tempoResolucaoString}}
+												 {{$index + 1}} - {{basic.aluno.nome}} | Hits: {{basic.chances}} | Resolution time: {{basic.tempoResolucaoString}} | Correct questions: {{basic.questoesCorretas}}
 											</a>
 										</div>
 								      
@@ -122,11 +124,11 @@
 								    <div uib-accordion-group ng-repeat="exercise in intermediateList" class="panel-default" heading="{{exercise.musica.nome}}">
 								    
 								    	<div>
-											<a ng-repeat="intermediate in exercise.exercicioAlunos | orderBy:['intermediate.tempoResolucaoMillis', '-intermediate.questoesCorretas', 'intermediate.chances'] : true" 
+											<a ng-repeat="intermediate in exercise.exercicioAlunos | orderBy:['-questoesCorretas', 'chances', 'tempoResolucaoMillis']" 
 												 ng-click="$parent.intermediateSelected = intermediate" 
 												 class="list-group-item" 
 												 ng-class="{active:intermediateSelected==intermediate}">
-												 {{$index + 1}} - {{intermediate.aluno.nome}} | Hits: {{intermediate.chances}} | Resolution time: {{intermediate.tempoResolucaoString}}
+												 {{$index + 1}} - {{intermediate.aluno.nome}} | Hits: {{intermediate.chances}} | Resolution time: {{intermediate.tempoResolucaoString}} | Correct questions: {{intermediate.questoesCorretas}}
 											</a>
 										</div>
 								    
@@ -140,11 +142,11 @@
 								    <div uib-accordion-group ng-repeat="exercise in advancedList" class="panel-default" heading="{{exercise.musica.nome}}">
 								    
 								    	<div>
-											<a ng-repeat="advanced in exercise.exercicioAlunos | orderBy:['advanced.tempoResolucaoMillis', '-advanced.questoesCorretas', 'advanced.chances'] : true" 
+											<a ng-repeat="advanced in exercise.exercicioAlunos | orderBy:['-questoesCorretas', 'chances', 'tempoResolucaoMillis']" 
 												 ng-click="$parent.advancedSelected = advanced" 
 												 class="list-group-item" 
 												 ng-class="{active:advancedSelected==advanced}">
-												 {{$index + 1}} - {{advanced.aluno.nome}} | Hits: {{advanced.chances}} | Resolution time: {{advanced.tempoResolucaoString}}
+												 {{$index + 1}} - {{advanced.aluno.nome}} | Hits: {{advanced.chances}} | Resolution time: {{advanced.tempoResolucaoString}} | Correct questions: {{advanced.questoesCorretas}}
 											</a>
 										</div>
 								    

@@ -1,5 +1,6 @@
 angular.module('app').controller("solveExercisesCtrl", function($scope, $rootScope, $state, Pubnub, LazyRoute, solveExercisesService, exercisesManagementService, tts){
 	
+	$scope.dataLoading = false;
 	$scope.exercisesAssigned = [];
 	$scope.allExercises = [];
 	$scope.exercise;
@@ -37,6 +38,8 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	// Method called when the main screen with exercises to be resolved is open. It calls the method searchAssignedExercises from solveExercisesService
 	$scope.init = function(){
 		
+		$scope.dataLoading = true;
+		
 		delete $rootScope.models;
 		delete $rootScope.vocabularyPictures;
 		delete $rootScope.grammarQuestions;
@@ -60,20 +63,24 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 							$scope.exercisesAssigned.push(angular.copy(exercise));
 						});
 						
+						$scope.dataLoading = false;
 					}, 
 					function errorCallback(response) {
-						
+						$scope.dataLoading = false;
 					}
 				);
 			}, 
 			function errorCallback(response) {
-				
+				$scope.dataLoading = false;
 			}
 		);
 	};
 	
 	// Method called when the youtube video screen is open
 	$scope.initSong = function(){
+		
+		$scope.dataLoading = true;
+		
 		$scope.splittedLyrics = $rootScope.exerciseToEdit.exercicio.musica.letraOrdenar.split("\n");
 		if($rootScope.models.lists.A.length == 0 && $rootScope.models.lists.B.length == 0){
 			$($scope.splittedLyrics).each(function(index, sentence) {
@@ -86,38 +93,47 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 				         : b.label > a.label ? -1 // if b should come later, push a to begin
 				         : 0;                   // a and b are equal
 			});
-			
-			if(!$rootScope.exerciseToEdit.dataInicio){
-				$rootScope.exerciseToEdit.dataInicio = new Date();
-				$rootScope.exerciseToEdit.chances = 0;
-				$scope.updateExercise();
-			}
 		}
+		
+		$scope.dataLoading = false;
 	};
 	
 	// Method called when the vocabulary screen is open. It calls the method searchVocabularyPictures from solveExercisesService
 	$scope.initVocabulary = function(){
+		
+		$scope.dataLoading = true;
+		
 		if($rootScope.vocabularyPictures.length == 0){
 			solveExercisesService.searchVocabularyPictures($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
 				function successCallback(response) {
 					
 					$(response.data).each(function(index, picture) {
-						
 						picture.resposta = "";
 						$rootScope.vocabularyPictures.push(angular.copy(picture));
-						console.log("Teste");
 					});
 					
+					if(!$rootScope.exerciseToEdit.dataInicio){
+						$rootScope.exerciseToEdit.dataInicio = new Date();
+						$rootScope.exerciseToEdit.chances = 0;
+						$scope.updateExercise();
+					}
+					
+					$scope.dataLoading = false;
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 			);
+		}else{
+			$scope.dataLoading = false;
 		}
 	};
 	
 	// Method called when the grammar screen is open. It calls the method searchGrammarQuestions from solveExercisesService
 	$scope.initGrammar = function(){
+		
+		$scope.dataLoading = true;
+		
 		if($rootScope.grammarQuestions.length == 0){
 			solveExercisesService.searchGrammarQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
 				function successCallback(response) {
@@ -160,21 +176,30 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 						         : 0;                   // a and b are equal
 					});
 					
+					$scope.dataLoading = false;
+					
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 			);
+		}else{
+			$scope.dataLoading = false;
 		}
 	};
 	
 	// Method called when the reading screen is open. It calls the method searchReadingQuestions and searchReadingAlternatives from solveExercisesService
 	$scope.initReading = function(){
+		
+		$scope.dataLoading = true;
+		
 		if($rootScope.readingQuestions.length == 0){
 			solveExercisesService.searchReadingQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
 				function successCallback(response) {
 					
 					$(response.data).each(function(index, question) {
+						
+						var questionsSize = response.data.length;
 						
 						$rootScope.readingQuestions.push(angular.copy(question));
 						$rootScope.readingQuestions[index].readingAlternativas = [];
@@ -187,27 +212,36 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 										$rootScope.readingQuestions[index].readingAlternativas.push(angular.copy(alternative));
 									});
 									
+									if(angular.equals(questionsSize, index + 1)){
+										$scope.dataLoading = false;
+									}
 								}, 
 								function errorCallback(response) {
-									
+									$scope.dataLoading = false;
 								}
 							);
 					});
 					
-					console.log("Teste");
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 			);
+		}else{
+			$scope.dataLoading = false;
 		}
 	};
 	
 	// Method called when the pronunciation screen is open. It calls the method searchPronunciationQuestions from solveExercisesService
 	$scope.initPronunciation = function(){
+		
+		$scope.dataLoading = true;
+		
 		if($rootScope.pronunciationQuestoes.length == 0){
 			solveExercisesService.searchPronunciationQuestions($rootScope.exerciseToEdit.exercicio.idExercicio).then( 
 				function successCallback(response) {
+					
+					var questionsSize = response.data.length;
 					
 					$(response.data).each(function(index, question) {
 						
@@ -222,19 +256,24 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 										$rootScope.pronunciationQuestoes[index].pronunciationQuestaoPartes.push(angular.copy(part));
 									});
 									
+									if(angular.equals(questionsSize, index + 1)){
+										$scope.dataLoading = false;
+									}
+									
 								}, 
 								function errorCallback(response) {
-									
+									$scope.dataLoading = false;
 								}
 							);
 					});
 					
-					console.log("Teste");
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 			);
+		}else{
+			$scope.dataLoading = false;
 		}
 		
 	};
@@ -243,12 +282,6 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	$scope.selectExercise = function(iterationExercise){
 		 $scope.exercise =  angular.copy(iterationExercise);
 	};
-	
-	// Method called by "Answer" button
-	$scope.goToExerciseResolution = function(){
-		 $rootScope.exerciseToEdit = (angular.copy($scope.exercise));
-		 $state.go("resolveExerciseLyrics");
-	}; 
 	
 	// Call the method assignExercise from exercisesManagementService
 	$scope.answerUnassignedExercise = function(){
@@ -294,8 +327,33 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 		);
 	};
 	
-	$scope.goToVocabulary = function(){
+	// Method called by "Answer" button
+	$scope.goToExerciseResolution = function(){
+		 $rootScope.exerciseToEdit = (angular.copy($scope.exercise));
+		 $state.go("resolveExerciseVocabulary");
+	}; 
+	
+	$scope.goToListening = function(){
 		
+		var questionsResolved = true
+		$scope.error = "";
+			
+		for(var i = 0; i < $rootScope.vocabularyPictures.length; i++){
+			if(!$rootScope.vocabularyPictures[i].resposta){
+				questionsResolved = false;
+				break;
+			}
+		}
+		
+		if(questionsResolved){
+			$state.go("resolveExerciseLyrics");
+		}else{
+			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
+		}
+		
+	};
+	
+	$scope.goToLanguage = function(){
 		$scope.error = "";
 		$scope.isLyricsCorrect = true;
 		
@@ -314,31 +372,12 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 				$scope.incrementChances();
 				$scope.error = "The lyrics are not in the correct order.";
 			}else{
-				$state.go("resolveExerciseVocabulary");
+				$state.go("resolveExerciseLanguage");
 			}
 			
 		}else{
 			$scope.incrementChances();
 			$scope.error = "The lyrics are not in the correct order.";
-		}
-		
-	};
-	
-	$scope.goToLanguage = function(){
-		var questionsResolved = true
-		$scope.error = "";
-			
-		for(var i = 0; i < $rootScope.vocabularyPictures.length; i++){
-			if(!$rootScope.vocabularyPictures[i].resposta){
-				questionsResolved = false;
-				break;
-			}
-		}
-		
-		if(questionsResolved){
-			$state.go("resolveExerciseLanguage");
-		}else{
-			$scope.error = "It's needed to answer all questions before proceeding to the next activity.";
 		}
 	};
 	
@@ -402,6 +441,7 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 	
 	$scope.submitExercise = function(){
 		$scope.error = "";
+		$scope.dataLoading = true;
 		
 		if(!$scope.exerciseToEdit.writingQuestaoResposta){
 			$scope.error = "It's needed to answer the question before submitting the exercise.";
@@ -432,9 +472,11 @@ angular.module('app').controller("solveExercisesCtrl", function($scope, $rootSco
 					$rootScope.exerciseSubmitted = true;
 					$rootScope.exerciseToEdit.totalQuestoes = response.data.totalQuestoes;
 					$rootScope.exerciseToEdit.questoesCorretas = response.data.questoesCorretas;
+					
+					$scope.dataLoading = false;
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 			);
 			

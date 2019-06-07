@@ -59,4 +59,12 @@ public class ReadingAlternativaDaoImpl extends BaseDao<ReadingAlternativa> imple
 	public void deleteAll(List<ReadingAlternativa> readingAlternativas) {
 		hibernateTemplate.deleteAll(readingAlternativas);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ReadingAlternativa> findByQuestionList(List<ReadingQuestao> questoes) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.in("questao", questoes));
+		return (List<ReadingAlternativa>) hibernateTemplate.findByCriteria(criteria);
+	}
 }

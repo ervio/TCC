@@ -1,37 +1,39 @@
-var app = angular.module('app', ['voiceRss', 'pubnub.angular.service', 'ui.router', 'ui.bootstrap', 'youtube-embed', 'dndLists', 'ngAnimate', 'ngSanitize', 'ngFileUpload'])
+var app = angular.module('app', ['voiceRss', 'pubnub.angular.service', 'ui.router', 'ui.bootstrap', 'youtube-embed', 'dndLists', 'ngAnimate', 'ngSanitize', 'ngFileUpload', 'ngResource'])
 
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $injector) {
+	
+	$urlRouterProvider.otherwise('/index');
 	
 	$stateProvider
 	
 	.state('index', {
-		url: '/WebPlatform/',
+		url: '/index',
 		templateUrl: 'modules/login/login.html',
 		controller: "loginCtrl"
 	})
 	
 	.state('personalData', {
-		url: '/WebPlatform/',
+		url: '/personalData',
 		templateUrl: 'modules/personaldata/personalData.html',
 		controller: "personalDataCtrl"
 	})
 	.state('exercisesManagement', {
-		url: '/WebPlatform/',
+		url: '/exercisesManagement',
 		templateUrl: 'modules/exercisesmanagement/exercisesManagement.html',
 		controller: "exercisesMgmtCtrl"
 	})
 	.state('invitation', {
-		url: '/WebPlatform/',
+		url: '/invitation',
 		templateUrl: 'modules/invitation/invitation.html',
 		controller: "invitationCtrl"
 	})
 	.state('solveExercises', {
-		url: '/WebPlatform/',
+		url: '/solveExercises',
 		templateUrl: 'modules/solveexercises/solveExercises.html',
 		controller: "solveExercisesCtrl"
 	})
 	.state('performance', {
-		url: '/WebPlatform/',
+		url: '/performance',
 		templateUrl: 'modules/performance/performance.html',
 		controller: "performanceCtrl"
 	});
@@ -55,73 +57,73 @@ app.factory("LazyRoute", function ($log) {
         $stateProvider
         	
 	        .state('signup', {
-	    		url: '/WebPlatform/',
+	    		url: '/signup',
 	    		templateUrl: 'modules/login/signup.html',
 	    		controller: "signupCtrl"
 	    	})
 	        .state('main', {
-	    		url: '/WebPlatform/',
+	    		url: '/main',
 	    		templateUrl: 'modules/main/main.html',
 	    		controller: "mainCtrl"
 	    	})
 	        .state('newExercise', {
-	    		url: '/WebPlatform/',
+	    		url: '/exercisesManagementNewExercise',
 	    		templateUrl: 'modules/exercisesmanagement/exercisesManagementNewExercise.html',
 	    		controller: "exercisesMgmtCtrl"
 	    	})
 	    	
 	    	.state('resolveExerciseLyrics', {
-				url: '/WebPlatform/',
+				url: '/solveExercises_song',
 				templateUrl: 'modules/solveexercises/solveExercises_song.html',
 				controller: "solveExercisesCtrl"
 			})
 			.state('resolveExerciseQuestions', {
-				url: '/WebPlatform/',
+				url: '/solveExercises_questions',
 				templateUrl: 'modules/solveexercises/solveExercises_questions.html',
 				controller: "solveExercisesCtrl"
 			})
 			.state('ranking', {
-				url: '/WebPlatform/',
+				url: '/ranking',
 				templateUrl: 'modules/ranking/ranking.html',
 				controller: "rankingCtrl"
 			})
 			.state('logout', {
-				url: '/WebPlatform/',
+				url: '/login',
 				templateUrl: 'modules/login/login.html',
 				controller: "rankingCtrl"
 			})
 			.state('resolveExerciseVocabulary', {
-				url: '/WebPlatform/',
+				url: '/solveExercises_vocabulary',
 				templateUrl: 'modules/solveexercises/solveExercises_vocabulary.html',
 				controller: "solveExercisesCtrl"
 			})
 			.state('resolveExerciseLanguage', {
-				url: '/WebPlatform/',
+				url: '/solveExercises_grammar',
 				templateUrl: 'modules/solveexercises/solveExercises_language.html',
 				controller: "solveExercisesCtrl"
 			})
 			.state('resolveExerciseReading', {
-				url: '/WebPlatform/',
+				url: '/solveExercises_reading',
 				templateUrl: 'modules/solveexercises/solveExercises_reading.html',
 				controller: "solveExercisesCtrl"
 			})
 			.state('resolveExerciseOralProduction', {
-				url: '/WebPlatform/',
+				url: '/solveExercises_oralProduction',
 				templateUrl: 'modules/solveexercises/solveExercises_oralProduction.html',
 				controller: "solveExercisesCtrl"
 			})
 			.state('resolveExerciseWriting', {
-				url: '/WebPlatform/',
+				url: '/solveExercises_writing',
 				templateUrl: 'modules/solveexercises/solveExercises_writing.html',
 				controller: "solveExercisesCtrl"
 			})
 			.state('forumMain', {
-				url: '/WebPlatform/',
+				url: '/forumMain',
 				templateUrl: 'modules/forum/forumMain.html',
 				controller: "forumCtrl"
 			})
 			.state('forumTopic', {
-				url: '/WebPlatform/',
+				url: '/forumTopic',
 				templateUrl: 'modules/forum/forumTopic.html',
 				controller: "forumCtrl"
 			})
@@ -131,15 +133,6 @@ app.factory("LazyRoute", function ($log) {
     });
     
     return {};
-});
-
-app.directive('webPlatformLoading', function() { 
-	return {
-		template: 
-			'<div class="text-center">' +
-				'<img src="img/loading-animation-square.gif">' +
-			'</div>'
-	}
 });
 
 app.filter('range', function() {

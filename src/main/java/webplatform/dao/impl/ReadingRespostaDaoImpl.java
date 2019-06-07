@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import webplatform.dao.ReadingRespostaDao;
+import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.ReadingAlternativa;
 import webplatform.model.entity.ReadingQuestao;
 import webplatform.model.entity.ReadingResposta;
@@ -48,6 +49,14 @@ public class ReadingRespostaDaoImpl extends BaseDao<ReadingResposta> implements 
 	public List<ReadingResposta> findByReadingQuestoes(List<ReadingQuestao> readingQuestoes) {
 		DetachedCriteria criteria = getDetachedCriteria();
 		criteria.add(Restrictions.in("readingQuestao", readingQuestoes));
+		return (List<ReadingResposta>) hibernateTemplate.findByCriteria(criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ReadingResposta> findByExercicioAlunoList(List<ExercicioAluno> exercicioAlunoList) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.in("exercicioAluno", exercicioAlunoList));
 		return (List<ReadingResposta>) hibernateTemplate.findByCriteria(criteria);
 	}
 

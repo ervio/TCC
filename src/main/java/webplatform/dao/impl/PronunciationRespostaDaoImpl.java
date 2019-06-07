@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import webplatform.dao.PronunciationRespostaDao;
+import webplatform.model.entity.ExercicioAluno;
 import webplatform.model.entity.PronunciationQuestaoParte;
 import webplatform.model.entity.PronunciationResposta;
 
@@ -41,6 +42,14 @@ public class PronunciationRespostaDaoImpl extends BaseDao<PronunciationResposta>
 	@Override
 	public void deleteAll(List<PronunciationResposta> pronunciationRespostas) {
 		hibernateTemplate.deleteAll(pronunciationRespostas);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PronunciationResposta> findByExercicioAlunoList(List<ExercicioAluno> exercicioAlunoList) {
+		DetachedCriteria criteria = getDetachedCriteria();
+		criteria.add(Restrictions.in("exercicioAluno", exercicioAlunoList));
+		return (List<PronunciationResposta>) hibernateTemplate.findByCriteria(criteria);
 	}
 
 }

@@ -86,7 +86,11 @@ public class ForumController {
 		List<ForumPost> posts = forumPostDao.findByExercise(forumPostModel.getExercicio().getIdExercicio());
 
 		Exercicio exercicio = posts.get(0).getExercicio();
-		exercicio.setTotalPosts(exercicio.getTotalPosts() + 1);
+		if (exercicio.getTotalPosts() == null) {
+			exercicio.setTotalPosts(1);
+		} else {
+			exercicio.setTotalPosts(exercicio.getTotalPosts() + 1);
+		}
 		exercicioDao.saveOrUpdate(exercicio);
 
 		return new ResponseEntity(posts, HttpStatus.OK);

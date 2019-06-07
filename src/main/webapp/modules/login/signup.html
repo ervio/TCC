@@ -14,6 +14,8 @@
 					
 						<form name="form" role="form">
 						
+							<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+						
 	               			<fieldset class="scheduler-border">
 								<legend class="scheduler-border">Personal Data</legend>
 								<div class="row">
@@ -86,10 +88,8 @@
 								<a ui-sref="index" href="#">
 			   						<input class="btn btn-lg btn-success" type="submit" value="Cancel"/>
 								</a>
-			    				<input type="submit" ng-disabled="form.$invalid || dataLoading" ng-click="signup(newrecord)" class="btn btn-lg btn-success" value="Sign-up"/>
+			    				<input type="submit" ng-disabled="form.$invalid" ng-click="signup(newrecord)" class="btn btn-lg btn-success" value="Sign-up"/>
 			   				</div>
-			   				
-			   				<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
 			   				
 		   				</form>
 		   				

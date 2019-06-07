@@ -20,8 +20,8 @@ repositories{
 war {
 	baseName = 'WebPlatform'
 }
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
@@ -60,6 +60,6 @@ dependencies {
 	compile('org.webjars.bower:pubnub-angular:3.2.1')
 	
 	// Database
-	compile files('libs/ojdbc6.jar')
-	//compile files('libs/postgresql-42.2.2.jar')
+	//compile files('libs/ojdbc6.jar')
+	compile files('libs/postgresql-42.2.2.jar')
 }

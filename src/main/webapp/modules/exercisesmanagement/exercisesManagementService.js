@@ -97,6 +97,11 @@ angular.module("app").service("exercisesManagementService", function($http, cons
 		return $http.get(constants.baseUrl + "/deleteExercise/" + exerciseId);
 	}
 	
+	// Calls the searchUnresolvedExercises service from ExercisesManagementController class
+	this.searchUnresolvedExercises = function(exerciseId){
+		return $http.get(constants.baseUrl + "/searchUnresolvedExercises/" + exerciseId);
+	}
+	
 	// Calls the searchStudentsToAssign service from ExercisesManagementController class
 	this.searchStudents = function(name, email, teacherId){
 		if(name == null || name == ""){

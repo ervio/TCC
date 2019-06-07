@@ -1,4 +1,7 @@
-angular.module('app').controller("signupCtrl", function($scope, $location, LazyRoute, signupService){
+angular.module('app').controller("signupCtrl", function($scope, $rootScope, $location, LazyRoute, signupService){
+	
+	$scope.dataLoading = false;
+	
 	$scope.newrecord = {
 			 nome : "",
 			 sobrenome : "",
@@ -25,24 +28,28 @@ angular.module('app').controller("signupCtrl", function($scope, $location, LazyR
 			
 			signupService.signup(newrecord).then( 
 				function successCallback(response) {
+					$scope.dataLoading = false;
 					$scope.registered = true;
 				}, 
 				function errorCallback(response) {
 					 $scope.error = "The email '" + newrecord.email + "' is already registered, please choose another one.";
+					 $scope.dataLoading = false;
 				}
 			);
 		}
-		
-		$scope.dataLoading = false;
 		
 	};
 	
 	// Method called when the screen opens
 	$scope.init = function(){
 		
+		$scope.dataLoading = true;
+		
 		signupService.getAllCountries().then( 
 			function successCallback(response) {
 				$scope.paises = angular.copy(response.data);
+				
+				$scope.dataLoading = false;
 			}
 		);
 		

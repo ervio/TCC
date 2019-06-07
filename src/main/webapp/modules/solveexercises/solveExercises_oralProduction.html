@@ -12,6 +12,8 @@
 
 <body ng-controller="solveExercisesCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -23,7 +25,7 @@
                 <a class="navbar-brand">Menu</a> 
             </div>
             <div>
-                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for Learning English with Songs</a> 
             </div>
             
             <!-- Top Menu Items -->
@@ -84,10 +86,10 @@
 	                                <i class="fa fa-puzzle-piece"></i>  <a ui-sref="solveExercises">Lesson Resolution</a>
 	                            </li>
 	                            <li>
-	                                <i class="fa fa-headphones"></i> <a ui-sref="resolveExerciseLyrics">Listening Practice</a>
+	                                <i class="fa fa-comments"></i> <a ui-sref="resolveExerciseVocabulary">Vocabulary Practice</a>
 	                            </li>
 	                            <li>
-	                                <i class="fa fa-comments"></i> <a ui-sref="resolveExerciseVocabulary">Vocabulary Practice</a>
+	                                <i class="fa fa-headphones"></i> <a ui-sref="resolveExerciseLyrics">Listening Practice</a>
 	                            </li>
 	                            <li>
 	                                <i class="fa fa-language"></i> <a ui-sref="resolveExerciseLanguage">Grammar Practice</a>
@@ -109,8 +111,6 @@
 						
 		               	<div class="row">
 		               	
-			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	
 			               	<div class="col-md-12">
 								<b>Say aloud the correct word to complete the lines of the lyrics.</b> <img ng-if="!speaking" src="img/mic.gif"><img ng-if="speaking" src="img/mic-animate.gif"><br>
 			   				</div>
@@ -119,16 +119,16 @@
 		               			<a ui-sref="resolveExerciseReading" href="#">
 			   						<input class="btn btn-md btn-primary" type="button" value="Back"/>
 								</a>
-								<input type="button" ng-click="goToWriting()" class="btn btn-md btn-primary" value="Writing"/>
+								<input type="button" ng-click="goToWriting()" class="btn btn-md btn-primary" value="Next"/>
 			   				</div>
 			   				
 		               	</div><br>
 		               	
-		               	<div class="row" style="margin-top: 10px;" ng-repeat="question in pronunciationQuestoes">
+		               	<div class="row" style="margin-top: 10px;" ng-repeat="question in pronunciationQuestoes | orderBy:['sequencia']">
 		               	
 		               		<div class="col-md-12">
 		               			<span>{{$index + 1}})</span>
-		               			<span ng-repeat="part in question.pronunciationQuestaoPartes">
+		               			<span ng-repeat="part in question.pronunciationQuestaoPartes | orderBy:['sequencia']">
 		               				<span ng-if="part.tipo == 'Sentence'">{{part.descricao}}</span>
 		               				<input type="submit" ng-click="dictateIt(part)" ng-if="part.tipo == 'Gap' && part.resposta != ''" style="background-color: #eee6e6;" value="{{part.resposta}}" ng-class="exerciseSubmitted && part.tipo == 'Gap' ? (part.resposta | uppercase | removeSpaces) == (part.descricao | uppercase | removeSpaces) ? 'correctOption' : 'wrongOption' : ''" ng-disabled="exerciseSubmitted"/>
 		               				<input type="submit" ng-click="dictateIt(part)" ng-if="part.tipo == 'Gap' && part.resposta == ''" style="background-color: #eee6e6;" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>

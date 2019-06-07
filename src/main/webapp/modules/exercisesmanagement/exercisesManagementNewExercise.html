@@ -23,6 +23,8 @@
 
 <body ng-controller="exercisesMgmtCtrl">
 
+	<div id="spinner" ng-show="dataLoading" class="loading">Loading&#8230;</div>
+
 	<div class="row"></div>
 
     <div id="wrapper">
@@ -34,7 +36,7 @@
                 <a class="navbar-brand">Menu</a> 
             </div>
             <div>
-                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for English Learning</a> 
+                <a class="navbar-brand"><i class="fa fa-bars"></i> Web Platform for Learning English with Songs</a> 
             </div>
             
             <!-- Top Menu Items -->
@@ -116,14 +118,12 @@
 					
 		               	<div class="row">
 		               	
-			               	<img ng-show="dataLoading" src="img/loading-animation-square.gif"/>
-			               	
 		               		<div class="col-md-12" style="text-align: right;">
 		               			<input type="button" ng-if="exercicio.musica.nome" class="btn btn-md btn-primary" data-toggle="modal" data-target="#musicModal" value="Edit song"/>
 		               			<a ui-sref="exercisesManagement" href="#">
 			   						<input class="btn btn-md btn-primary" type="submit" value="Cancel"/>
 								</a>
-								<input type="submit" ng-disabled="mainForm.$invalid || formMusic.$invalid" ng-click="saveExercise()" class="btn btn-md btn-primary" value="Save"/>
+								<input type="button" ng-disabled="mainForm.$invalid || formMusic.$invalid" ng-click="saveExercise()" class="btn btn-md btn-primary" value="Save"/>
 			   				</div>
 			   				
 			   				<div class="col-md-12">
@@ -412,7 +412,7 @@
 												</div>
 											
 											</uib-tab>
-											<uib-tab index="4" heading="Pronunciation Practice">
+											<uib-tab index="4" heading="Oral Production">
 											
 												<div class="row">
 													<div class="col-md-12 form-group">
@@ -521,15 +521,15 @@
 										<div class="row">
 											<div class="col-md-12 form-group">
 												<label>Name *</label>
-												<input ng-model="musicName" class="form-control" type="text" maxlength="30" required/>
+												<input ng-model="musicName" class="form-control" type="text" maxlength="100" required/>
 											</div>
 											<div class="col-md-12 form-group">
 												<label>Singer *</label>
-												<input ng-model="musicSinger" class="form-control" type="text"  maxlength="20" required/>
+												<input ng-model="musicSinger" class="form-control" type="text"  maxlength="100" required/>
 											</div>
 											<div class="col-md-12 form-group">
 												<label>Youtube Link *</label>
-												<input ng-model="musicLink" class="form-control" type="text" maxlength="50" required/>
+												<input ng-model="musicLink" class="form-control" type="text" maxlength="100" required/>
 											</div>
 											<div class="col-md-12 form-group">
 												<label>Lyrics *</label>
@@ -560,5 +560,7 @@
 
     </div>
     <!-- /#wrapper -->
+    
+    <div ng-init="initLessonAddOrEdit()"></div>
 
 </body>

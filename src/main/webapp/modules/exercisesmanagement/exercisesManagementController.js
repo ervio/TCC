@@ -1,5 +1,6 @@
 angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce, $timeout, $rootScope, $state, Upload, LazyRoute, exercisesManagementService, constants){
 	
+	$scope.dataLoading = false;
 	$scope.assignSuccess = false;
 	$scope.assignError = false;
 	$scope.allSelected = false;
@@ -206,62 +207,12 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		);
 	};
 	
-	// Calls searchPicturesByExercise from exercisesManagementService considering the selected exercise
-	$scope.searchPicturesByExercise = function(idExercicio){
-		exercisesManagementService.searchPicturesByExercise(idExercicio).then( 
-			function successCallback(response) {
-				
-				$scope.exercicio.pictures = [];
-				
-				$(response.data).each(function(index, file) {
-					$scope.exercicio.pictures.push(file);
-				 });
-				
-				console.log("asdasdasd");
-				
-			}, 
-			function errorCallback(response) {
-				console.log('Deu errado');
-			}
-		);
-	};
-	
-	// Populates the temporary json with the values from the selected exercise, if it's being edited, or empty values, if it's a new one
-	if(!$rootScope.exercicioToEdit){
-		$scope.exercicio = {
-			professorId : $rootScope.loggedUser.id,
-			nivel : "",
-			musica : {
-				nome : "",
-				cantor : "",
-				letra : "",
-				letraOrdenar : "",
-				link : ""
-	        },
-	        writingQuestao : "",
-	        pictures : [],
-	        grammarDefinicoes : [],
-	        readingQuestoes : [],
-	        pronunciationQuestions : []
-		};
-	}else{
-		$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
-		$scope.searchPicturesByExercise($scope.exercicio.idExercicio);
-		$scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio);
-		$scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio);
-		$scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio);
-		
-		// Populate music modal
-		$scope.musicName = $scope.exercicio.musica.nome;
-		$scope.musicSinger = $scope.exercicio.musica.cantor;
-		$scope.musicLyrics = $scope.exercicio.musica.letra;
-		$scope.musicLink = $scope.exercicio.musica.link;
-	}
-	
 	// Function called by "New" button
 	 $scope.goToExerciseCreation = function(){
+		 $scope.dataLoading = true;
 		 $rootScope.exercicioEditOrCreationMode = true;
 		 delete $rootScope.exercicioToEdit;
+		 $scope.dataLoading = false;
 		 $state.go("newExercise");
 	 };
 	 
@@ -301,6 +252,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 			);
 	 };	 
@@ -313,6 +265,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						$scope.grammarDefinitionsToDelete = [];
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 		 );		 
 	 };
@@ -325,6 +278,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						$scope.readingQuestionsToDelete = [];
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 		 );		 
 	 };
@@ -337,48 +291,73 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						$scope.pronunciationQuestionToDelete = [];
 					}, 
 					function errorCallback(response) {
+						$scope.dataLoading = false;
 					}
 		 );	
 	 };
 	 
 	 // Call the method deleteExercise from exercisesManagementService
 	 $scope.deleteExercise = function(){
-		 exercisesManagementService.deleteExercise($scope.exercicio.idExercicio).then( 
-					function successCallback(response) {
-						
-						if($scope.exercicio.nivel == 'Basic'){
-							for (var i = 0; i < $scope.basicExercisesList.length; i++) {
-							    if ($scope.basicExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
-							    	$scope.basicExercisesList.splice(i, 1);
-							        break;
-							    }
-							}
-						}
-						
-						if($scope.exercicio.nivel == 'Intermediate'){
-							for (var i = 0; i < $scope.intermediateExercisesList.length; i++) {
-							    if ($scope.intermediateExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
-							    	$scope.intermediateExercisesList.splice(i, 1);
-							        break;
-							    }
-							}
-						}
-						
-						if($scope.exercicio.nivel == 'Advanced'){
-							for (var i = 0; i < $scope.advancedExercisesList.length; i++) {
-							    if ($scope.advancedExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
-							    	$scope.advancedExercisesList.splice(i, 1);
-							        break;
-							    }
-							}
-						}
-						
-						$scope.exercicio = "";
-						$scope.exerciseDeleted = true;
-					}, 
-					function errorCallback(response) {
-					}
-			);
+		 
+		 $scope.dataLoading = true;
+		 $scope.exerciseDeleted = false;
+		 $scope.error = "";
+		 
+		 exercisesManagementService.searchUnresolvedExercises($scope.exercicio.idExercicio).then( 
+				 function successCallback(response) {
+					 if(response.data.length > 0){
+						 
+						 $scope.error = "The lesson is being resolved by a student and cannot be deleted.";
+						 $scope.dataLoading = false;
+						 
+					 }else{
+						 
+						 exercisesManagementService.deleteExercise($scope.exercicio.idExercicio).then( 
+								 function successCallback(response) {
+										
+									 if($scope.exercicio.nivel == 'Basic'){
+										 for (var i = 0; i < $scope.basicExercisesList.length; i++) {
+											 if ($scope.basicExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
+												 $scope.basicExercisesList.splice(i, 1);
+												 break;
+											 }
+										 }
+									 }
+										
+									 if($scope.exercicio.nivel == 'Intermediate'){
+										 for (var i = 0; i < $scope.intermediateExercisesList.length; i++) {
+											 if ($scope.intermediateExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
+												 $scope.intermediateExercisesList.splice(i, 1);
+												 break;
+											 }
+										 }
+									 }
+										
+									 if($scope.exercicio.nivel == 'Advanced'){
+										 for (var i = 0; i < $scope.advancedExercisesList.length; i++) {
+											 if ($scope.advancedExercisesList[i].idExercicio == $scope.exercicio.idExercicio) {
+												 $scope.advancedExercisesList.splice(i, 1);
+												 break;
+											 }
+										 }
+									 }
+										
+									 $scope.exercicio = "";
+									 $scope.exerciseDeleted = true;
+									 $scope.dataLoading = false;
+								 }, 
+								 function errorCallback(response) {
+									 $scope.dataLoading = false;
+								 }
+						 );
+						 
+					 }
+				 }, 
+				 function errorCallback(response) {
+					 $scope.dataLoading = false;
+				 }
+		 );
+		 
 	 };
 	 
 	 $scope.savePictures = function(idExercicio) {
@@ -417,6 +396,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	 // Call the method saveExercise from exercisesManagementService if all the requirements all fine
 	 $scope.saveExercise = function(){
 		 
+		 $scope.dataLoading = true;
 		 $scope.exerciseSaved = false;
 		 $scope.error = "";
 		 
@@ -468,6 +448,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						// Search the records
 						$q.all(promises3).then(function() {
 							$scope.exerciseSaved = true;
+							$scope.dataLoading = false;
 						});
 						
 					});
@@ -475,6 +456,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 				}, 
 				function errorCallback(response) {
 					$scope.error = response.data.status;
+					$scope.dataLoading = false;
 				}
 			); 
 			 
@@ -482,8 +464,74 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		 
 	 };
 	 
+	 $scope.initLessonAddOrEdit = function(){
+		 
+		$scope.dataLoading = true;
+		 
+		// Populates the temporary json with the values from the selected exercise, if it's being edited, or empty values, if it's a new one
+		if(!$rootScope.exercicioToEdit){
+			$scope.exercicio = {
+				professorId : $rootScope.loggedUser.id,
+				nivel : "",
+				musica : {
+					nome : "",
+					cantor : "",
+					letra : "",
+					letraOrdenar : "",
+					link : ""
+		        },
+		        writingQuestao : "",
+		        pictures : [],
+		        grammarDefinicoes : [],
+		        readingQuestoes : [],
+		        pronunciationQuestions : []
+			};
+			
+			$scope.dataLoading = false;
+			
+		}else{
+			$scope.exercicio = angular.copy($rootScope.exercicioToEdit);
+			
+			var promises = [];
+			promises.push($scope.searchGrammarDefinitionsByExercise($scope.exercicio.idExercicio));
+			promises.push($scope.searchReadingQuestionsByExercise($scope.exercicio.idExercicio));
+			promises.push($scope.searchPronunciationQuestionsByExercise($scope.exercicio.idExercicio));
+			
+			$q.all(promises).then(function() {
+				
+				exercisesManagementService.searchPicturesByExercise($scope.exercicio.idExercicio).then( 
+					function successCallback(response) {
+						
+						$scope.exercicio.pictures = [];
+						
+						$(response.data).each(function(index, file) {
+							$scope.exercicio.pictures.push(file);
+						 });
+						
+						// Populate music modal
+						$scope.musicName = $scope.exercicio.musica.nome;
+						$scope.musicSinger = $scope.exercicio.musica.cantor;
+						$scope.musicLyrics = $scope.exercicio.musica.letra;
+						$scope.musicLink = $scope.exercicio.musica.link;
+						$scope.dataLoading = false;
+						
+					}, 
+					function errorCallback(response) {
+						$scope.dataLoading = false;
+					}
+				);
+				
+			});
+			
+		}
+		 
+	 };
+	 
 	 // Method called when the main screen from exercises management opens
 	 $scope.init = function(){
+		
+		$scope.dataLoading = true;
+		
 		exercisesManagementService.searchAll($rootScope.loggedUser.id).then( 
 			function successCallback(response) {
 				
@@ -504,15 +552,19 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 					}
 				});
 				
+				$scope.dataLoading = false;
+				
 			}, 
 			function errorCallback(response) {
+				$scope.dataLoading = false;
 			}
 		);
 	 };
 	 
 	 // Method used to search the students when the exercise is being assigned. It calls searchStudents method from exercisesManagementService
 	 $scope.searchStudents = function(){
-			
+		 
+		$scope.dataLoading = true;
 		$scope.students = [];
 		
 		exercisesManagementService.searchStudents($scope.name, $scope.email, $rootScope.loggedUser.id).then( 
@@ -521,9 +573,11 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 						student.selected;
 						$scope.students.push(angular.copy(student));
 					 });
+					
+					$scope.dataLoading = false;
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 		);
 		
@@ -560,6 +614,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	
 	// Call the method assignExercise from exercisesManagementService when the exercise is being assigned
 	$scope.assignExercise = function(){
+		$scope.dataLoading = true;
 		var selected = false;
 		$scope.assignError = "";
 		$scope.assignSuccess = "";
@@ -579,9 +634,10 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 			exercisesManagementService.assignExercise($scope.studentsIds, $scope.exercicio.idExercicio).then( 
 				function successCallback(response) {
 					$scope.assignSuccess = true;
+					$scope.dataLoading = false;
 				}, 
 				function errorCallback(response) {
-					
+					$scope.dataLoading = false;
 				}
 			);
 			
@@ -590,14 +646,19 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	
 	// Method called by "Assign" button
 	$scope.clearAssignModal = function(){
+		$scope.dataLoading = true;
 		$scope.name = "";
 		$scope.email = "";
 		$scope.assignError = "";
 		$scope.assignSuccess = "";
 		$scope.students = [];
+		$scope.dataLoading = false;
 	};
 	
 	 $scope.activitiesModal = function(){
+		 
+		 $scope.dataLoading = true;
+		 
 		 if(!$scope.exercicio.pictures && $scope.picturesTemp){
 			 $scope.exercicio.pictures = [];
 			 
@@ -653,6 +714,8 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 			}
 		});
 		
+		$scope.dataLoading = false;
+		
 		$("#activitiesModal").modal("show");
 	 };
 	
@@ -696,6 +759,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	};
 	 
 	$scope.saveActivitiesModal = function(){
+		
+		$scope.dataLoading = true;
+		
 		$scope.modalError = "";
 		$scope.exercicio.pictures = [];
 		$scope.exercicio.writingQuestao = angular.copy($scope.writingQuestao.writingQuestao);
@@ -745,6 +811,9 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		
 		$scope.exercicio.pronunciationQuestions = angular.copy($scope.pronunciationQuestions);
 		$scope.clearActivitiesModal();
+		
+		$scope.dataLoading = false;
+		
 		$("#activitiesModal").modal("hide");
 	};
 	
@@ -869,7 +938,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 	  };
 	  
 	  $scope.editAlternative = function(){
-		  $scope.alternatives[$scope.alternativeSelectedIndex].alternative = angular.copy($scope.grammarPractice.alternativeInput);
+		  $scope.alternatives[$scope.alternativeSelectedIndex].questao = angular.copy($scope.grammarPractice.alternativeInput);
 		  $scope.alternatives[$scope.alternativeSelectedIndex].definition = angular.copy($scope.grammarPractice.alternativeAnswer);
 		  $scope.grammarPractice.alternativeInput = "";
 		  $scope.grammarPractice.alternativeAnswer = "";
@@ -1028,6 +1097,7 @@ angular.module('app').controller("exercisesMgmtCtrl", function($scope, $q, $sce,
 		  var descricao = ($scope.pronunciationQuestions.length + 1) + ") ";
 		  var question = {
 				  descricao : "",
+				  sequencia : $scope.pronunciationQuestions.length + 1,
 				  pronunciationQuestaoPartes : []
 		  };
 		  

@@ -19,9 +19,15 @@ public class ExercicioConverter {
 		Exercicio exercicio = new Exercicio();
 		if (exercicioModel.getIdExercicio() != 0) {
 			exercicio.setIdExercicio(exercicioModel.getIdExercicio());
+
+			if (exercicioModel.getTotalPosts() != null) {
+				exercicio.setTotalPosts(exercicioModel.getTotalPosts());
+			}
+
 		} else {
 			exercicio.setTotalPosts(0);
 		}
+
 		exercicio.setNivel(exercicioModel.getNivel());
 		exercicio.setWritingQuestao(exercicioModel.getWritingQuestao());
 
